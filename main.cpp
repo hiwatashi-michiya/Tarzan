@@ -2,6 +2,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Wall.h"
+#include "Scene.h"
 
 const char kWindowTitle[] = "Wild Tarzan";
 
@@ -23,6 +24,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int scrollX = 0;
 
+	int BGTITLE = Novice::LoadTexture("./Resources/Images/TarzanBG.png");
+	int BGSELECT = Novice::LoadTexture("./Resources/Images/TarzanBG_SELECT.png");
+
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -33,30 +37,91 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		memcpy(preKeys, keys, 256);
 		Novice::GetHitKeyStateAll(keys);
 
-		///
-		/// ↓更新処理ここから
-		///
+		switch (scene) {
 
-		player.Update(&scrollX);
+		case TITLE:
 
-		wall.Update(scrollX);
+			///
+			/// ↓更新処理ここから
+			///
 
-		///
-		/// ↑更新処理ここまで
-		///
+			
 
-		player.Draw(scrollX);
+			///
+			/// ↑更新処理ここまで
+			///
 
-		wall.Draw(scrollX);
+			Novice::DrawSprite(0, 0, BGTITLE, 1, 1, 0, 0xFFFFFFFF);
 
-		///
-		/// ↓描画処理ここから
-		///
+			///
+			/// ↓描画処理ここから
+			///
 
-		
-		///
-		/// ↑描画処理ここまで
-		///
+			
+
+			///
+			/// ↑描画処理ここまで
+			///
+
+			break;
+
+		case STAGESELECT:
+
+			///
+			/// ↓更新処理ここから
+			///
+
+			Novice::DrawSprite(0, 0, BGSELECT, 1, 1, 0, 0xFFFFFFFF);
+
+			///
+			/// ↑更新処理ここまで
+			///
+
+
+
+			///
+			/// ↓描画処理ここから
+			///
+
+			
+
+			///
+			/// ↑描画処理ここまで
+			///
+
+			break;
+
+		case GAMEPLAY:
+
+			///
+			/// ↓更新処理ここから
+			///
+
+			player.Update(&scrollX);
+
+			wall.Update(scrollX);
+
+			///
+			/// ↑更新処理ここまで
+			///
+
+			
+
+			///
+			/// ↓描画処理ここから
+			///
+
+			player.Draw(scrollX);
+
+			wall.Draw(scrollX);
+
+			///
+			/// ↑描画処理ここまで
+			///
+
+			break;
+
+		}
 
 		// フレームの終了
 		Novice::EndFrame();
