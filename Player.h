@@ -15,7 +15,8 @@ class Player
 {
 public:
 	Player();
-	Player(Vec2 position, Vec2 velocity, float radius, Vec2 center, int color, bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround);
+	Player(Vec2 position, Vec2 velocity, float radius, Vec2 center, int color, 
+		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround);
 
 	void Update(int* scrollX);
 
@@ -25,6 +26,8 @@ public:
 
 	inline float getSpeedX() { return velocity.x; }
 
+	inline float setSpeedX() { velocity.x *= -1; return velocity.x; }
+
 	inline float getRadius() { return radius; }
 
 private:
@@ -32,6 +35,8 @@ private:
 	void Move();
 
 	void Collision(int* scrollX);
+
+	
 
 	//ç¿ïW
 	Vec2 position;

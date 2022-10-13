@@ -44,19 +44,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			/// ↓更新処理ここから
 			///
 
-			
+			if (Key::IsTrigger(DIK_SPACE)) {
+				scene = STAGESELECT;
+			}
 
 			///
 			/// ↑更新処理ここまで
 			///
 
-			Novice::DrawSprite(0, 0, BGTITLE, 1, 1, 0, 0xFFFFFFFF);
+			
 
 			///
 			/// ↓描画処理ここから
 			///
 
-			
+			Novice::DrawSprite(0, 0, BGTITLE, 1, 1, 0, 0xFFFFFFFF);
 
 			///
 			/// ↑描画処理ここまで
@@ -70,7 +72,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			/// ↓更新処理ここから
 			///
 
-			Novice::DrawSprite(0, 0, BGSELECT, 1, 1, 0, 0xFFFFFFFF);
+			if (Key::IsTrigger(DIK_SPACE)) {
+				scene = GAMEPLAY;
+			}
+
+			if (Key::IsTrigger(DIK_ESCAPE)) {
+				scene = TITLE;
+			}
 
 			///
 			/// ↑更新処理ここまで
@@ -82,7 +90,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			/// ↓描画処理ここから
 			///
 
-			
+			Novice::DrawSprite(0, 0, BGSELECT, 1, 1, 0, 0xFFFFFFFF);
 
 			///
 			/// ↑描画処理ここまで
@@ -95,6 +103,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			///
 			/// ↓更新処理ここから
 			///
+
+			if (Key::IsTrigger(DIK_ESCAPE)) {
+				scene = STAGESELECT;
+			}
 
 			player.Update(&scrollX);
 
@@ -126,7 +138,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::EndFrame();
 
 		// ESCキーが押されたらループを抜ける
-		if (preKeys[DIK_ESCAPE] == 0 && keys[DIK_ESCAPE] != 0) {
+		if (Key::IsTrigger(DIK_ESCAPE) && scene == TITLE) {
 			break;
 		}
 	}

@@ -11,7 +11,8 @@ Player::Player()
 
 }
 
-Player::Player(Vec2 position, Vec2 velocity, float radius, Vec2 center, int color, bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround)
+Player::Player(Vec2 position, Vec2 velocity, float radius, Vec2 center, int color, 
+	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround)
 	: position({ position.x,position.y }), velocity({ velocity.x,velocity.y }), radius(radius),
 	center({ center.x,center.y }), color(color), isGrip(false), TarzanGage(TARZAN_GAGE), 
 	GripGage(0), unGrip(unGrip), isGround(isGround)

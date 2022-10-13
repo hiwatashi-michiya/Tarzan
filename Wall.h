@@ -24,6 +24,8 @@ public:
 
 	void Draw(int scrollX);
 
+	inline float getHitSpeedX() { return hitSpeed; }
+
 private:
 
 	void Collision(int scrollX);
