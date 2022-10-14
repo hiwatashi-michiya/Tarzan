@@ -22,13 +22,21 @@ public:
 
 	void Draw(int scrollX);
 
+	float KeepMaxSpeed(float maxSpeed);
+
 	inline float getPosX() { return position.x; }
 
 	inline float getSpeedX() { return velocity.x; }
 
 	inline float setSpeedX() { velocity.x *= -1; return velocity.x; }
 
+	inline float setSpeedY() { velocity.y *= -1; return velocity.y; }
+
 	inline float getRadius() { return radius; }
+
+	inline bool getIsGround() { return isGround; }
+
+	inline int resetTarzanGage() { TarzanGage = 0; return TarzanGage; }
 
 private:
 

@@ -19,15 +19,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = {0};
 	char preKeys[256] = {0};
 
-	Player player({ 200.0f, 200.0f }, { 0.0f, 0.0f }, 10.0f, { 100.0f + 250.0f, 200.0f }, 0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false);
+	Player player({ 200.0f, 200.0f }, { 0.0f, 0.0f }, 20.0f, { 100.0f + 250.0f, 200.0f }, 0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false);
 
-	Wall wall({ 1000.0f,0.0f }, 720.0f, 20.0f, true, 0xFFFFFFFF, player);
+	Wall wall[WALL_NUMBER];
+	for (int i = 0; i < WALL_NUMBER; i++) {
+		wall[i] = Wall({ 1000.0f * (i * 2 + 1),0.0f }, 720.0f, 20.0f + (10.0f * i), true, 0xFFFFFFFF, player);
+	}
+
 
 	int scrollX = 0;
 
 	int BGTITLE = Novice::LoadTexture("./Resources/Images/TarzanBG.png");
 	int BGSELECT = Novice::LoadTexture("./Resources/Images/TarzanBG_SELECT.png");
-
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -44,8 +47,43 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			/// ↓更新処理ここから
 			///
 
-			if (Key::IsTrigger(DIK_SPACE)) {
-				scene = STAGESELECT;
+			if (sceneChange == true) {
+
+				if (nextScene == TITLE) {
+
+					if (sceneCount > 0) {
+						sceneCount -= 1;
+						clearly = 0x0000000F + sceneCount * 4;
+					}
+
+					if (sceneCount == 0) {
+						sceneChange = false;
+					}
+
+				}
+				else {
+
+					if (sceneCount < 60) {
+						sceneCount += 1;
+						clearly = 0x0000000F + sceneCount * 4;
+					}
+
+					if (sceneCount == 60) {
+
+						scene = nextScene;
+
+					}
+
+				}
+
+			}
+			else if (sceneChange == false) {
+
+				if (Key::IsTrigger(DIK_SPACE)) {
+					sceneChange = true;
+					nextScene = STAGESELECT;
+				}
+
 			}
 
 			///
@@ -72,13 +110,51 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			/// ↓更新処理ここから
 			///
 
-			if (Key::IsTrigger(DIK_SPACE)) {
-				scene = GAMEPLAY;
+			if (sceneChange == true) {
+
+				if (nextScene == STAGESELECT) {
+					
+					if (sceneCount > 0) {
+						sceneCount -= 1;
+						clearly = 0x0000000F + sceneCount * 4;
+					}
+
+					if (sceneCount == 0) {
+						sceneChange = false;
+					}
+
+				}
+				else {
+
+					if (sceneCount < 60) {
+						sceneCount += 1;
+						clearly = 0x0000000F + sceneCount * 4;
+					}
+
+					if (sceneCount == 60) {
+
+						scene = nextScene;
+
+					}
+
+				}
+
+			}
+			else if (sceneChange == false) {
+
+				if (Key::IsTrigger(DIK_SPACE)) {
+					sceneChange = true;
+					nextScene = GAMEPLAY;
+				}
+
+				if (Key::IsTrigger(DIK_ESCAPE)) {
+					sceneChange = true;
+					nextScene = TITLE;
+				}
+
 			}
 
-			if (Key::IsTrigger(DIK_ESCAPE)) {
-				scene = TITLE;
-			}
+			
 
 			///
 			/// ↑更新処理ここまで
@@ -104,13 +180,88 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			/// ↓更新処理ここから
 			///
 
-			if (Key::IsTrigger(DIK_ESCAPE)) {
-				scene = STAGESELECT;
+			if (sceneChange == true && isGoal == false) {
+
+				if (nextScene == GAMEPLAY) {
+
+					if (sceneCount > 0) {
+						sceneCount -= 1;
+						clearly = 0x0000000F + sceneCount * 4;
+					}
+
+					if (sceneCount == 0) {
+						sceneChange = false;
+					}
+
+				}
+				else {
+
+					if (sceneCount < 60) {
+						sceneCount += 1;
+						clearly = 0x0000000F + sceneCount * 4;
+					}
+
+					if (sceneCount == 60) {
+
+						scene = nextScene;
+
+					}
+
+				}
+
+			}
+			else if(isGoal == true) {
+
+				if (sceneChange == false) {
+
+					if (sceneCount < 30) {
+						sceneCount += 1;
+						clearly = 0x0000000F + sceneCount * 2;
+					}
+
+					if (sceneCount == 30) {
+
+						if (Key::IsTrigger(DIK_RETURN)) {
+							sceneChange = true;
+							nextScene = STAGESELECT;
+						}
+
+					}
+
+				}
+				else {
+
+					if (sceneCount < 60) {
+						sceneCount += 1;
+						clearly = 0x0000000F + sceneCount * 2;
+					}
+
+					if (sceneCount == 60) {
+						scene = nextScene;
+					}
+
+				}
+
+			}
+			else if (sceneChange == false && isGoal == false) {
+
+				if (Key::IsTrigger(DIK_ESCAPE)) {
+					sceneChange = true;
+					nextScene = STAGESELECT;
+				}
+
+				player.Update(&scrollX);
+
+				for (int i = 0; i < WALL_NUMBER; i++) {
+					wall[i].Update(scrollX);
+				}
+
 			}
 
-			player.Update(&scrollX);
-
-			wall.Update(scrollX);
+			if (player.getPosX() > goalLine) {
+				isGoal = true;
+			}
+			
 
 			///
 			/// ↑更新処理ここまで
@@ -124,7 +275,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			player.Draw(scrollX);
 
-			wall.Draw(scrollX);
+			for (int i = 0; i < WALL_NUMBER; i++) {
+				wall[i].Draw(scrollX);
+			}
 
 			///
 			/// ↑描画処理ここまで
@@ -134,11 +287,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		}
 
+		if (sceneChange == true || isGoal == true) {
+
+			Novice::DrawBox(0, 0, 1280, 720, 0, clearly, kFillModeSolid);
+
+		}
+
 		// フレームの終了
 		Novice::EndFrame();
 
 		// ESCキーが押されたらループを抜ける
-		if (Key::IsTrigger(DIK_ESCAPE) && scene == TITLE) {
+		if (Key::IsTrigger(DIK_ESCAPE) && scene == TITLE && sceneChange == false) {
 			break;
 		}
 	}

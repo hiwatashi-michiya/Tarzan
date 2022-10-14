@@ -3,7 +3,6 @@
 #include <Novice.h>
 #include "Wall.h"
 
-
 Player::Player()
 	: position({ 100.0f,100.0f }), velocity({ 5.0f,5.0f }), radius(30), center({0.0f,0.0f}),
 	color(0xFFFFFFFF), isGrip(false), TarzanGage(TARZAN_GAGE), GripGage(0), unGrip(0),isGround(false)
@@ -46,6 +45,17 @@ void Player::Draw(int scrollX) {
 
 	Novice::ScreenPrintf(0, 0, "%1.2f", position.x);
 	Novice::ScreenPrintf(0, 20, "%1.2f", position.y);
+	Novice::ScreenPrintf(0, 40, "%1.2f", velocity.x);
+
+}
+
+float Player::KeepMaxSpeed(float maxSpeed) {
+
+	if (velocity.x > maxSpeed) {
+		maxSpeed = velocity.x;
+	}
+
+	return maxSpeed;
 
 }
 
@@ -97,7 +107,7 @@ void Player::Move() {
 			}
 			else if (isGround) {
 				velocity.y -= 20;
-				unGrip = 20;
+				unGrip = 17;
 			}
 			
 		}
@@ -116,8 +126,6 @@ void Player::Move() {
 	// ë¨ìxÇç¿ïWÇ…â¡éZ
 	position.x += velocity.x;
 	position.y += velocity.y;
-
-
 	
 
 }
