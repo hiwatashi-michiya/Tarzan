@@ -46,6 +46,7 @@ void Player::Draw(int scrollX) {
 	Novice::ScreenPrintf(0, 0, "%1.2f", position.x);
 	Novice::ScreenPrintf(0, 20, "%1.2f", position.y);
 	Novice::ScreenPrintf(0, 40, "%1.2f", velocity.x);
+	Novice::ScreenPrintf(0, 60, "%1.2f", velocity.y);
 
 }
 

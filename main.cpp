@@ -4,6 +4,7 @@
 #include "Wall.h"
 #include "Scene.h"
 #include "Key.h"
+#include "Floor.h"
 
 const char kWindowTitle[] = "Wild Tarzan";
 
@@ -19,18 +20,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = {0};
 	char preKeys[256] = {0};
 
-	Player player({ 200.0f, 200.0f }, { 0.0f, 0.0f }, 20.0f, { 100.0f + 250.0f, 200.0f }, 0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false);
-
-	Wall wall[WALL_NUMBER];
-	for (int i = 0; i < WALL_NUMBER; i++) {
-		wall[i] = Wall({ 1000.0f * (i * 2 + 1),0.0f }, 720.0f, 20.0f + (10.0f * i), true, 0xFFFFFFFF, player);
-	}
-
-
 	int scrollX = 0;
 
 	int BGTITLE = Novice::LoadTexture("./Resources/Images/TarzanBG.png");
 	int BGSELECT = Novice::LoadTexture("./Resources/Images/TarzanBG_SELECT.png");
+
+	Player player({ 200.0f, 200.0f }, { 0.0f, 0.0f }, 20.0f, { 100.0f + 250.0f, 200.0f }, 0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false);
+
+	Wall wall[WALL_NUMBER];
+	for (int i = 0; i < WALL_NUMBER; i++) {
+		wall[i] = Wall({ 1000.0f * (i * 2 + 1),0.0f }, 720.0f, 20.0f + (100.0f * i), false, 0xFFFFFFFF, player);
+	}
+
+	Floor floor[FLOOR_NUMBER];
+	for (int i = 0; i < FLOOR_NUMBER; i++) {
+		floor[i] = Floor(300 * (i + 1), (690 - i * 30), 10000, 100, 400, 100, BGSELECT, player);
+	}
+
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -252,6 +258,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				player.Update(&scrollX);
 
+				for (int i = 0; i < FLOOR_NUMBER; i++) {
+					floor[i].Update(scrollX);
+				}
+				
+
 				for (int i = 0; i < WALL_NUMBER; i++) {
 					wall[i].Update(scrollX);
 				}
@@ -274,6 +285,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			///
 
 			player.Draw(scrollX);
+
+			for (int i = 0; i < FLOOR_NUMBER; i++) {
+				floor[i].Draw(scrollX);
+			}
 
 			for (int i = 0; i < WALL_NUMBER; i++) {
 				wall[i].Draw(scrollX);

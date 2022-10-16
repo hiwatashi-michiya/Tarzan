@@ -1,6 +1,7 @@
 #pragma once
 #include "Vec2.h"
 
+
 // 重力
 const float GRAVITY = 1.0f;
 // ツタを打ち出す距離
@@ -24,19 +25,41 @@ public:
 
 	float KeepMaxSpeed(float maxSpeed);
 
+	//X座標の取得
 	inline float getPosX() { return position.x; }
 
+	//Y座標の取得
+	inline float getPosY() { return position.y; }
+
+	//X速度の取得
 	inline float getSpeedX() { return velocity.x; }
 
+	//Y速度の取得
+	inline float getSpeedY() { return velocity.y; }
+
+	//X速度を反転させる
 	inline float setSpeedX() { velocity.x *= -1; return velocity.x; }
 
-	inline float setSpeedY() { velocity.y *= -1; return velocity.y; }
+	//Y座標を止める
+	inline float setPosY(float y) { position.y = y - radius; return position.y; }
 
+	//Y速度を0にする
+	inline float setSpeedY() { velocity.y = 0; return velocity.y; }
+
+	//大きさの取得
 	inline float getRadius() { return radius; }
 
+	//地面判定かどうかの取得
 	inline bool getIsGround() { return isGround; }
 
+	//地面判定にする
+	inline bool setIsGround() { isGround = true; return isGround; }
+
+	//ターザンゲージをリセットさせる
 	inline int resetTarzanGage() { TarzanGage = 0; return TarzanGage; }
+
+	//ターザンゲージを回復する
+	inline int RecoveryTarzanGage() { TarzanGage = TARZAN_GAGE; return TarzanGage; }
 
 private:
 
