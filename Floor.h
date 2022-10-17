@@ -4,17 +4,18 @@ const int FLOOR_NUMBER = 10;
 
 class Player;
 
-//enum TYPE {
-//	NORMAL,
-//	PLAYERACCEL,
-//	PLAYERDECEL
-//};
+enum FLOORTYPE {
+	NORMAL,
+	PLAYERACCEL,
+	PLAYERDECEL
+};
 
 class Floor
 {
 public:
 	Floor();
-	Floor(float x,float y,float length,float height,float scrW, float scrH, int textureHandle, Player& pPlayer);
+	Floor(float x, float y, float length, float height, int type,
+		float scrW, float scrH, int textureHandle, Player& pPlayer);
 
 	void Update(int scrollX);
 
@@ -34,6 +35,8 @@ private:
 
 	//çÇÇ≥(âÊëúï\é¶óp)
 	float height;
+
+	int type;
 
 	//DrawQuadóp
 	float scrW;

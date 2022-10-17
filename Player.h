@@ -25,26 +25,38 @@ public:
 
 	float KeepMaxSpeed(float maxSpeed);
 
+	//---------------- x ------------------
+
 	//X座標の取得
 	inline float getPosX() { return position.x; }
-
-	//Y座標の取得
-	inline float getPosY() { return position.y; }
 
 	//X速度の取得
 	inline float getSpeedX() { return velocity.x; }
 
-	//Y速度の取得
-	inline float getSpeedY() { return velocity.y; }
-
 	//X速度を反転させる
 	inline float setSpeedX() { velocity.x *= -1; return velocity.x; }
+
+	//X速度を加速させる
+	inline float accelX() { velocity.x *= 1.001f; return velocity.x; }
+
+	//X速度を減速させる
+	inline float decelX() { velocity.x /= 1.005f;	return velocity.x; }
+
+	//---------------- y ------------------
+
+	//Y座標の取得
+	inline float getPosY() { return position.y; }
 
 	//Y座標を止める
 	inline float setPosY(float y) { position.y = y - radius; return position.y; }
 
+	//Y速度の取得
+	inline float getSpeedY() { return velocity.y; }
+
 	//Y速度を0にする
 	inline float setSpeedY() { velocity.y = 0; return velocity.y; }
+
+	//------------ その他 -----------------
 
 	//大きさの取得
 	inline float getRadius() { return radius; }

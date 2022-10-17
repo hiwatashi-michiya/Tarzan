@@ -6,8 +6,9 @@ Floor::Floor()
 {
 }
 
-Floor::Floor(float x, float y, float length, float height, float scrW, float scrH, int textureHandle, Player& pPlayer)
-	: x(x), y(y), length(length), height(height), scrW(scrW), scrH(scrH), textureHandle(textureHandle), pPlayer(&pPlayer)
+Floor::Floor(float x, float y, float length, float height,int type, float scrW, float scrH, int textureHandle, Player& pPlayer)
+	: x(x), y(y), length(length), height(height), type(type),
+	scrW(scrW), scrH(scrH), textureHandle(textureHandle), pPlayer(&pPlayer)
 {
 }
 
@@ -28,8 +29,9 @@ void Floor::Draw(int scrollX) {
 
 void Floor::Collision(int scrollX) {
 
-	//プレイヤーが地面の下に入ろうとした場合速度を0にする
+	//上判定
 	if ((pPlayer->Player::getPosY() + pPlayer->Player::getRadius()) >= y &&
+		pPlayer->Player::getPosY() - pPlayer->Player::getRadius() <= y + height &&
 		pPlayer->Player::getPosX() + pPlayer->Player::getRadius() - scrollX > x - scrollX &&
 		pPlayer->Player::getPosX() - pPlayer->Player::getRadius() - scrollX < x + length - scrollX &&
 		pPlayer->Player::getSpeedY() >= 0) {
@@ -38,6 +40,20 @@ void Floor::Collision(int scrollX) {
 		pPlayer->setSpeedY();
 		pPlayer->setIsGround();
 		pPlayer->setPosY(y);
+
+		if (type == PLAYERACCEL) {
+
+			pPlayer->Player::accelX();
+
+		}
+		else if (type == PLAYERDECEL) {
+
+			pPlayer->Player::decelX();
+
+		}
+		else {
+
+		}
 
 	}
 

@@ -5,6 +5,11 @@ const int WALL_NUMBER = 1;
 
 class Player;
 
+enum WALLTYPE {
+	BREAK,
+	UNBREAK
+};
+
 class Wall
 {
 
@@ -20,7 +25,8 @@ public:
 	/// <param name="isAlive">壊れたかどうか</param>
 	/// <param name="color">色</param>
 	/// <param name="pPlayer">受け渡すポインタ(Playerクラス限定)</param>
-	Wall(Vec2 position, float radius, float hitSpeed, bool isAlive, int color, Player& pPlayer);
+	Wall(Vec2 position, float width, float height, float hitSpeed, bool isAlive, 
+		int type, int color, Player& pPlayer);
 
 	void Update(int scrollX);
 
@@ -35,14 +41,20 @@ private:
 	//壁の位置
 	Vec2 position;
 
-	//大きさ
-	float radius;
+	//横幅
+	float width;
+
+	//縦幅
+	float height;
 
 	//耐久力(スピード許容量)
 	float hitSpeed;
 
 	//壊れているかどうか
 	bool isAlive;
+
+	//壁の種類
+	int type;
 
 	//色
 	int color;

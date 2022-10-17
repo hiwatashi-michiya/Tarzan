@@ -25,16 +25,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int BGTITLE = Novice::LoadTexture("./Resources/Images/TarzanBG.png");
 	int BGSELECT = Novice::LoadTexture("./Resources/Images/TarzanBG_SELECT.png");
 
-	Player player({ 200.0f, 200.0f }, { 0.0f, 0.0f }, 20.0f, { 100.0f + 250.0f, 200.0f }, 0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false);
+	Player player({ 150.0f, 200.0f }, { 0.0f, 0.0f }, 20.0f, { 100.0f + 250.0f, 200.0f },
+		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false);
 
 	Wall wall[WALL_NUMBER];
 	for (int i = 0; i < WALL_NUMBER; i++) {
-		wall[i] = Wall({ 1000.0f * (i * 2 + 1),0.0f }, 720.0f, 20.0f + (100.0f * i), false, 0xFFFFFFFF, player);
+		wall[i] = Wall({ 1000.0f * (i * 2 + 1),0.0f }, 360.0f, 720.0f, 200.0f + (10.0f * i),
+			false, UNBREAK, 0xFFFFFFFF, player);
 	}
 
 	Floor floor[FLOOR_NUMBER];
 	for (int i = 0; i < FLOOR_NUMBER; i++) {
-		floor[i] = Floor(300 * (i + 1), (690 - i * 30), 10000, 100, 400, 100, BGSELECT, player);
+		floor[i] = Floor(300 * (i + 0), (390 + i * 60), 10000, 10, NORMAL, 400, 100, BGSELECT, player);
 	}
 
 

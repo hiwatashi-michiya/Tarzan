@@ -3,12 +3,15 @@
 #include <Novice.h>
 #include "Map.h"
 
-Wall::Wall() : position({0.0f,0.0f}), radius(0.0f),hitSpeed(0.0f),isAlive(true),color(0xFFFFFFFF), pPlayer(pPlayer)
+Wall::Wall() : position({ 0.0f,0.0f }), width(0.0f), height(0.0f), hitSpeed(0.0f),
+isAlive(true), color(0xFFFFFFFF), pPlayer(pPlayer)
 {
 }
 
-Wall::Wall(Vec2 position, float radius, float hitSpeed, bool isAlive, int color,Player& pPlayer)
-	: position({position.x,position.y}), radius(radius), hitSpeed(hitSpeed), isAlive(true), color(color), pPlayer(&pPlayer)
+Wall::Wall(Vec2 position, float width, float height, float hitSpeed,
+	bool isAlive, int type, int color, Player& pPlayer)
+	: position({position.x,position.y}), width(width), height(height), hitSpeed(hitSpeed),
+	isAlive(true), type(type), color(color), pPlayer(&pPlayer)
 {
 
 }
@@ -21,8 +24,8 @@ void Wall::Update(int scrollX) {
 
 		color = 0xFFFFFFFF;
 
-		if (pPlayer->getPosX() > position.x - radius &&
-			pPlayer->getPosX() < position.x + radius) {
+		if (pPlayer->getPosX() > position.x - width &&
+			pPlayer->getPosX() < position.x + width * 2) {
 			Collision(scrollX);
 		}
 
@@ -32,9 +35,9 @@ void Wall::Update(int scrollX) {
 
 void Wall::Draw(int scrollX) {
 
-	if (isAlive == true && position.x - scrollX < WINDOW_WIDTH && position.x > 0 - radius) {
+	if (isAlive == true && position.x - scrollX < WINDOW_WIDTH && position.x > 0 - width) {
 
-		Novice::DrawBox(position.x - scrollX, position.y, radius / 2, radius, 0.0f, color, kFillModeSolid);
+		Novice::DrawBox(position.x - scrollX, position.y, width, height, 0.0f, color, kFillModeSolid);
 
 	}
 
@@ -44,20 +47,40 @@ void Wall::Draw(int scrollX) {
 
 void Wall::Collision(int scrollX) {
 
-	if (pPlayer->Player::getPosX() + pPlayer->Player::getRadius() - scrollX > position.x - scrollX) {
+	if ((pPlayer->Player::getPosX() + pPlayer->Player::getRadius() - scrollX > position.x - scrollX) &&
+		(pPlayer->Player::getPosX() - pPlayer->Player::getRadius() - scrollX < position.x + width - scrollX)) {
 
-		if ((pPlayer->Player::getSpeedX()) >= hitSpeed) {
-			isAlive = false;
+		if (type == BREAK) {
+
+			if ((pPlayer->Player::getSpeedX()) >= hitSpeed) {
+				isAlive = false;
+			}
+			else if (pPlayer->Player::getIsGround() == false) {
+				pPlayer->Player::resetTarzanGage();
+				pPlayer->Player::setSpeedX();
+				color = 0xFF0000FF;
+			}
+			else {
+				pPlayer->Player::setSpeedX();
+				color = 0xFF0000FF;
+			}
+
 		}
-		else if (pPlayer->Player::getIsGround() == false) {
-			pPlayer->Player::resetTarzanGage();
-			pPlayer->Player::setSpeedX();
-			color = 0xFF0000FF;
+		else if (type == UNBREAK) {
+
+			if (pPlayer->Player::getIsGround() == false) {
+				pPlayer->Player::resetTarzanGage();
+				pPlayer->Player::setSpeedX();
+				color = 0x0000FFFF;
+			}
+			else {
+				pPlayer->Player::setSpeedX();
+				color = 0x0000FFFF;
+			}
+
 		}
-		else {
-			pPlayer->Player::setSpeedX();
-			color = 0xFF0000FF;
-		}
+
+		
 
 	}
 
