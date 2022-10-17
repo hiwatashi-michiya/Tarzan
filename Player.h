@@ -50,6 +50,9 @@ public:
 	//YÀ•W‚ğ~‚ß‚é
 	inline float setPosY(float y) { position.y = y - radius; return position.y; }
 
+	//YÀ•W‚ğ~‚ß‚é(‰º”»’è)
+	inline float setUnderPosY(float y) { position.y = y + radius; return position.y; }
+
 	//Y‘¬“x‚Ìæ“¾
 	inline float getSpeedY() { return velocity.y; }
 

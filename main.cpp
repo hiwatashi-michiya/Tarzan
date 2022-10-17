@@ -30,13 +30,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Wall wall[WALL_NUMBER];
 	for (int i = 0; i < WALL_NUMBER; i++) {
-		wall[i] = Wall({ 1000.0f * (i * 2 + 1),0.0f }, 360.0f, 720.0f, 200.0f + (10.0f * i),
+		wall[i] = Wall({ 100.0f * (i + 1),390.0f - (i * 30.0f)}, 500.0f, 200.0f, 200.0f + (10.0f * i),
 			false, UNBREAK, 0xFFFFFFFF, player);
 	}
 
 	Floor floor[FLOOR_NUMBER];
 	for (int i = 0; i < FLOOR_NUMBER; i++) {
-		floor[i] = Floor(300 * (i + 0), (390 + i * 60), 10000, 10, NORMAL, 400, 100, BGSELECT, player);
+		floor[i] = Floor(1000 * (i + 1), (680 - (i * 30.0f)), 500, 10, NORMAL, 1, 1, BGSELECT, player);
 	}
 
 

@@ -48,8 +48,11 @@ void Wall::Draw(int scrollX) {
 void Wall::Collision(int scrollX) {
 
 	if ((pPlayer->Player::getPosX() + pPlayer->Player::getRadius() - scrollX > position.x - scrollX) &&
-		(pPlayer->Player::getPosX() - pPlayer->Player::getRadius() - scrollX < position.x + width - scrollX)) {
+		(pPlayer->Player::getPosX() - pPlayer->Player::getRadius() - scrollX < position.x + width - scrollX) &&
+		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() > position.y &&
+		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() < position.y + height) {
 
+		
 		if (type == BREAK) {
 
 			if ((pPlayer->Player::getSpeedX()) >= hitSpeed) {
@@ -58,6 +61,10 @@ void Wall::Collision(int scrollX) {
 			else if (pPlayer->Player::getIsGround() == false) {
 				pPlayer->Player::resetTarzanGage();
 				pPlayer->Player::setSpeedX();
+				if (pPlayer->Player::getSpeedY() < 0) {
+					pPlayer->Player::setSpeedY();
+					pPlayer->Player::setUnderPosY(position.y + height);
+				}
 				color = 0xFF0000FF;
 			}
 			else {
@@ -71,6 +78,10 @@ void Wall::Collision(int scrollX) {
 			if (pPlayer->Player::getIsGround() == false) {
 				pPlayer->Player::resetTarzanGage();
 				pPlayer->Player::setSpeedX();
+				if (pPlayer->Player::getSpeedY() < 0) {
+					pPlayer->Player::setSpeedY();
+					pPlayer->Player::setUnderPosY(position.y + height);
+				}
 				color = 0x0000FFFF;
 			}
 			else {
@@ -79,8 +90,6 @@ void Wall::Collision(int scrollX) {
 			}
 
 		}
-
-		
 
 	}
 

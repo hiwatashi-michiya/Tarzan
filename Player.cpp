@@ -42,6 +42,7 @@ void Player::Draw(int scrollX) {
 	}
 	int color = RED + ((int)(TarzanGage * TARZAN_COLOR) << 16) + ((int)(TarzanGage * TARZAN_COLOR) << 8);
 	Novice::DrawEllipse(position.x - scrollX, (position.y), radius, radius, 0.0f, color, kFillModeSolid);
+	Novice::DrawEllipse(position.x + velocity.x - scrollX, (position.y + velocity.y), radius, radius, 0.0f, 0xFF0000FF, kFillModeWireFrame);
 
 	Novice::ScreenPrintf(0, 0, "%1.2f", position.x);
 	Novice::ScreenPrintf(0, 20, "%1.2f", position.y);

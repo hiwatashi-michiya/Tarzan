@@ -1,7 +1,7 @@
 #pragma once
 #include "Vec2.h"
 
-const int WALL_NUMBER = 1;
+const int WALL_NUMBER = 10;
 
 class Player;
 
