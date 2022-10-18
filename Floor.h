@@ -7,14 +7,15 @@ class Player;
 enum FLOORTYPE {
 	NORMAL,
 	PLAYERACCEL,
-	PLAYERDECEL
+	PLAYERDECEL,
+	CEILING
 };
 
 class Floor
 {
 public:
 	Floor();
-	Floor(float x, float y, float length, float height, int type,
+	Floor(float x, float y, float length, float height, int type, float imgLength, float imgHeight,
 		float scrW, float scrH, int textureHandle, Player& pPlayer);
 
 	void Update(int scrollX);
@@ -30,13 +31,19 @@ private:
 	float x;
 	float y;
 
-	//’·‚³
+	//”»’è’·‚³
 	float length;
 
-	//‚‚³(‰æ‘œ•\¦—p)
+	//”»’è‚‚³
 	float height;
 
 	int type;
+
+	//‰æ‘œ’·‚³
+	float imgLength;
+
+	//‰æ‘œ‚‚³
+	float imgHeight;
 
 	//DrawQuad—p
 	float scrW;

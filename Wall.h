@@ -20,9 +20,11 @@ public:
 	/// 壁のパラメーター
 	/// </summary>
 	/// <param name="position">{X座標, Y座標}</param>
-	/// <param name="radius">横幅</param>
+	/// <param name="width">横幅</param>
+	/// /// <param name="height">縦幅</param>
 	/// <param name="hitSpeed">どこまでのスピードを耐えられるか</param>
 	/// <param name="isAlive">壊れたかどうか</param>
+	/// /// <param name="type">壁の種類</param>
 	/// <param name="color">色</param>
 	/// <param name="pPlayer">受け渡すポインタ(Playerクラス限定)</param>
 	Wall(Vec2 position, float width, float height, float hitSpeed, bool isAlive, 

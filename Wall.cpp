@@ -4,7 +4,7 @@
 #include "Map.h"
 
 Wall::Wall() : position({ 0.0f,0.0f }), width(0.0f), height(0.0f), hitSpeed(0.0f),
-isAlive(true), color(0xFFFFFFFF), pPlayer(pPlayer)
+isAlive(true), type(BREAK), color(0xFFFFFFFF), pPlayer(pPlayer)
 {
 }
 
@@ -49,46 +49,20 @@ void Wall::Collision(int scrollX) {
 
 	if ((pPlayer->Player::getPosX() + pPlayer->Player::getRadius() - scrollX > position.x - scrollX) &&
 		(pPlayer->Player::getPosX() - pPlayer->Player::getRadius() - scrollX < position.x + width - scrollX) &&
-		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() > position.y &&
-		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() < position.y + height) {
+		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() >= position.y &&
+		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() <= position.y + height) {
 
-		
-		if (type == BREAK) {
-
-			if ((pPlayer->Player::getSpeedX()) >= hitSpeed) {
-				isAlive = false;
-			}
-			else if (pPlayer->Player::getIsGround() == false) {
-				pPlayer->Player::resetTarzanGage();
-				pPlayer->Player::setSpeedX();
-				if (pPlayer->Player::getSpeedY() < 0) {
-					pPlayer->Player::setSpeedY();
-					pPlayer->Player::setUnderPosY(position.y + height);
-				}
-				color = 0xFF0000FF;
-			}
-			else {
-				pPlayer->Player::setSpeedX();
-				color = 0xFF0000FF;
-			}
-
+		if ((pPlayer->Player::getSpeedX()) >= hitSpeed && type == BREAK) {
+			isAlive = false;
 		}
-		else if (type == UNBREAK) {
-
-			if (pPlayer->Player::getIsGround() == false) {
-				pPlayer->Player::resetTarzanGage();
-				pPlayer->Player::setSpeedX();
-				if (pPlayer->Player::getSpeedY() < 0) {
-					pPlayer->Player::setSpeedY();
-					pPlayer->Player::setUnderPosY(position.y + height);
-				}
-				color = 0x0000FFFF;
-			}
-			else {
-				pPlayer->Player::setSpeedX();
-				color = 0x0000FFFF;
-			}
-
+		else if (pPlayer->Player::getIsGround() == false) {
+			pPlayer->Player::resetTarzanGage();
+			pPlayer->Player::setSpeedX();
+			color = 0xFF0000FF;
+		}
+		else {
+			pPlayer->Player::setSpeedX();
+			color = 0xFF0000FF;
 		}
 
 	}

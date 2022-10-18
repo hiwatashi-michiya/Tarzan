@@ -17,7 +17,7 @@ class Player
 public:
 	Player();
 	Player(Vec2 position, Vec2 velocity, float radius, Vec2 center, int color, 
-		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround);
+		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length);
 
 	void Update(int* scrollX);
 
@@ -36,8 +36,16 @@ public:
 	//X速度を反転させる
 	inline float setSpeedX() { velocity.x *= -1; return velocity.x; }
 
+	//X速度を0にする
+	inline float setSpeed0X() { velocity.x = 0; return velocity.x; }
+
 	//X速度を加速させる
-	inline float accelX() { velocity.x *= 1.001f; return velocity.x; }
+	inline float accelX() { 
+		if (velocity.x < 50) {
+			velocity.x *= 1.005f;
+		}
+		return velocity.x;
+	}
 
 	//X速度を減速させる
 	inline float decelX() { velocity.x /= 1.005f;	return velocity.x; }
@@ -59,6 +67,10 @@ public:
 	//Y速度を0にする
 	inline float setSpeedY() { velocity.y = 0; return velocity.y; }
 
+	//バウンド
+	inline float boundY() { velocity.y *= -1; return velocity.y; }
+
+
 	//------------ その他 -----------------
 
 	//大きさの取得
@@ -75,6 +87,12 @@ public:
 
 	//ターザンゲージを回復する
 	inline int RecoveryTarzanGage() { TarzanGage = TARZAN_GAGE; return TarzanGage; }
+
+	//グリップフラグを戻す
+	inline bool setIsGrip() { isGrip = false; return isGrip; }
+
+	//距離を0にする
+	inline bool setLength() { length = 0; return length; }
 
 private:
 
@@ -113,6 +131,9 @@ private:
 
 	// 地面にいるか
 	bool isGround;
+
+	//距離
+	float length;
 
 };
 

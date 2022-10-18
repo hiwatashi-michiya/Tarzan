@@ -5,16 +5,16 @@
 
 Player::Player()
 	: position({ 100.0f,100.0f }), velocity({ 5.0f,5.0f }), radius(30), center({0.0f,0.0f}),
-	color(0xFFFFFFFF), isGrip(false), TarzanGage(TARZAN_GAGE), GripGage(0), unGrip(0),isGround(false)
+	color(0xFFFFFFFF), isGrip(false), TarzanGage(TARZAN_GAGE), GripGage(0), unGrip(0),isGround(false), length(0)
 {
 
 }
 
 Player::Player(Vec2 position, Vec2 velocity, float radius, Vec2 center, int color, 
-	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround)
+	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length)
 	: position({ position.x,position.y }), velocity({ velocity.x,velocity.y }), radius(radius),
 	center({ center.x,center.y }), color(color), isGrip(false), TarzanGage(TARZAN_GAGE), 
-	GripGage(0), unGrip(unGrip), isGround(isGround)
+	GripGage(0), unGrip(unGrip), isGround(isGround), length(length)
 {
 
 }
@@ -65,6 +65,10 @@ float Player::KeepMaxSpeed(float maxSpeed) {
 
 void Player::Move() {
 
+
+	if (isGround) {
+		center.y = position.y - 500;
+	}
 	// プレイヤーの先を行く
 	if (!isGrip) {
 		center.x = position.x + VINE_LENGTH;
@@ -89,17 +93,71 @@ void Player::Move() {
 				isGrip = true;
 
 				// 中心までのベクトルを出す
-				Vec2 PtC;
-				PtC = { center.x - position.x,center.y - position.y };
-				PtC = PtC.normarize();
+				Vec2 ptc;
+				ptc = { center.x - position.x,center.y - position.y };
+				Vec2 normal = ptc.normarize();
 
+				// つかんだ時点での距離を保存
+				if (length == 0) {
+					length = ptc.length();
+				}
+
+
+				// 中心から垂直なベクトル
+				Vec2 ver = { -normal.y,normal.x };// ベクトルを分解する式
+				// (s * a.X) + (t * b.X) = X, (s * a.Y) - (t * b.Y) = Y
+				// ↑の式めっちゃ変換した
+				// 中心のベクトルに垂直なベクトルの倍率
+				float t, s;
+				t = -(velocity.x * normal.y - velocity.y * normal.x) / (normal.x * ver.y - normal.y * ver.x);
+				// 中心への倍率
+				s = (velocity.x - t * ver.x) / normal.x;
+
+				//	速度を打ち消す(減衰あり)
+				float fixX = -s * normal.x;
+				float fixY = -s * normal.y;
+				
+				// スカラー
+				float scalar = velocity.length();
+
+				// 速度を方向で指定する
+				if (t < -0.2f) {
+					fixX = -scalar * ver.x;
+					fixY = -scalar * ver.y;
+				}
+				else if (0.2f < t) {
+					fixX = scalar * ver.x;
+					fixY = scalar * ver.y;
+				}
+
+				// 案2
+					// 広がった分を中心に向かうベクトルと合成して補正する
+					// その分のベクトルを算出
+				Vec2 collection = { 0,0 };
+
+				ptc.x = center.x - (position.x + fixX);
+				ptc.y = center.y - (position.y + fixY);
+				normal = ptc.normarize();
+
+
+				// 生じた差異
+				float diffelence = ptc.length() - length;
+				// 半径を戻すベクトル
+				collection.x = normal.x * diffelence;
+				collection.y = normal.y * diffelence;
+				// ベクトルを修正する
+				fixX += collection.x;
+				fixY += collection.y;
+
+				velocity.x = fixX;
+				velocity.y = fixY;
 
 				// 左回りの垂直な線に変える
-				velocity.x = -PtC.y * velocity.length();
-				velocity.y = PtC.x * velocity.length();
+				//velocity.x = -ptc.y * velocity.length();
+				//velocity.y = ptc.x * velocity.length();
 
-				velocity.x += PtC.normarize().x;
-				velocity.y += PtC.normarize().y;
+				//velocity.x += ptc.normarize().x;
+				//velocity.y += ptc.normarize().y;
 
 
 			}
@@ -120,6 +178,7 @@ void Player::Move() {
 		float newV = 1 + GripGage / 500.0f;
 		velocity.x *= newV;
 		GripGage = 0;
+		length = 0;
 	}
 	//DrawEllipse(position.X + VINE_LENGTH, 600, 20, 20, WHITE, kFillModeWireFrame);
 
@@ -141,6 +200,8 @@ void Player::Collision(int* scrollX) {
 		TarzanGage = TARZAN_GAGE;
 		velocity.y = 0;
 		isGround = true;
+		length = 0;
+		isGrip = false;
 	}
 	else {
 		isGround = false;

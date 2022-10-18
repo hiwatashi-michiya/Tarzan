@@ -25,4 +25,4 @@ int clearly = 0x0000000F + sceneCount * 4;
 bool isGoal = false;
 
 //ƒS[ƒ‹ƒ‰ƒCƒ“
-int goalLine = 128000;
+int goalLine = 25600;

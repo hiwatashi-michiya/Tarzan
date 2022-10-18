@@ -8,8 +8,6 @@
 
 const char kWindowTitle[] = "Wild Tarzan";
 
-
-
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -24,21 +22,47 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int BGTITLE = Novice::LoadTexture("./Resources/Images/TarzanBG.png");
 	int BGSELECT = Novice::LoadTexture("./Resources/Images/TarzanBG_SELECT.png");
+	int ACCELFLOOR = Novice::LoadTexture("./Resources/Images/accel.png");
+	int DECELFLOOR = Novice::LoadTexture("./Resources/Images/decel.png");
+	int FLOOR = Novice::LoadTexture("./Resources/Images/floor.png");
 
-	Player player({ 150.0f, 200.0f }, { 0.0f, 0.0f }, 20.0f, { 100.0f + 250.0f, 200.0f },
-		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false);
+	Player player({ 150.0f, 200.0f }, { 0.0f, 0.0f }, 10.0f, { 100.0f + 250.0f, 200.0f },
+		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0);
 
 	Wall wall[WALL_NUMBER];
-	for (int i = 0; i < WALL_NUMBER; i++) {
-		wall[i] = Wall({ 100.0f * (i + 1),390.0f - (i * 30.0f)}, 500.0f, 200.0f, 200.0f + (10.0f * i),
-			false, UNBREAK, 0xFFFFFFFF, player);
-	}
+	wall[0] = Wall({ 1000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[1] = Wall({ 4000.0f,0.0f }, 200, 720, 20.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[2] = Wall({ 9000.0f,0.0f }, 200, 720, 25.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[3] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[4] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[5] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[6] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[7] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[8] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[9] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
 
 	Floor floor[FLOOR_NUMBER];
 	for (int i = 0; i < FLOOR_NUMBER; i++) {
-		floor[i] = Floor(1000 * (i + 1), (680 - (i * 30.0f)), 500, 10, NORMAL, 1, 1, BGSELECT, player);
+
+		if (i % 3 == 0) {
+			floor[i] = Floor(1000 * (i + 1), (680 - (i * 60.0f)), 5000, 10, NORMAL, 5000, 10, 256, 64, BGSELECT, player);
+		}
+
+		if (i % 3 == 1) {
+			floor[i] = Floor(1000 * (i + 1), (680 - (i * 60.0f)), 5000, 10, PLAYERACCEL, 5000, 10, 256, 64, ACCELFLOOR, player);
+		}
+
+		if (i % 3 == 2) {
+			floor[i] = Floor(1000 * (i + 1), (680 - (i * 60.0f)), 5000, 10, PLAYERDECEL, 5000, 10, 256, 64, DECELFLOOR, player);
+		}
+
+		if (i > 2) {
+			floor[i] = Floor(1000 * (i + 1), (680 - (i * 60.0f)), 0, 0, NORMAL, 0, 0, 256, 64, ACCELFLOOR, player);
+		}
+
 	}
 
+	Floor ceiling[FLOOR_NUMBER];
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -262,6 +286,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				for (int i = 0; i < FLOOR_NUMBER; i++) {
 					floor[i].Update(scrollX);
+					/*ceiling[i].Update(scrollX);*/
 				}
 				
 
@@ -290,6 +315,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			for (int i = 0; i < FLOOR_NUMBER; i++) {
 				floor[i].Draw(scrollX);
+				/*ceiling[i].Draw(scrollX);*/
 			}
 
 			for (int i = 0; i < WALL_NUMBER; i++) {
