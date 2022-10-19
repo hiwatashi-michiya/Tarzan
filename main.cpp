@@ -30,35 +30,41 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0);
 
 	Wall wall[WALL_NUMBER];
-	wall[0] = Wall({ 1000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
-	wall[1] = Wall({ 4000.0f,0.0f }, 200, 720, 20.0f, true, BREAK, 0xFFFFFFFF, player);
-	wall[2] = Wall({ 9000.0f,0.0f }, 200, 720, 25.0f, true, BREAK, 0xFFFFFFFF, player);
-	wall[3] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
-	wall[4] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
-	wall[5] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[0] = Wall({ 1000.0f,690.0f }, 5000, 30, 15.0f, true, UNBREAK, 0xFFFFFFFF, player);
+	wall[1] = Wall({ 4000.0f,590.0f }, 200, 130, 20.0f, true, UNBREAK, 0xFFFFFFFF, player);
+	wall[2] = Wall({ 5000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[3] = Wall({ 9000.0f,0.0f }, 200, 720, 25.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[4] = Wall({ 12000.0f,0.0f }, 200, 720, 30.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[5] = Wall({ 14000.0f,0.0f }, 200, 360, 15.0f, true, UNBREAK, 0xFFFFFFFF, player);
 	wall[6] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
 	wall[7] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
 	wall[8] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
-	wall[9] = Wall({ 100000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[9] = Wall({ -100.0f,0.0f }, 200, 720, 15.0f, true, UNBREAK, 0xFFFFFFFF, player);
+
+
 
 	Floor floor[FLOOR_NUMBER];
 	for (int i = 0; i < FLOOR_NUMBER; i++) {
 
-		if (i % 3 == 0) {
-			floor[i] = Floor(1000 * (i + 1), (680 - (i * 60.0f)), 5000, 10, NORMAL, 5000, 10, 256, 64, BGSELECT, player);
-		}
+		floor[0] = Floor(1000, 680, 5000, 10, NORMAL, 5000, 10, 256, 64, BGSELECT, player);
 
-		if (i % 3 == 1) {
-			floor[i] = Floor(1000 * (i + 1), (680 - (i * 60.0f)), 5000, 10, PLAYERACCEL, 5000, 10, 256, 64, ACCELFLOOR, player);
-		}
+		floor[1] = Floor(4000, 580, 200, 10, PLAYERACCEL, 200, 10, 256, 64, ACCELFLOOR, player);
 
-		if (i % 3 == 2) {
-			floor[i] = Floor(1000 * (i + 1), (680 - (i * 60.0f)), 5000, 10, PLAYERDECEL, 5000, 10, 256, 64, DECELFLOOR, player);
-		}
+		floor[2] = Floor(7000, 480, 3000, 10, PLAYERDECEL, 3000, 10, 256, 64, DECELFLOOR, player);
 
-		if (i > 2) {
-			floor[i] = Floor(1000 * (i + 1), (680 - (i * 60.0f)), 0, 0, NORMAL, 0, 0, 256, 64, ACCELFLOOR, player);
-		}
+		floor[3] = Floor(8000, 650, 500, 10, PLAYERACCEL, 500, 10, 256, 64, ACCELFLOOR, player);
+
+		floor[4] = Floor(14000, 360, 200, 10, CEILING, 200, 10, 256, 64, BGSELECT, player);
+
+		floor[5] = Floor(70000, 480, 5000, 10, NORMAL, 5000, 10, 256, 64, BGSELECT, player);
+
+		floor[6] = Floor(70000, 480, 5000, 10, NORMAL, 5000, 10, 256, 64, BGSELECT, player);
+
+		floor[7] = Floor(10000, 680, 5000, 10, NORMAL, 5000, 10, 256, 64, BGSELECT, player);
+
+		floor[8] = Floor(40000, 580, 200, 10, PLAYERACCEL, 200, 10, 256, 64, ACCELFLOOR, player);
+
+		floor[9] = Floor(70000, 480, 5000, 10, NORMAL, 5000, 10, 256, 64, BGSELECT, player);
 
 	}
 

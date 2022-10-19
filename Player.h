@@ -67,10 +67,6 @@ public:
 	//Y速度を0にする
 	inline float setSpeedY() { velocity.y = 0; return velocity.y; }
 
-	//バウンド
-	inline float boundY() { velocity.y *= -1; return velocity.y; }
-
-
 	//------------ その他 -----------------
 
 	//大きさの取得

@@ -58,11 +58,23 @@ void Wall::Collision(int scrollX) {
 		else if (pPlayer->Player::getIsGround() == false) {
 			pPlayer->Player::resetTarzanGage();
 			pPlayer->Player::setSpeedX();
-			color = 0xFF0000FF;
+
+			if (type == BREAK) {
+				color = 0xFF0000FF;
+			}
+			else {
+				color = 0x0000FFFF;
+			}
+			
 		}
 		else {
 			pPlayer->Player::setSpeedX();
-			color = 0xFF0000FF;
+			if (type == BREAK) {
+				color = 0xFF0000FF;
+			}
+			else {
+				color = 0x0000FFFF;
+			}
 		}
 
 	}
