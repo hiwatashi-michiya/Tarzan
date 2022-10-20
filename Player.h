@@ -17,7 +17,7 @@ class Player
 public:
 	Player();
 	Player(Vec2 position, Vec2 velocity, float radius, Vec2 center, int color, 
-		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length);
+		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle);
 
 	void Update(int* scrollX);
 
@@ -130,6 +130,9 @@ private:
 
 	//‹——£
 	float length;
+
+	//‰æ‘œ
+	int textureHandle;
 
 };
 

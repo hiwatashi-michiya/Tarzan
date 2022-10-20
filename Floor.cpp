@@ -69,6 +69,7 @@ void Floor::Collision(int scrollX) {
 
 		if (type == CEILING) {
 
+			pPlayer->Player::resetTarzanGage();
 			pPlayer->Player::setSpeedY();
 			pPlayer->Player::setUnderPosY(y + height);
 

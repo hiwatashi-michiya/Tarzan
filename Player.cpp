@@ -11,10 +11,10 @@ Player::Player()
 }
 
 Player::Player(Vec2 position, Vec2 velocity, float radius, Vec2 center, int color, 
-	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length)
+	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length,int textureHandle)
 	: position({ position.x,position.y }), velocity({ velocity.x,velocity.y }), radius(radius),
 	center({ center.x,center.y }), color(color), isGrip(false), TarzanGage(TARZAN_GAGE), 
-	GripGage(0), unGrip(unGrip), isGround(isGround), length(length)
+	GripGage(0), unGrip(unGrip), isGround(isGround), length(length), textureHandle(textureHandle)
 {
 
 }
@@ -41,7 +41,10 @@ void Player::Draw(int scrollX) {
 		Novice::DrawLine(position.x - scrollX, (position.y), center.x - scrollX, (center.y), GREEN);
 	}
 	int color = RED + ((int)(TarzanGage * TARZAN_COLOR) << 16) + ((int)(TarzanGage * TARZAN_COLOR) << 8);
-	Novice::DrawEllipse(position.x - scrollX, (position.y), radius, radius, 0.0f, color, kFillModeSolid);
+	/*Novice::DrawEllipse(position.x - scrollX, (position.y), radius, radius, 0.0f, color, kFillModeSolid);*/
+	Novice::DrawQuad(position.x - radius - scrollX, position.y - radius, position.x + radius - scrollX, position.y - radius,
+		position.x - radius - scrollX, position.y + radius, position.x + radius - scrollX, position.y + radius,
+		0, 0, 32, 32, textureHandle, color);
 	Novice::DrawEllipse(position.x + velocity.x - scrollX, (position.y + velocity.y), radius, radius, 0.0f, 0xFF0000FF, kFillModeWireFrame);
 
 	Novice::ScreenPrintf(0, 0, "%1.2f", position.x);
@@ -90,6 +93,9 @@ void Player::Move() {
 			TarzanGage--;
 			if (0 < TarzanGage && !isGround) {
 				GripGage++;
+				if (300 <= GripGage) {
+					GripGage = 300;
+				}
 				isGrip = true;
 
 				// 中心までのベクトルを出す
@@ -175,10 +181,14 @@ void Player::Move() {
 	else if (!Novice::CheckHitKey(DIK_RETURN) && isGrip) {
 		isGrip = false;
 		// 掴んだ時間に応じて加速
-		float newV = 1 + GripGage / 500.0f;
+		float newV = 1 + GripGage / 400.0f;
 		velocity.x *= newV;
-		GripGage = 0;
+		newV = 1 + GripGage / 200.0f;
+		if (velocity.y < 0) {
+			velocity.y *= newV;
+		}
 		length = 0;
+		GripGage = 0;
 	}
 	//DrawEllipse(position.X + VINE_LENGTH, 600, 20, 20, WHITE, kFillModeWireFrame);
 

@@ -26,13 +26,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int DECELFLOOR = Novice::LoadTexture("./Resources/Images/decel.png");
 	int FLOOR = Novice::LoadTexture("./Resources/Images/floor.png");
 
-	Player player({ 150.0f, 200.0f }, { 0.0f, 0.0f }, 10.0f, { 100.0f + 250.0f, 200.0f },
-		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0);
+	Player player({ 150.0f, 200.0f }, { 0.0f, 0.0f }, 16.0f, { 100.0f + 250.0f, 200.0f },
+		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0,BGTITLE);
 
 	Wall wall[WALL_NUMBER];
-	wall[0] = Wall({ 1000.0f,690.0f }, 5000, 30, 15.0f, true, UNBREAK, 0xFFFFFFFF, player);
+	wall[0] = Wall({ 100.0f,690.0f }, 5900, 30, 15.0f, true, UNBREAK, 0xFFFFFFFF, player);
 	wall[1] = Wall({ 4000.0f,590.0f }, 200, 130, 20.0f, true, UNBREAK, 0xFFFFFFFF, player);
-	wall[2] = Wall({ 5000.0f,0.0f }, 200, 720, 15.0f, true, BREAK, 0xFFFFFFFF, player);
+	wall[2] = Wall({ 5000.0f,0.0f }, 200, 680, 15.0f, true, BREAK, 0xFFFFFFFF, player);
 	wall[3] = Wall({ 9000.0f,0.0f }, 200, 720, 25.0f, true, BREAK, 0xFFFFFFFF, player);
 	wall[4] = Wall({ 12000.0f,0.0f }, 200, 720, 30.0f, true, BREAK, 0xFFFFFFFF, player);
 	wall[5] = Wall({ 14000.0f,0.0f }, 200, 360, 15.0f, true, UNBREAK, 0xFFFFFFFF, player);
@@ -46,7 +46,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Floor floor[FLOOR_NUMBER];
 	for (int i = 0; i < FLOOR_NUMBER; i++) {
 
-		floor[0] = Floor(1000, 680, 5000, 10, NORMAL, 5000, 10, 256, 64, BGSELECT, player);
+		floor[0] = Floor(100, 680, 5900, 10, NORMAL, 5900, 10, 256, 64, BGSELECT, player);
 
 		floor[1] = Floor(4000, 580, 200, 10, PLAYERACCEL, 200, 10, 256, 64, ACCELFLOOR, player);
 
