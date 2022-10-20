@@ -1,7 +1,7 @@
 #include "Wall.h"
 #include "Player.h"
 #include <Novice.h>
-#include "Map.h"
+#include "Stage.h"
 
 Wall::Wall() : position({ 0.0f,0.0f }), width(0.0f), height(0.0f), hitSpeed(0.0f),
 isAlive(true), type(BREAK), color(0xFFFFFFFF), pPlayer(pPlayer)
@@ -52,7 +52,7 @@ void Wall::Collision(int scrollX) {
 		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() >= position.y &&
 		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() <= position.y + height) {
 
-		if ((pPlayer->Player::getSpeedX()) >= hitSpeed && type == BREAK) {
+		if (((pPlayer->Player::getSpeedX()) >= hitSpeed || (pPlayer->Player::getReverseSpeedX()) >= hitSpeed) && type == BREAK) {
 			isAlive = false;
 		}
 		else if (pPlayer->Player::getIsGround() == false) {

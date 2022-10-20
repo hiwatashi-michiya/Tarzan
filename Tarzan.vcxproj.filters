@@ -133,14 +133,13 @@
     <ClInclude Include="..\DirectXGame\math\Vector4.h">
       <Filter>KamataEngine\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Text.h" />
-    <ClInclude Include="Select.h" />
+    <ClInclude Include="Stage.h" />
     <ClInclude Include="Floor.h" />
   </ItemGroup>
 </Project>

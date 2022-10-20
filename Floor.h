@@ -1,6 +1,6 @@
 #pragma once
 
-const int FLOOR_NUMBER = 10;
+const int FLOOR_NUMBER = 50;
 
 class Player;
 

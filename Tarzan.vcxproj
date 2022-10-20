@@ -135,10 +135,9 @@
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Key.h" />
-    <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="Select.h" />
+    <ClInclude Include="Stage.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Wall.h" />

@@ -33,6 +33,9 @@ public:
 	//X速度の取得
 	inline float getSpeedX() { return velocity.x; }
 
+	//X速度の取得(負の値)
+	inline float getReverseSpeedX() { return -velocity.x; }
+
 	//X速度を反転させる
 	inline float setSpeedX() { velocity.x *= -1; return velocity.x; }
 

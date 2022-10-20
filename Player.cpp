@@ -1,7 +1,7 @@
 #include "Player.h"
-#include "Map.h"
 #include <Novice.h>
 #include "Wall.h"
+#include "Stage.h"
 
 Player::Player()
 	: position({ 100.0f,100.0f }), velocity({ 5.0f,5.0f }), radius(30), center({0.0f,0.0f}),
