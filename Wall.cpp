@@ -9,16 +9,16 @@ isAlive(true), type(BREAK), color(0xFFFFFFFF), pPlayer(pPlayer)
 }
 
 Wall::Wall(Vec2 position, float width, float height, float hitSpeed,
-	bool isAlive, int type, int color, Player& pPlayer)
+	bool isAlive, int type, int color, Player& pPlayer, int textureHandle)
 	: position({position.x,position.y}), width(width), height(height), hitSpeed(hitSpeed),
-	isAlive(true), type(type), color(color), pPlayer(&pPlayer)
+	isAlive(true), type(type), color(color), pPlayer(&pPlayer), textureHandle(textureHandle)
 {
 
 }
 
 //-----------------------------------------
 
-void Wall::Update(int scrollX) {
+void Wall::Update(Vec2 scroll) {
 
 	if (isAlive == true) {
 
@@ -26,18 +26,20 @@ void Wall::Update(int scrollX) {
 
 		if (pPlayer->getPosX() > position.x - width &&
 			pPlayer->getPosX() < position.x + width * 2) {
-			Collision(scrollX);
+			Collision(scroll);
 		}
 
 	}
 
 }
 
-void Wall::Draw(int scrollX) {
+void Wall::Draw(Vec2 scroll) {
 
-	if (isAlive == true && position.x - scrollX < WINDOW_WIDTH && position.x > 0 - width) {
+	if (isAlive == true && position.x - scroll.x < WINDOW_WIDTH && position.x > 0 - width) {
 
-		Novice::DrawBox(position.x - scrollX, position.y, width, height, 0.0f, color, kFillModeSolid);
+		Novice::DrawQuad(position.x - scroll.x, position.y - scroll.y, position.x + width - scroll.x, position.y - scroll.y,
+			position.x - scroll.x, position.y + height - scroll.y, position.x + width - scroll.x, position.y + height - scroll.y,
+			0, 0, 64, 64, textureHandle, color);
 
 	}
 
@@ -45,12 +47,12 @@ void Wall::Draw(int scrollX) {
 
 //------------------------------------------
 
-void Wall::Collision(int scrollX) {
+void Wall::Collision(Vec2 scroll) {
 
-	if ((pPlayer->Player::getPosX() + pPlayer->Player::getRadius() - scrollX > position.x - scrollX) &&
-		(pPlayer->Player::getPosX() - pPlayer->Player::getRadius() - scrollX < position.x + width - scrollX) &&
-		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() >= position.y &&
-		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() <= position.y + height) {
+	if ((pPlayer->Player::getPosX() + pPlayer->Player::getRadius() - scroll.x > position.x - scroll.x) &&
+		(pPlayer->Player::getPosX() - pPlayer->Player::getRadius() - scroll.x < position.x + width - scroll.x) &&
+		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() - scroll.y >= position.y - scroll.y &&
+		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() - scroll.y <= position.y + height - scroll.y) {
 
 		if (((pPlayer->Player::getSpeedX()) >= hitSpeed || (pPlayer->Player::getReverseSpeedX()) >= hitSpeed) && type == BREAK) {
 			isAlive = false;

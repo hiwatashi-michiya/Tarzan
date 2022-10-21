@@ -1,8 +1,8 @@
 #include "Vec2.h"
 #include <math.h>
 
-Vec2::Vec2() : x(0.0f),y(0.0f) {
-	
+Vec2::Vec2() : x(0.0f), y(0.0f) {
+
 }
 
 Vec2::Vec2(float x, float y) : x(x), y(y) {
@@ -44,7 +44,7 @@ float Vec2::posY() {
 }
 
 Vec2 Vec2::normarize() {
-	
+
 	Vec2 vector;
 
 	vector = { x,y };
@@ -53,7 +53,19 @@ Vec2 Vec2::normarize() {
 		vector.x = vector.x / length();
 		vector.y = vector.y / length();
 	}
-	
+
 	return vector;
 
+}
+
+float Vec2::ATAN2() {
+	return atan2(y, x);
+}
+
+float Vec2::COSF() {
+	return cosf(ATAN2());
+}
+
+float Vec2::SINF() {
+	return sinf(ATAN2());
 }

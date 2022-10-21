@@ -1,4 +1,5 @@
 #pragma once
+#include "Vec2.h"
 
 const int FLOOR_NUMBER = 50;
 
@@ -15,21 +16,21 @@ class Floor
 {
 public:
 	Floor();
-	Floor(float x, float y, float length, float height, int type, float imgLength, float imgHeight,
+	Floor(float posX, float posY, float length, float height, int type, float imgLength, float imgHeight,
 		float scrW, float scrH, int textureHandle, Player& pPlayer);
 
-	void Update(int scrollX);
+	void Update(Vec2 scroll);
 
-	void Draw(int scrollX);
+	void Draw(Vec2 scroll);
 
 private:
 
 	//ìñÇΩÇËîªíË
-	void Collision(int scrollX);
+	void Collision(Vec2 scroll);
 
 	//ç¿ïW
-	float x;
-	float y;
+	float posX;
+	float posY;
 
 	//îªíËí∑Ç≥
 	float length;

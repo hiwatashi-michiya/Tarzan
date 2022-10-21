@@ -8,11 +8,11 @@
 
 class Vec2 {
 
-//アクセス範囲 : 外からいじれない
+	//アクセス範囲 : 外からいじれない
 private:
 
 
-//アクセス範囲 : 外からいじれる、見れる
+	//アクセス範囲 : 外からいじれる、見れる
 public:
 
 	float x;
@@ -35,5 +35,23 @@ public:
 	float posY();
 
 	Vec2 normarize();
+
+	/// <summary>
+	/// 座標を入力して角度を出す
+	/// </summary>
+	/// <returns>求めたラジアン値</returns>
+	float ATAN2();
+
+	/// <summary>
+	/// 単位円上の x 値
+	/// </summary>
+	/// <returns>ベクトルのラジアンを算出し、 x 値を返す</returns>
+	float COSF();
+
+	/// <summary>
+	/// 単位円上の y 値
+	/// </summary>
+	/// <returns>ベクトルのラジアンを算出し、 y 値を返す</returns>
+	float SINF();
 
 };

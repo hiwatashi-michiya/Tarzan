@@ -12,16 +12,25 @@ const int TARZAN_GAGE = 300;
 // ターザンゲージに対応したカラーコード
 const float TARZAN_COLOR = 255 / (float)TARZAN_GAGE;
 
+// 半径(当たり判定は円)
+const int RADIUS = 16;
+
+// 四隅の点
+const Vec2 LEFTTOP = { -RADIUS,-RADIUS };
+const Vec2 RIGHTTOP = { RADIUS - 1,-RADIUS };
+const Vec2 LEFTBOTTOM = { -RADIUS,RADIUS - 1 };
+const Vec2 RIGHTBOTTOM = { RADIUS - 1,RADIUS - 1 };
+
 class Player
 {
 public:
 	Player();
-	Player(Vec2 position, Vec2 velocity, float radius, Vec2 center, int color, 
+	Player(Vec2 position, Vec2 velocity, Vec2 center, int color,
 		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle);
 
-	void Update(int* scrollX);
+	void Update(Vec2* scroll);
 
-	void Draw(int scrollX);
+	void Draw(Vec2 scroll);
 
 	float KeepMaxSpeed(float maxSpeed);
 
@@ -43,7 +52,7 @@ public:
 	inline float setSpeed0X() { velocity.x = 0; return velocity.x; }
 
 	//X速度を加速させる
-	inline float accelX() { 
+	inline float accelX() {
 		if (velocity.x < 50) {
 			velocity.x *= 1.005f;
 		}
@@ -59,10 +68,10 @@ public:
 	inline float getPosY() { return position.y; }
 
 	//Y座標を止める
-	inline float setPosY(float y) { position.y = y - radius; return position.y; }
+	inline float setPosY(float y) { position.y = y - RADIUS; return position.y; }
 
 	//Y座標を止める(下判定)
-	inline float setUnderPosY(float y) { position.y = y + radius; return position.y; }
+	inline float setUnderPosY(float y) { position.y = y + RADIUS; return position.y; }
 
 	//Y速度の取得
 	inline float getSpeedY() { return velocity.y; }
@@ -73,7 +82,7 @@ public:
 	//------------ その他 -----------------
 
 	//大きさの取得
-	inline float getRadius() { return radius; }
+	inline float getRadius() { return RADIUS; }
 
 	//地面判定かどうかの取得
 	inline bool getIsGround() { return isGround; }
@@ -97,18 +106,15 @@ private:
 
 	void Move();
 
-	void Collision(int* scrollX);
+	void Collision(Vec2* scroll);
 
-	
+
 
 	//座標
 	Vec2 position;
 
 	//速度
 	Vec2 velocity;
-
-	//半径
-	float radius;
 
 	//中心座標
 	Vec2 center;

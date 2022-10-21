@@ -28,17 +28,17 @@ public:
 	/// <param name="color">色</param>
 	/// <param name="pPlayer">受け渡すポインタ(Playerクラス限定)</param>
 	Wall(Vec2 position, float width, float height, float hitSpeed, bool isAlive, 
-		int type, int color, Player& pPlayer);
+		int type, int color, Player& pPlayer, int textureHandle);
 
-	void Update(int scrollX);
+	void Update(Vec2 scroll);
 
-	void Draw(int scrollX);
+	void Draw(Vec2 scroll);
 
 	inline float getHitSpeedX() { return hitSpeed; }
 
 private:
 
-	void Collision(int scrollX);
+	void Collision(Vec2 scroll);
 
 	//壁の位置
 	Vec2 position;
@@ -62,6 +62,9 @@ private:
 	int color;
 
 	Player* pPlayer;
+
+	//画像
+	int textureHandle;
 
 };
 
