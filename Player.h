@@ -90,6 +90,9 @@ public:
 	//地面判定にする
 	inline bool setIsGround() { isGround = true; return isGround; }
 
+	//ターザンゲージの取得
+	inline int getTarzanGage() { return TarzanGage; }
+
 	//ターザンゲージをリセットさせる
 	inline int resetTarzanGage() { TarzanGage = 0; return TarzanGage; }
 
