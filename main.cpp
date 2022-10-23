@@ -30,8 +30,32 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//Y軸の画像表示の繰り返し回数
 	const int REPETITION_Y = 4;
 
+	//ロード用の変数
+
+	//タイトル画像
 	int BGTITLE = Novice::LoadTexture("./Resources/Images/TarzanBG.png");
+
+	//セレクト画像
 	int BGSELECT = Novice::LoadTexture("./Resources/Images/TarzanBG_SELECT.png");
+	int SELECTWOOD = Novice::LoadTexture("./Resources/Images/stageselect.png");
+	int WOOD[STAGE_NUMBER];
+	WOOD[0] = 0;
+	WOOD[1] = Novice::LoadTexture("./Resources/Images/stage1.png");
+	WOOD[2] = Novice::LoadTexture("./Resources/Images/stage2.png");
+	WOOD[3] = Novice::LoadTexture("./Resources/Images/stage3.png");
+	WOOD[4] = Novice::LoadTexture("./Resources/Images/stage4.png");
+	WOOD[5] = Novice::LoadTexture("./Resources/Images/stage5.png");
+	int BRIGHTWOOD[STAGE_NUMBER];
+	BRIGHTWOOD[0] = 0;
+	BRIGHTWOOD[1] = Novice::LoadTexture("./Resources/Images/stage1select.png");
+	BRIGHTWOOD[2] = Novice::LoadTexture("./Resources/Images/stage2select.png");
+	BRIGHTWOOD[3] = Novice::LoadTexture("./Resources/Images/stage3select.png");
+	BRIGHTWOOD[4] = Novice::LoadTexture("./Resources/Images/stage4select.png");
+	BRIGHTWOOD[5] = Novice::LoadTexture("./Resources/Images/stage5select.png");
+
+
+
+	//ゲームプレイ画像
 	int ACCELFLOOR = Novice::LoadTexture("./Resources/Images/accel.png");
 	int DECELFLOOR = Novice::LoadTexture("./Resources/Images/decel.png");
 	int UNBREAKWALL = Novice::LoadTexture("./Resources/Images/wall.png");
@@ -51,6 +75,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Player player({ posX, posY }, { velocityX, 0.0f }, { 100.0f + 250.0f, 200.0f },
 		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0,BGTITLE);
+
+	//壁の生成
 
 	Wall wall[STAGE_NUMBER][WALL_NUMBER];
 	for (int a = 0; a < STAGE_NUMBER; a++) {
@@ -72,7 +98,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	wall[1][8] = Wall({ 23000.0f,-344.0f }, 256, 1024, 30.0f, true, BREAK, 0xFFFFFFFF, player,BREAKWALL);
 	wall[1][9] = Wall({ -100.0f,-300.0f }, 256, 1024, 15.0f, true, UNBREAK, 0xFFFFFFFF, player,UNBREAKWALL);
 
+	//
 
+	//初期化用
+	Wall RESET_WALL[STAGE_NUMBER][WALL_NUMBER];
+
+	for (int a = 0; a < STAGE_NUMBER; a++) {
+
+		for (int b = 0; b < WALL_NUMBER; b++) {
+			RESET_WALL[a][b] = wall[a][b];
+		}
+
+	}
+
+	//床、天井の生成
 
 	Floor floor[STAGE_NUMBER][FLOOR_NUMBER];
 
@@ -96,6 +135,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	floor[1][9] = Floor(20000, 480, 256, 10, CEILING, 256, 10, 64, 64, CEILINGFLOOR, player);
 	floor[1][10] = Floor(0, -1440, 28000, 1096, CEILING, 28000, 1096, 64, 64, STAGECEILING, player);
 
+	//
+
+	//初期化用
+	Floor RESET_FLOOR[STAGE_NUMBER][FLOOR_NUMBER];
+
+	for (int a = 0; a < STAGE_NUMBER; a++) {
+		for (int b = 0; b < FLOOR_NUMBER; b++) {
+			RESET_FLOOR[a][b] = floor[a][b];
+		}
+	}
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -113,6 +163,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (sceneChange == true) {
 
+				//フェードイン
 				if (nextScene == TITLE) {
 
 					if (sceneCount > 0) {
@@ -125,6 +176,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 
 				}
+				//フェードアウト
 				else {
 
 					if (sceneCount < 60) {
@@ -176,6 +228,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (sceneChange == true) {
 
+				//フェードイン
 				if (nextScene == STAGESELECT) {
 					
 					if (sceneCount > 0) {
@@ -188,6 +241,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 
 				}
+				//フェードアウト
 				else {
 
 					if (sceneCount < 60) {
@@ -205,6 +259,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 			else if (sceneChange == false) {
+
+				if (Key::IsTrigger(DIK_UP) && stageSelect > 1) {
+					stageSelect -= 1;
+				}
+
+				if (Key::IsTrigger(DIK_DOWN) && stageSelect < 5) {
+					stageSelect += 1;
+				}
 
 				if (Key::IsTrigger(DIK_SPACE)) {
 					sceneChange = true;
@@ -232,6 +294,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			Novice::DrawSprite(0, 0, BGSELECT, 1, 1, 0, 0xFFFFFFFF);
 
+			Novice::DrawQuad(0, 0, 640, 0, 0, 64, 640, 64, 384, 0, 640, 64, SELECTWOOD, 0xFFFFFFFF);
+
+			for (int i = 1; i < STAGE_NUMBER; i++) {
+
+				if (stageSelect == i) {
+					Novice::DrawQuad(0, 64 * i, 512, 64 * i, 0, 64 * i + 64, 512, 64 * i + 64, 0, 0, 512, 64, BRIGHTWOOD[i], 0xFFFFFFFF);
+				}
+				else {
+					Novice::DrawQuad(0, 64 * i, 512 - 128, 64 * i, 0, 64 * i + 64, 512 - 128, 64 * i + 64, 128, 0, 512 - 128, 64, WOOD[i], 0xFFFFFFFF);
+				}
+
+			}
+
 			///
 			/// ↑描画処理ここまで
 			///
@@ -244,8 +319,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			/// ↓更新処理ここから
 			///
 
+			//シーンチェンジが有効になったら
 			if (sceneChange == true && isGoal == false) {
 
+				//フェードイン
 				if (nextScene == GAMEPLAY) {
 
 					if (sceneCount > 0) {
@@ -258,6 +335,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 
 				}
+				//フェードアウト
 				else {
 
 					if (sceneCount < 60) {
@@ -274,8 +352,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 			}
+			//ゴールしたら
 			else if(isGoal == true) {
 
+				//リザルト表示
 				if (sceneChange == false) {
 
 					if (sceneCount < 30) {
@@ -283,6 +363,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						clearly = 0x0000000F + sceneCount * 2;
 					}
 
+					//キー入力でシーンチェンジを有効にする
 					if (sceneCount == 30) {
 
 						if (Key::IsTrigger(DIK_RETURN)) {
@@ -307,6 +388,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 			}
+			//ゲームプレイ中
 			else if (sceneChange == false && isGoal == false) {
 
 				if (Key::IsTrigger(DIK_ESCAPE)) {
