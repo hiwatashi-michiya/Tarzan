@@ -72,7 +72,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region Player
 
-	int TARZAN = Novice::LoadTexture("./Resources/Images/Player/playerRun.png");
+	int PLAYERIDLE = Novice::LoadTexture("./Resources/Images/Player/playerIdle.png");
+	int PLAYERRUN = Novice::LoadTexture("./Resources/Images/Player/playerRun.png");
+	int PLAYERTARZAN = Novice::LoadTexture("./Resources/Images/Player/playerTarzan.png");
 
 #pragma endregion
 
@@ -133,6 +135,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//ドット
 	int DOT = Novice::LoadTexture("./Resources/Images/UI/dot.png");
+	int REDDOT = Novice::LoadTexture("./Resources/Images/UI/dot_red.png");
 
 
 #pragma endregion
@@ -143,6 +146,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//スピードテキスト
 	int SPEED = Novice::LoadTexture("./Resources/Images/UI/speed.png");
+	int MAXSPEED = Novice::LoadTexture("./Resources/Images/UI/maxspeed.png");
 
 	//UI表示を見やすくする画像
 	int UI = Novice::LoadTexture("./Resources/Images/UI/UIsheet.png");
@@ -160,12 +164,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//画像を動かすタイマー
 	int drawTimer = 0;
 
-	float posX = 200.0f;
-	float posY = 200.0f;
-	float velocityX = 0.0f;
+	//シーンチェンジ時の画像を動かす変数
+	int sceneX = 0;
 
-	Player player({ posX, posY }, { velocityX, 0.0f }, { 100.0f + 250.0f, 200.0f },
-		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0, TARZAN, 0);
+	//シーン切り替えにかかる時間
+	const int SCENE_TIMER = 30;
+
+	//最大速度の保存
+	float maxSpeed = 0.0f;
+
+	int drawMaxSpeed = 0;
+
+	/*Player player({ posX, posY }, { velocityX, 0.0f }, { 100.0f + 250.0f, 200.0f },
+		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0, TARZAN, 0);*/
+
+	int PLAYERIMAGES[PLAYER_STATE_NUM] = {
+		PLAYERIDLE,PLAYERRUN,PLAYERTARZAN
+	};
+
+	Vec2 pos = { 200.0f,500.0f };
+	Player player(pos, PLAYERIMAGES);
 
 	//壁の生成
 
@@ -261,7 +279,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (sceneCount > 0) {
 						sceneCount -= 1;
-						clearly = 0x0000000F + sceneCount * 4;
+					}
+
+					if (sceneCount % 6 == 0) {
+						sceneX -= WINDOW_WIDTH;
+					}
+
+					if (sceneX < 0) {
+						sceneX = 0;
 					}
 
 					if (sceneCount == 0) {
@@ -272,12 +297,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//フェードアウト
 				else {
 
-					if (sceneCount < 60) {
+					if (sceneCount < SCENE_TIMER) {
 						sceneCount += 1;
-						clearly = 0x0000000F + sceneCount * 4;
 					}
 
-					if (sceneCount == 60) {
+					if (sceneCount % 6 == 0) {
+						sceneX += WINDOW_WIDTH;
+					}
+
+					if (sceneX > 5120) {
+						sceneX = 5120;
+					}
+
+					if (sceneCount == SCENE_TIMER) {
 
 						scene = nextScene;
 
@@ -326,7 +358,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (sceneCount > 0) {
 						sceneCount -= 1;
-						clearly = 0x0000000F + sceneCount * 4;
+					}
+
+					if (sceneCount % 6 == 0) {
+						sceneX -= WINDOW_WIDTH;
+					}
+
+					if (sceneX < 0) {
+						sceneX = 0;
 					}
 
 					if (sceneCount == 0) {
@@ -337,12 +376,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//フェードアウト
 				else {
 
-					if (sceneCount < 60) {
+					if (sceneCount < SCENE_TIMER) {
 						sceneCount += 1;
-						clearly = 0x0000000F + sceneCount * 4;
 					}
 
-					if (sceneCount == 60) {
+					if (sceneCount % 6 == 0) {
+						sceneX += WINDOW_WIDTH;
+					}
+
+					if (sceneX > 5120) {
+						sceneX = 5120;
+					}
+
+					if (sceneCount == SCENE_TIMER) {
 
 						scene = nextScene;
 
@@ -438,6 +484,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 						player.setSpeedY();
 
+						maxSpeed = 0.0f;
+
 						//ステージの初期化
 						for (int a = 0; a < STAGE_NUMBER; a++) {
 
@@ -461,7 +509,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (sceneCount > 0) {
 						sceneCount -= 1;
-						clearly = 0x0000000F + sceneCount * 4;
+					}
+
+					if (sceneCount % 6 == 0) {
+						sceneX -= WINDOW_WIDTH;
+					}
+
+					if (sceneX < 0) {
+						sceneX = 0;
 					}
 
 					if (sceneCount == 0) {
@@ -472,12 +527,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//フェードアウト
 				else {
 
-					if (sceneCount < 60) {
+					if (sceneCount < SCENE_TIMER) {
 						sceneCount += 1;
-						clearly = 0x0000000F + sceneCount * 4;
 					}
 
-					if (sceneCount == 60) {
+					if (sceneCount % 6 == 0) {
+						sceneX += WINDOW_WIDTH;
+					}
+
+					if (sceneX > 5120) {
+						sceneX = 5120;
+					}
+
+					if (sceneCount == SCENE_TIMER) {
 
 						scene = nextScene;
 
@@ -492,13 +554,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//リザルト表示
 				if (sceneChange == false) {
 
-					if (sceneCount < 30) {
+					if (sceneCount < SCENE_TIMER) {
 						sceneCount += 1;
 						clearly = 0x0000000F + sceneCount * 2;
 					}
 
 					//キー入力でシーンチェンジを有効にする
-					if (sceneCount == 30) {
+					if (sceneCount == SCENE_TIMER) {
 
 						if (Key::IsTrigger(DIK_RETURN)) {
 							sceneChange = true;
@@ -510,12 +572,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				else {
 
-					if (sceneCount < 60) {
+					if (sceneCount < SCENE_TIMER * 2) {
 						sceneCount += 1;
-						clearly = 0x0000000F + sceneCount * 2;
 					}
 
-					if (sceneCount == 60) {
+					if (sceneCount % 6 == 0) {
+						sceneX += WINDOW_WIDTH;
+					}
+
+					if (sceneX > 5120) {
+						sceneX = 5120;
+					}
+
+					if (sceneCount == SCENE_TIMER * 2) {
+						sceneCount = SCENE_TIMER;
 						scene = nextScene;
 					}
 
@@ -534,11 +604,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				drawTimer += 1;
 
-				if (drawTimer % 12 == 0) {
+				if (drawTimer % 6 == 0) {
 
 					player.MoveDrawX();
 
-					if (drawTimer >= 60) {
+					if (player.getDrawX() > 128) {
 						player.resetDrawX();
 					}
 				}
@@ -562,6 +632,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			}
+
+			//最大速度を更新
+			if ( AbsoluteValuef(player.getSpeedX()) > AbsoluteValuef(maxSpeed)) {
+				maxSpeed = player.getSpeedX();
+			}
+
+			drawMaxSpeed = maxSpeed * 1000;
 
 			drawSpeed = player.getSpeedX() * 1000;
 
@@ -594,6 +671,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (stageSelect == 1) {
 				
+				//チュートリアルUIの表示
 				Novice::DrawQuad(500 - scroll.x, 400 - scroll.y, 756 - scroll.x, 400 - scroll.y,
 					500 - scroll.x, 656 - scroll.y, 756 - scroll.x, 656 - scroll.y, 0, 0, 256, 256, PRESSINFO, 0xFFFFFFFF);
 
@@ -670,6 +748,48 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 
+			//----------------最大速度の表示------------------
+
+			//ドット
+			Novice::DrawQuad(1095, 64, 1143, 64, 1095, 112, 1143, 112, 0, 0, 64, 64, REDDOT, 0xFFFFFFFF);
+
+			//スピード
+			Novice::DrawQuad(888, 48, 1048, 48, 888, 80, 1048, 80, 0, 0, 320, 64, MAXSPEED, 0xFFFFFFFF);
+
+			//スピードの表示
+			for (int a = 0; a < 5; a++) {
+
+				divideNumber = 1;
+
+				for (int b = 0; b < 4; b++) {
+					divideNumber *= 10;
+				}
+
+				for (int c = 0; c < a; c++) {
+					divideNumber /= 10;
+				}
+
+				drawNumber = AbsoluteValue(drawMaxSpeed) / divideNumber;
+
+				for (int d = 0; d < 10; d++) {
+
+					if (d == drawNumber) {
+
+						if (a < 2) {
+							Novice::DrawQuad(1032 + a * 32, 32, 1096 + a * 32, 32, 1032 + a * 32, 96, 1096 + a * 32, 96, 0, 0, 64, 64, REDNUM[d], 0xFFFFFFFF);
+						}
+						else {
+							Novice::DrawQuad(1048 + a * 32, 32, 1112 + a * 32, 32, 1048 + a * 32, 96, 1112 + a * 32, 96, 0, 0, 64, 64, REDNUM[d], 0xFFFFFFFF);
+						}
+
+					}
+
+				}
+
+				drawMaxSpeed = AbsoluteValue(drawMaxSpeed) % divideNumber;
+
+			}
+
 			///
 			/// ↑描画処理ここまで
 			///
@@ -685,6 +805,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		if (sceneChange == true) {
+
+			Novice::DrawQuad(0, 0, 1280, 0, 0, 720, 1280, 720, sceneX, 0, 1280, 720, SCENECHANGE, 0xFFFFFFFF);
 
 		}
 

@@ -38,10 +38,10 @@ class Player
 {
 public:
 	Player();
-	Player(Vec2 position, Vec2 velocity, Vec2 center, int color,
+	Player(Vec2 position, Vec2 velocity, Vec2 center,
 		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle, int drawX);
 
-	Player(Vec2 pos, int texturehandle);
+	Player(Vec2 pos, int texturehandle[]);
 
 	void Update(Vec2& scroll);
 
@@ -103,7 +103,7 @@ public:
 	inline bool getIsGround() { return isGround; }
 
 	//地面判定にする
-	inline bool setIsGround() { isGround = true; return isGround; }
+	inline bool setIsGround() { isGround = true; state = RUN; return isGround; }
 
 	//ターザンゲージの取得
 	inline int getTarzanGage() { return TarzanGage; }
@@ -126,8 +126,12 @@ public:
 	//画像の位置を0に戻す
 	inline int resetDrawX() { drawX = 0; return drawX; }
 
+	//drawXの取得
+	inline int getDrawX() { return drawX; }
+
 	//ポジションリセット
-	inline Vec2 resetPosition() { position = { 200.0f,200.0f }; return position; }
+	inline Vec2 resetPosition() { position = { 200.0f,500.0f }; return position; }
+
 
 private:
 
@@ -145,9 +149,6 @@ private:
 
 	//中心座標
 	Vec2 center;
-
-	//色
-	int color;
 
 	//つかんでいるかどうかの判定
 	bool isGrip;
@@ -173,11 +174,11 @@ private:
 	//画像描画の位置
 	int drawX;
 
+	// 画像をまとめたもの(実装出来れば配列にする)
+	int textures[PLAYER_STATE_NUM];
 
-	// アニメーション
-	int animation;
-	// アニメーションのための遅延
-	int delay;
+	// どの画像を出すか(どの処理をするか)
+	PLAYERSTATE state;
 
 
 

@@ -5,24 +5,36 @@
 
 Player::Player()
 	: position({ 100.0f,100.0f }), velocity({ 5.0f,5.0f }), center({ 0.0f,0.0f }),
-	color(0xFFFFFFFF), isGrip(false), TarzanGage(TARZAN_GAGE), GripGage(0), unGrip(0), isGround(false), length(0), textureHandle(0)
+	isGrip(false), TarzanGage(TARZAN_GAGE), GripGage(0), unGrip(0), isGround(false), length(0), textureHandle(0)
 {
 
 }
 
-Player::Player(Vec2 position, Vec2 velocity, Vec2 center, int color,
+Player::Player(Vec2 position, Vec2 velocity, Vec2 center,
 	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle, int drawX)
 	: position({ position.x,position.y }), velocity({ velocity.x,velocity.y }),
-	center({ center.x,center.y }), color(color), isGrip(false), TarzanGage(TARZAN_GAGE),
+	center({ center.x,center.y }), isGrip(false), TarzanGage(TARZAN_GAGE),
 	GripGage(0), unGrip(unGrip), isGround(isGround), length(length), textureHandle(textureHandle), drawX(drawX)
 {
 
 }
 
-Player::Player(Vec2 pos, int texturehandle)
+Player::Player(Vec2 pos, int texturehandle[])
 {
 	position = pos;
-	textureHandle = texturehandle;
+	//textureHandle = texturehandle;
+	for (int i = 0; i < PLAYER_STATE_NUM; i++) {
+		textures[i] = texturehandle[i];
+	}
+
+	GripGage = 0;
+	TarzanGage = TARZAN_GAGE;
+	drawX = 0;
+	isGrip = false;
+	isGround = false;
+	length = 0;
+	state = IDLE;
+	unGrip = 0;
 }
 
 //-----------------------------------
@@ -83,12 +95,12 @@ void Player::Draw(Vec2 scroll) {
 	if (velocity.x >= 0) {
 		Novice::DrawQuad(lotatedLeftTop.x - scroll.x, lotatedLeftTop.y - scroll.y, lotatedRightTop.x - scroll.x, lotatedRightTop.y - scroll.y,
 			lotatedLeftBottom.x - scroll.x, lotatedLeftBottom.y - scroll.y, lotatedRightBottom.x - scroll.x, lotatedRightBottom.y - scroll.y,
-			drawX, 0, 32, 32, textureHandle, color);
+			drawX, 0, 32, 32, textures[(int)state], color);
 	}
 	else {
 		Novice::DrawQuad(lotatedRightTop.x - scroll.x, lotatedRightTop.y - scroll.y, lotatedLeftTop.x - scroll.x, lotatedLeftTop.y - scroll.y,
 			lotatedRightBottom.x - scroll.x, lotatedRightBottom.y - scroll.y, lotatedLeftBottom.x - scroll.x, lotatedLeftBottom.y - scroll.y,
-			drawX, 0, 32, 32, textureHandle, color);
+			drawX, 0, 32, 32, textures[(int)state], color);
 	}
 
 
@@ -145,6 +157,7 @@ void Player::Move() {
 					GripGage = 300;
 				}
 				isGrip = true;
+				state = TARZAN;
 
 				// 中心までのベクトルを出す
 				Vec2 ptc;
@@ -285,7 +298,9 @@ void Player::Collision(Vec2& scroll) {
 	else if (0 <= scroll.y) {
 		scroll.y = 0;
 	}
-
+	if (velocity.x == 0) {
+		state = IDLE;
+	}
 }
 
 
