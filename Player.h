@@ -1,6 +1,19 @@
 #pragma once
 #include "Vec2.h"
 
+// プレイヤーの状態を分ける
+enum PLAYERSTATE {
+	IDLE,
+	RUN,
+	TARZAN,
+	JUMP,
+	SKY,
+	LANDING
+};
+
+// プレイヤーの状態
+const int PLAYER_STATE_NUM = 6;
+
 
 // 重力
 const float GRAVITY = 1.0f;
@@ -26,9 +39,11 @@ class Player
 public:
 	Player();
 	Player(Vec2 position, Vec2 velocity, Vec2 center, int color,
-		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle,int drawX);
+		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle, int drawX);
 
-	void Update(Vec2* scroll);
+	Player(Vec2 pos, int texturehandle);
+
+	void Update(Vec2& scroll);
 
 	void Draw(Vec2 scroll);
 
@@ -118,7 +133,7 @@ private:
 
 	void Move();
 
-	void Collision(Vec2* scroll);
+	void Collision(Vec2& scroll);
 
 
 
@@ -157,6 +172,16 @@ private:
 
 	//画像描画の位置
 	int drawX;
+
+
+	// アニメーション
+	int animation;
+	// アニメーションのための遅延
+	int delay;
+
+
+
+
 
 };
 

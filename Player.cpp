@@ -11,17 +11,23 @@ Player::Player()
 }
 
 Player::Player(Vec2 position, Vec2 velocity, Vec2 center, int color,
-	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle,int drawX)
+	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle, int drawX)
 	: position({ position.x,position.y }), velocity({ velocity.x,velocity.y }),
 	center({ center.x,center.y }), color(color), isGrip(false), TarzanGage(TARZAN_GAGE),
-	GripGage(0), unGrip(unGrip), isGround(isGround), length(length), textureHandle(textureHandle),drawX(drawX)
+	GripGage(0), unGrip(unGrip), isGround(isGround), length(length), textureHandle(textureHandle), drawX(drawX)
 {
 
 }
 
+Player::Player(Vec2 pos, int texturehandle)
+{
+	position = pos;
+	textureHandle = texturehandle;
+}
+
 //-----------------------------------
 
-void Player::Update(Vec2* scroll) {
+void Player::Update(Vec2& scroll) {
 
 	Move();
 
@@ -81,18 +87,18 @@ void Player::Draw(Vec2 scroll) {
 	}
 	else {
 		Novice::DrawQuad(lotatedRightTop.x - scroll.x, lotatedRightTop.y - scroll.y, lotatedLeftTop.x - scroll.x, lotatedLeftTop.y - scroll.y,
-			 lotatedRightBottom.x - scroll.x, lotatedRightBottom.y - scroll.y, lotatedLeftBottom.x - scroll.x, lotatedLeftBottom.y - scroll.y,
+			lotatedRightBottom.x - scroll.x, lotatedRightBottom.y - scroll.y, lotatedLeftBottom.x - scroll.x, lotatedLeftBottom.y - scroll.y,
 			drawX, 0, 32, 32, textureHandle, color);
 	}
 
-	
-	// 次に動く場所を表示
-	Novice::DrawEllipse(position.x + velocity.x - scroll.x, (position.y + velocity.y) - scroll.y, RADIUS, RADIUS, 0.0f, 0xFF0000FF, kFillModeWireFrame);
 
-	Novice::ScreenPrintf(0, 0, "%1.2f", position.x);
-	Novice::ScreenPrintf(0, 20, "%1.2f", position.y);
-	Novice::ScreenPrintf(0, 40, "%1.2f", velocity.x);
-	Novice::ScreenPrintf(0, 60, "%1.2f", velocity.y);
+	// 次に動く場所を表示
+	//Novice::DrawEllipse(position.x + velocity.x - scroll.x, (position.y + velocity.y) - scroll.y, RADIUS, RADIUS, 0.0f, 0xFF0000FF, kFillModeWireFrame);
+
+	//Novice::ScreenPrintf(0, 0, "%1.2f", position.x);
+	//Novice::ScreenPrintf(0, 20, "%1.2f", position.y);
+	//Novice::ScreenPrintf(0, 40, "%1.2f", velocity.x);
+	//Novice::ScreenPrintf(0, 60, "%1.2f", velocity.y);
 
 }
 
@@ -243,7 +249,7 @@ void Player::Move() {
 
 }
 
-void Player::Collision(Vec2* scroll) {
+void Player::Collision(Vec2& scroll) {
 
 	// 範囲内にする
 	// 下側
@@ -264,20 +270,20 @@ void Player::Collision(Vec2* scroll) {
 		velocity.x *= -1;
 	}
 	// x 値のスクロール
-	(*scroll).x = position.x - 640;
-	if ((*scroll).x <= 0) {
-		(*scroll).x = 0;
+	scroll.x = position.x - 640;
+	if (scroll.x <= 0) {
+		scroll.x = 0;
 	}
-	else if (1280 * (32 - 1) <= (*scroll).x) {
-		(*scroll).x = 1280 * (32 - 1);
+	else if (1280 * (32 - 1) <= scroll.x) {
+		scroll.x = 1280 * (32 - 1);
 	}
 	// y 値のスクロール
-	(*scroll).y = position.y - 480;
-	if ((*scroll).y <= -720) {
-		(*scroll).y = -720;
+	scroll.y = position.y - 480;
+	if (scroll.y <= -720) {
+		scroll.y = -720;
 	}
-	else if (0 <= (*scroll).y) {
-		(*scroll).y = 0;
+	else if (0 <= scroll.y) {
+		scroll.y = 0;
 	}
 
 }

@@ -16,8 +16,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Initialize(kWindowTitle, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	// キー入力結果を受け取る箱
-	char keys[256] = {0};
-	char preKeys[256] = {0};
+	char keys[256] = { 0 };
+	char preKeys[256] = { 0 };
 
 	// スクロール値
 	Vec2 scroll = { 0,0 };
@@ -36,7 +36,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//スピード表示用の変数
 	int drawSpeed = 0;
-	
+
 	int drawNumber = 0;
 
 	int divideNumber = 1;
@@ -69,7 +69,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int STAGECEILING = Novice::LoadTexture("./Resources/Images/Object/stageceiling.png");
 
 #pragma endregion
-	
+
 #pragma region Player
 
 	int TARZAN = Novice::LoadTexture("./Resources/Images/Player/playerRun.png");
@@ -149,7 +149,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 
-	
+
 
 	//画像を動かすタイマー
 	int drawTimer = 0;
@@ -172,16 +172,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	}
 	//ステージ1
-	wall[1][0] = Wall({ 100.0f,690.0f }, 51200, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player,GROUND);
-	wall[1][1] = Wall({ 4000.0f,590.0f }, 256, 256, 20.0f, true, UNBREAK, 0xFFFFFFFF, player,UNBREAKWALL);
-	wall[1][2] = Wall({ 5000.0f,-344.0f }, 256, 1024, 15.0f, true, BREAK, 0xFFFFFFFF, player,BREAKWALL);
-	wall[1][3] = Wall({ 9000.0f,-344.0f }, 256, 1024, 20.0f, true, BREAK, 0xFFFFFFFF, player,BREAKWALL);
-	wall[1][4] = Wall({ 12000.0f,-344.0f }, 256, 1024, 25.0f, true, BREAK, 0xFFFFFFFF, player,BREAKWALL);
-	wall[1][5] = Wall({ 14000.0f,-344.0f }, 256, 704, 15.0f, true, UNBREAK, 0xFFFFFFFF, player,UNBREAKWALL);
-	wall[1][6] = Wall({ 17000.0f,424.0f }, 512, 256, 35.0f, true, BREAK, 0xFFFFFFFF, player,BREAKWALL);
-	wall[1][7] = Wall({ 20000.0f,-344.0f }, 256, 824, 15.0f, true, UNBREAK, 0xFFFFFFFF, player,UNBREAKWALL);
-	wall[1][8] = Wall({ 23000.0f,-344.0f }, 256, 1024, 30.0f, true, BREAK, 0xFFFFFFFF, player,BREAKWALL);
-	wall[1][9] = Wall({ -100.0f,-300.0f }, 256, 1024, 15.0f, true, UNBREAK, 0xFFFFFFFF, player,UNBREAKWALL);
+	wall[1][0] = Wall({ 100.0f,690.0f }, 51200, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
+	wall[1][1] = Wall({ 4000.0f,590.0f }, 256, 256, 20.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[1][2] = Wall({ 5000.0f,-344.0f }, 256, 1024, 15.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[1][3] = Wall({ 9000.0f,-344.0f }, 256, 1024, 20.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[1][4] = Wall({ 12000.0f,-344.0f }, 256, 1024, 25.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[1][5] = Wall({ 14000.0f,-344.0f }, 256, 704, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[1][6] = Wall({ 17000.0f,424.0f }, 512, 256, 35.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[1][7] = Wall({ 20000.0f,-344.0f }, 256, 824, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[1][8] = Wall({ 23000.0f,-344.0f }, 256, 1024, 30.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[1][9] = Wall({ -100.0f,-300.0f }, 256, 1024, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 
 	//
 
@@ -291,7 +291,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			/// ↑更新処理ここまで
 			///
 
-			
+
 
 			///
 			/// ↓描画処理ここから
@@ -315,7 +315,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				//フェードイン
 				if (nextScene == STAGESELECT) {
-					
+
 					if (sceneCount > 0) {
 						sceneCount -= 1;
 						clearly = 0x0000000F + sceneCount * 4;
@@ -372,7 +372,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 
-			
+
 
 			///
 			/// ↑更新処理ここまで
@@ -479,7 +479,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 			//ゴールしたら
-			else if(isGoal == true) {
+			else if (isGoal == true) {
 
 				//リザルト表示
 				if (sceneChange == false) {
@@ -541,12 +541,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 
-				player.Update(&scroll);
+				player.Update(scroll);
 
 				for (int i = 0; i < FLOOR_NUMBER; i++) {
 					floor[stageSelect][i].Update(scroll);
 				}
-				
+
 
 				for (int i = 0; i < WALL_NUMBER; i++) {
 					wall[stageSelect][i].Update(scroll);
@@ -560,13 +560,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (player.getPosX() > GOAL_LINE[stageSelect]) {
 				isGoal = true;
 			}
-			
+
 
 			///
 			/// ↑更新処理ここまで
 			///
 
-			
+
 
 			///
 			/// ↓描画処理ここから
@@ -575,10 +575,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int y = 0; y < REPETITION_Y; y++) {
 
 				for (int x = 0; x < REPETITION_X; x++) {
-					Novice::DrawQuad(WINDOW_WIDTH* x - scroll.x, -WINDOW_HEIGHT * y - scroll.y,
-						WINDOW_WIDTH* x + WINDOW_WIDTH - scroll.x, -WINDOW_HEIGHT * y - scroll.y,
-						WINDOW_WIDTH* x - scroll.x, -WINDOW_HEIGHT * y + WINDOW_HEIGHT - scroll.y,
-						WINDOW_WIDTH* x + WINDOW_WIDTH - scroll.x, -WINDOW_HEIGHT * y + WINDOW_HEIGHT - scroll.y,
+					Novice::DrawQuad(WINDOW_WIDTH * x - scroll.x, -WINDOW_HEIGHT * y - scroll.y,
+						WINDOW_WIDTH * x + WINDOW_WIDTH - scroll.x, -WINDOW_HEIGHT * y - scroll.y,
+						WINDOW_WIDTH * x - scroll.x, -WINDOW_HEIGHT * y + WINDOW_HEIGHT - scroll.y,
+						WINDOW_WIDTH * x + WINDOW_WIDTH - scroll.x, -WINDOW_HEIGHT * y + WINDOW_HEIGHT - scroll.y,
 						0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, INGAMEBG, 0x888888FF);
 				}
 
@@ -599,7 +599,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//ターザンゲージ
 			Novice::DrawQuad(640 - 256 - 4, 84 - 4, (640 - 256) + 512 + 4, 84 - 4,
-				640 - 256 - 4,116 + 4, (640 - 256) + 512 + 4, 116 + 4,
+				640 - 256 - 4, 116 + 4, (640 - 256) + 512 + 4, 116 + 4,
 				0, 0, 512, 64, BACKGAGE, 0xFFFFFFFF);
 
 			Novice::DrawQuad(640 - 256, 84, (640 - 256) + (player.getTarzanGage() * 512) / TARZAN_GAGE, 84,
@@ -637,7 +637,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						else {
 							Novice::DrawQuad(148 + a * 32, 32, 212 + a * 32, 32, 148 + a * 32, 96, 212 + a * 32, 96, 0, 0, 64, 64, NUM[d], 0xFFFFFFFF);
 						}
-						
+
 					}
 
 				}
