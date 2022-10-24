@@ -41,83 +41,115 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int divideNumber = 1;
 
+#pragma region BG
+
 	//タイトル画像
-	int BGTITLE = Novice::LoadTexture("./Resources/Images/TarzanBG.png");
+	int BGTITLE = Novice::LoadTexture("./Resources/Images/BG/TarzanBG.png");
 
 	//セレクト画像
-	int BGSELECT = Novice::LoadTexture("./Resources/Images/TarzanBG_SELECT.png");
-	int SELECTWOOD = Novice::LoadTexture("./Resources/Images/stageselect.png");
-	int WOOD[STAGE_NUMBER];
+	int BGSELECT = Novice::LoadTexture("./Resources/Images/BG/TarzanBG_SELECT.png");
+
+	//ゲームプレイ背景
+	int INGAMEBG = Novice::LoadTexture("./Resources/Images/BG/ingameBG1.png");
+
+	//シーンチェンジ画像
+	int SCENECHANGE = Novice::LoadTexture("./Resources/Images/BG/scenechange.png");
+
+#pragma endregion
+
+#pragma region Object
+
+	int ACCELFLOOR = Novice::LoadTexture("./Resources/Images/Object/accel.png");
+	int DECELFLOOR = Novice::LoadTexture("./Resources/Images/Object/decel.png");
+	int UNBREAKWALL = Novice::LoadTexture("./Resources/Images/Object/wall.png");
+	int BREAKWALL = Novice::LoadTexture("./Resources/Images/Object/wallbreak.png");
+	int GROUND = Novice::LoadTexture("./Resources/Images/Object/ground.png");
+	int NORMALFLOOR = Novice::LoadTexture("./Resources/Images/Object/normalfloor.png");
+	int CEILINGFLOOR = Novice::LoadTexture("./Resources/Images/Object/ceiling.png");
+	int STAGECEILING = Novice::LoadTexture("./Resources/Images/Object/stageceiling.png");
+
+#pragma endregion
+	
+#pragma region Player
+
+	int TARZAN = Novice::LoadTexture("./Resources/Images/Player/playerRun.png");
+
+#pragma endregion
+
+#pragma region UI
 
 #pragma region WOOD
+
+	int SELECTWOOD = Novice::LoadTexture("./Resources/Images/UI/stageselect.png");
+
+	int WOOD[STAGE_NUMBER];
 
 	//特に使わない
 	WOOD[0] = 0;
 	//
-	WOOD[1] = Novice::LoadTexture("./Resources/Images/stage1.png");
-	WOOD[2] = Novice::LoadTexture("./Resources/Images/stage2.png");
-	WOOD[3] = Novice::LoadTexture("./Resources/Images/stage3.png");
-	WOOD[4] = Novice::LoadTexture("./Resources/Images/stage4.png");
-	WOOD[5] = Novice::LoadTexture("./Resources/Images/stage5.png");
+	WOOD[1] = Novice::LoadTexture("./Resources/Images/UI/stage1.png");
+	WOOD[2] = Novice::LoadTexture("./Resources/Images/UI/stage2.png");
+	WOOD[3] = Novice::LoadTexture("./Resources/Images/UI/stage3.png");
+	WOOD[4] = Novice::LoadTexture("./Resources/Images/UI/stage4.png");
+	WOOD[5] = Novice::LoadTexture("./Resources/Images/UI/stage5.png");
 	int BRIGHTWOOD[STAGE_NUMBER];
 	//特に使わない
 	BRIGHTWOOD[0] = 0;
 	//
-	BRIGHTWOOD[1] = Novice::LoadTexture("./Resources/Images/stage1select.png");
-	BRIGHTWOOD[2] = Novice::LoadTexture("./Resources/Images/stage2select.png");
-	BRIGHTWOOD[3] = Novice::LoadTexture("./Resources/Images/stage3select.png");
-	BRIGHTWOOD[4] = Novice::LoadTexture("./Resources/Images/stage4select.png");
-	BRIGHTWOOD[5] = Novice::LoadTexture("./Resources/Images/stage5select.png");
+	BRIGHTWOOD[1] = Novice::LoadTexture("./Resources/Images/UI/stage1select.png");
+	BRIGHTWOOD[2] = Novice::LoadTexture("./Resources/Images/UI/stage2select.png");
+	BRIGHTWOOD[3] = Novice::LoadTexture("./Resources/Images/UI/stage3select.png");
+	BRIGHTWOOD[4] = Novice::LoadTexture("./Resources/Images/UI/stage4select.png");
+	BRIGHTWOOD[5] = Novice::LoadTexture("./Resources/Images/UI/stage5select.png");
 
 #pragma endregion
-
-	//ゲームプレイ画像
-	int ACCELFLOOR = Novice::LoadTexture("./Resources/Images/accel.png");
-	int DECELFLOOR = Novice::LoadTexture("./Resources/Images/decel.png");
-	int UNBREAKWALL = Novice::LoadTexture("./Resources/Images/wall.png");
-	int BREAKWALL = Novice::LoadTexture("./Resources/Images/wallbreak.png");
-	int GROUND = Novice::LoadTexture("./Resources/Images/ground.png");
-	int NORMALFLOOR = Novice::LoadTexture("./Resources/Images/normalfloor.png");
-	int CEILINGFLOOR = Novice::LoadTexture("./Resources/Images/ceiling.png");
-	int STAGECEILING = Novice::LoadTexture("./Resources/Images/stageceiling.png");
-	int INGAMEBG = Novice::LoadTexture("./Resources/Images/ingameBG1.png");
-	int UI = Novice::LoadTexture("./Resources/Images/UIsheet.png");
-	int GAGE = Novice::LoadTexture("./Resources/Images/gage.png");
-	int BACKGAGE = Novice::LoadTexture("./Resources/Images/backgage.png");
-	int TARZAN = Novice::LoadTexture("./Resources/Images/playerRun.png");
 
 #pragma region NUM
+
 	//数字
 	int NUM[10];
-	NUM[0] = Novice::LoadTexture("./Resources/Images/0.png");
-	NUM[1] = Novice::LoadTexture("./Resources/Images/1.png");
-	NUM[2] = Novice::LoadTexture("./Resources/Images/2.png");
-	NUM[3] = Novice::LoadTexture("./Resources/Images/3.png");
-	NUM[4] = Novice::LoadTexture("./Resources/Images/4.png");
-	NUM[5] = Novice::LoadTexture("./Resources/Images/5.png");
-	NUM[6] = Novice::LoadTexture("./Resources/Images/6.png");
-	NUM[7] = Novice::LoadTexture("./Resources/Images/7.png");
-	NUM[8] = Novice::LoadTexture("./Resources/Images/8.png");
-	NUM[9] = Novice::LoadTexture("./Resources/Images/9.png");
+	NUM[0] = Novice::LoadTexture("./Resources/Images/UI/0.png");
+	NUM[1] = Novice::LoadTexture("./Resources/Images/UI/1.png");
+	NUM[2] = Novice::LoadTexture("./Resources/Images/UI/2.png");
+	NUM[3] = Novice::LoadTexture("./Resources/Images/UI/3.png");
+	NUM[4] = Novice::LoadTexture("./Resources/Images/UI/4.png");
+	NUM[5] = Novice::LoadTexture("./Resources/Images/UI/5.png");
+	NUM[6] = Novice::LoadTexture("./Resources/Images/UI/6.png");
+	NUM[7] = Novice::LoadTexture("./Resources/Images/UI/7.png");
+	NUM[8] = Novice::LoadTexture("./Resources/Images/UI/8.png");
+	NUM[9] = Novice::LoadTexture("./Resources/Images/UI/9.png");
 
 	int REDNUM[10];
-	REDNUM[0] = Novice::LoadTexture("./Resources/Images/0_red.png");
-	REDNUM[1] = Novice::LoadTexture("./Resources/Images/1_red.png");
-	REDNUM[2] = Novice::LoadTexture("./Resources/Images/2_red.png");
-	REDNUM[3] = Novice::LoadTexture("./Resources/Images/3_red.png");
-	REDNUM[4] = Novice::LoadTexture("./Resources/Images/4_red.png");
-	REDNUM[5] = Novice::LoadTexture("./Resources/Images/5_red.png");
-	REDNUM[6] = Novice::LoadTexture("./Resources/Images/6_red.png");
-	REDNUM[7] = Novice::LoadTexture("./Resources/Images/7_red.png");
-	REDNUM[8] = Novice::LoadTexture("./Resources/Images/8_red.png");
-	REDNUM[9] = Novice::LoadTexture("./Resources/Images/9_red.png");
+	REDNUM[0] = Novice::LoadTexture("./Resources/Images/UI/0_red.png");
+	REDNUM[1] = Novice::LoadTexture("./Resources/Images/UI/1_red.png");
+	REDNUM[2] = Novice::LoadTexture("./Resources/Images/UI/2_red.png");
+	REDNUM[3] = Novice::LoadTexture("./Resources/Images/UI/3_red.png");
+	REDNUM[4] = Novice::LoadTexture("./Resources/Images/UI/4_red.png");
+	REDNUM[5] = Novice::LoadTexture("./Resources/Images/UI/5_red.png");
+	REDNUM[6] = Novice::LoadTexture("./Resources/Images/UI/6_red.png");
+	REDNUM[7] = Novice::LoadTexture("./Resources/Images/UI/7_red.png");
+	REDNUM[8] = Novice::LoadTexture("./Resources/Images/UI/8_red.png");
+	REDNUM[9] = Novice::LoadTexture("./Resources/Images/UI/9_red.png");
 
 	//ドット
-	int DOT = Novice::LoadTexture("./Resources/Images/dot.png");
+	int DOT = Novice::LoadTexture("./Resources/Images/UI/dot.png");
+
 
 #pragma endregion
 
-	int SPEED = Novice::LoadTexture("./Resources/Images/speed.png");
+	//ターザンゲージ
+	int GAGE = Novice::LoadTexture("./Resources/Images/UI/gage.png");
+	int BACKGAGE = Novice::LoadTexture("./Resources/Images/UI/backgage.png");
+
+	//スピードテキスト
+	int SPEED = Novice::LoadTexture("./Resources/Images/UI/speed.png");
+
+	//UI表示を見やすくする画像
+	int UI = Novice::LoadTexture("./Resources/Images/UI/UIsheet.png");
+
+#pragma endregion
+
+	
 
 	//画像を動かすタイマー
 	int drawTimer = 0;
@@ -622,9 +654,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		}
 
-		if (sceneChange == true || isGoal == true) {
+		if (isGoal == true) {
 
 			Novice::DrawBox(0, 0, 1280, 720, 0, clearly, kFillModeSolid);
+
+		}
+
+		if (sceneChange == true) {
 
 		}
 
