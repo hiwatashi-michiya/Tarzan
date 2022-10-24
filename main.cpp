@@ -147,6 +147,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//UI表示を見やすくする画像
 	int UI = Novice::LoadTexture("./Resources/Images/UI/UIsheet.png");
 
+	//チュートリアル用のUI
+	int PRESSINFO = Novice::LoadTexture("./Resources/Images/UI/press.png");
+	int BREAKINFO = Novice::LoadTexture("./Resources/Images/UI/break.png");
+	int SLOWINFO = Novice::LoadTexture("./Resources/Images/UI/slow.png");
+	int FASTINFO = Novice::LoadTexture("./Resources/Images/UI/fast.png");
+
 #pragma endregion
 
 
@@ -182,7 +188,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	wall[1][7] = Wall({ 20000.0f,-344.0f }, 256, 824, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[1][8] = Wall({ 23000.0f,-344.0f }, 256, 1024, 30.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
 	wall[1][9] = Wall({ -100.0f,-300.0f }, 256, 1024, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
-
+	wall[1][10] = Wall({ 500.0f,600.0f }, 256, 300, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[1][11] = Wall({ 2000.0f,550.0f }, 256, 300, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	//
 
 	//初期化用
@@ -209,7 +216,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//ステージ1
 	floor[1][0] = Floor(100, 680, 28000, 10, NORMAL, 28000, 10, 64, 64, NORMALFLOOR, player);
-	floor[1][1] = Floor(4000, 580, 256, 10, PLAYERACCEL, 256, 10, 64, 64, ACCELFLOOR, player);
+	floor[1][1] = Floor(4000, 580, 256, 10, NORMAL, 256, 10, 64, 64, NORMALFLOOR, player);
 	floor[1][2] = Floor(6000, 480, 4000, 10, NORMAL, 4000, 10, 64, 64, NORMALFLOOR, player);
 	floor[1][3] = Floor(7000, 230, 2000, 10, PLAYERACCEL, 2000, 10, 64, 64, ACCELFLOOR, player);
 	floor[1][4] = Floor(14000, 360, 256, 10, CEILING, 256, 10, 64, 64, CEILINGFLOOR, player);
@@ -219,7 +226,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	floor[1][8] = Floor(15000, 300, 1400, 10, NORMAL, 1400, 10, 64, 64, NORMALFLOOR, player);
 	floor[1][9] = Floor(20000, 480, 256, 10, CEILING, 256, 10, 64, 64, CEILINGFLOOR, player);
 	floor[1][10] = Floor(0, -1440, 28000, 1096, CEILING, 28000, 1096, 64, 64, STAGECEILING, player);
-
+	floor[1][11] = Floor(500, 590, 256, 10, NORMAL, 256, 10, 64, 64, NORMALFLOOR, player);
+	floor[1][12] = Floor(2000, 540, 256, 10, NORMAL, 256, 10, 64, 64, NORMALFLOOR, player);
 	//
 
 	//初期化用
@@ -581,6 +589,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						WINDOW_WIDTH * x + WINDOW_WIDTH - scroll.x, -WINDOW_HEIGHT * y + WINDOW_HEIGHT - scroll.y,
 						0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, INGAMEBG, 0x888888FF);
 				}
+
+			}
+
+			if (stageSelect == 1) {
+				
+				Novice::DrawQuad(500 - scroll.x, 400 - scroll.y, 756 - scroll.x, 400 - scroll.y,
+					500 - scroll.x, 656 - scroll.y, 756 - scroll.x, 656 - scroll.y, 0, 0, 256, 256, PRESSINFO, 0xFFFFFFFF);
+
+				Novice::DrawQuad(4700 - scroll.x, 450 - scroll.y, 4956 - scroll.x, 450 - scroll.y,
+					4700 - scroll.x, 706 - scroll.y, 4956 - scroll.x, 706 - scroll.y, 0, 0, 256, 256, BREAKINFO, 0xFFFFFFFF);
+
+				Novice::DrawQuad(6000 - scroll.x, 450 - scroll.y, 6256 - scroll.x, 450 - scroll.y,
+					6000 - scroll.x, 706 - scroll.y, 6256 - scroll.x, 706 - scroll.y, 0, 0, 256, 256, SLOWINFO, 0xFFFFFFFF);
+
+				Novice::DrawQuad(7000 - scroll.x, -16 - scroll.y, 7256 - scroll.x, -16 - scroll.y,
+					7000 - scroll.x, 240 - scroll.y, 7256 - scroll.x, 240 - scroll.y, 0, 0, 256, 256, FASTINFO, 0xFFFFFFFF);
 
 			}
 
