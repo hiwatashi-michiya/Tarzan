@@ -141,5 +141,6 @@
     <ClInclude Include="Text.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Floor.h" />
+    <ClInclude Include="Calc.h" />
   </ItemGroup>
 </Project>

@@ -34,8 +34,8 @@ void Floor::Collision(Vec2 scroll) {
 	//ã”»’è
 	if ((pPlayer->Player::getPosY() + pPlayer->Player::getRadius() - scroll.y) >= posY - scroll.y &&
 		pPlayer->Player::getPosY() - pPlayer->Player::getRadius() - scroll.y <= posY + height - scroll.y &&
-		pPlayer->Player::getPosX() + pPlayer->Player::getRadius() - scroll.x > posX - scroll.x + 10 &&
-		pPlayer->Player::getPosX() - pPlayer->Player::getRadius() - scroll.x < posX + length - scroll.x - 10 &&
+		pPlayer->Player::getPosX() + pPlayer->Player::getRadius() - scroll.x > posX - scroll.x &&
+		pPlayer->Player::getPosX() - pPlayer->Player::getRadius() - scroll.x < posX + length - scroll.x &&
 		pPlayer->Player::getSpeedY() >= 0 && type != CEILING) {
 
 		pPlayer->Player::RecoveryTarzanGage();

@@ -11,10 +11,10 @@ Player::Player()
 }
 
 Player::Player(Vec2 position, Vec2 velocity, Vec2 center, int color,
-	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle)
+	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle,int drawX)
 	: position({ position.x,position.y }), velocity({ velocity.x,velocity.y }),
 	center({ center.x,center.y }), color(color), isGrip(false), TarzanGage(TARZAN_GAGE),
-	GripGage(0), unGrip(unGrip), isGround(isGround), length(length), textureHandle(textureHandle)
+	GripGage(0), unGrip(unGrip), isGround(isGround), length(length), textureHandle(textureHandle),drawX(drawX)
 {
 
 }
@@ -73,9 +73,19 @@ void Player::Draw(Vec2 scroll) {
 	}
 
 	// ターザンを画像で表示
-	Novice::DrawQuad(lotatedLeftTop.x - scroll.x, lotatedLeftTop.y - scroll.y, lotatedRightTop.x - scroll.x, lotatedRightTop.y - scroll.y,
-		lotatedLeftBottom.x - scroll.x, lotatedLeftBottom.y - scroll.y, lotatedRightBottom.x - scroll.x, lotatedRightBottom.y - scroll.y,
-		0, 0, 32, 32, textureHandle, color);
+
+	if (velocity.x >= 0) {
+		Novice::DrawQuad(lotatedLeftTop.x - scroll.x, lotatedLeftTop.y - scroll.y, lotatedRightTop.x - scroll.x, lotatedRightTop.y - scroll.y,
+			lotatedLeftBottom.x - scroll.x, lotatedLeftBottom.y - scroll.y, lotatedRightBottom.x - scroll.x, lotatedRightBottom.y - scroll.y,
+			drawX, 0, 32, 32, textureHandle, color);
+	}
+	else {
+		Novice::DrawQuad(lotatedRightTop.x - scroll.x, lotatedRightTop.y - scroll.y, lotatedLeftTop.x - scroll.x, lotatedLeftTop.y - scroll.y,
+			 lotatedRightBottom.x - scroll.x, lotatedRightBottom.y - scroll.y, lotatedLeftBottom.x - scroll.x, lotatedLeftBottom.y - scroll.y,
+			drawX, 0, 32, 32, textureHandle, color);
+	}
+
+	
 	// 次に動く場所を表示
 	Novice::DrawEllipse(position.x + velocity.x - scroll.x, (position.y + velocity.y) - scroll.y, RADIUS, RADIUS, 0.0f, 0xFF0000FF, kFillModeWireFrame);
 

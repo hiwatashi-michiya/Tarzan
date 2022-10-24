@@ -26,7 +26,7 @@ class Player
 public:
 	Player();
 	Player(Vec2 position, Vec2 velocity, Vec2 center, int color,
-		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle);
+		bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle,int drawX);
 
 	void Update(Vec2* scroll);
 
@@ -105,6 +105,15 @@ public:
 	//距離を0にする
 	inline bool setLength() { length = 0; return length; }
 
+	//画像を動かす
+	inline int MoveDrawX() { drawX += 32; return drawX; }
+
+	//画像の位置を0に戻す
+	inline int resetDrawX() { drawX = 0; return drawX; }
+
+	//ポジションリセット
+	inline Vec2 resetPosition() { position = { 200.0f,200.0f }; return position; }
+
 private:
 
 	void Move();
@@ -145,6 +154,9 @@ private:
 
 	//画像
 	int textureHandle;
+
+	//画像描画の位置
+	int drawX;
 
 };
 

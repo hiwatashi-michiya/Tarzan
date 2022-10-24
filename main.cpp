@@ -5,6 +5,7 @@
 #include "Key.h"
 #include "Floor.h"
 #include "Stage.h"
+#include "Calc.h"
 
 const char kWindowTitle[] = "Wild Tarzan";
 
@@ -31,6 +32,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const int REPETITION_Y = 4;
 
 	//ロード用の変数
+	int isLoading = 0;
+
+	//スピード表示用の変数
+	int drawSpeed = 0;
+	
+	int drawNumber = 0;
+
+	int divideNumber = 1;
 
 	//タイトル画像
 	int BGTITLE = Novice::LoadTexture("./Resources/Images/TarzanBG.png");
@@ -39,21 +48,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int BGSELECT = Novice::LoadTexture("./Resources/Images/TarzanBG_SELECT.png");
 	int SELECTWOOD = Novice::LoadTexture("./Resources/Images/stageselect.png");
 	int WOOD[STAGE_NUMBER];
+
+#pragma region WOOD
+
+	//特に使わない
 	WOOD[0] = 0;
+	//
 	WOOD[1] = Novice::LoadTexture("./Resources/Images/stage1.png");
 	WOOD[2] = Novice::LoadTexture("./Resources/Images/stage2.png");
 	WOOD[3] = Novice::LoadTexture("./Resources/Images/stage3.png");
 	WOOD[4] = Novice::LoadTexture("./Resources/Images/stage4.png");
 	WOOD[5] = Novice::LoadTexture("./Resources/Images/stage5.png");
 	int BRIGHTWOOD[STAGE_NUMBER];
+	//特に使わない
 	BRIGHTWOOD[0] = 0;
+	//
 	BRIGHTWOOD[1] = Novice::LoadTexture("./Resources/Images/stage1select.png");
 	BRIGHTWOOD[2] = Novice::LoadTexture("./Resources/Images/stage2select.png");
 	BRIGHTWOOD[3] = Novice::LoadTexture("./Resources/Images/stage3select.png");
 	BRIGHTWOOD[4] = Novice::LoadTexture("./Resources/Images/stage4select.png");
 	BRIGHTWOOD[5] = Novice::LoadTexture("./Resources/Images/stage5select.png");
 
-
+#pragma endregion
 
 	//ゲームプレイ画像
 	int ACCELFLOOR = Novice::LoadTexture("./Resources/Images/accel.png");
@@ -68,13 +84,50 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int UI = Novice::LoadTexture("./Resources/Images/UIsheet.png");
 	int GAGE = Novice::LoadTexture("./Resources/Images/gage.png");
 	int BACKGAGE = Novice::LoadTexture("./Resources/Images/backgage.png");
+	int TARZAN = Novice::LoadTexture("./Resources/Images/playerRun.png");
+
+#pragma region NUM
+	//数字
+	int NUM[10];
+	NUM[0] = Novice::LoadTexture("./Resources/Images/0.png");
+	NUM[1] = Novice::LoadTexture("./Resources/Images/1.png");
+	NUM[2] = Novice::LoadTexture("./Resources/Images/2.png");
+	NUM[3] = Novice::LoadTexture("./Resources/Images/3.png");
+	NUM[4] = Novice::LoadTexture("./Resources/Images/4.png");
+	NUM[5] = Novice::LoadTexture("./Resources/Images/5.png");
+	NUM[6] = Novice::LoadTexture("./Resources/Images/6.png");
+	NUM[7] = Novice::LoadTexture("./Resources/Images/7.png");
+	NUM[8] = Novice::LoadTexture("./Resources/Images/8.png");
+	NUM[9] = Novice::LoadTexture("./Resources/Images/9.png");
+
+	int REDNUM[10];
+	REDNUM[0] = Novice::LoadTexture("./Resources/Images/0_red.png");
+	REDNUM[1] = Novice::LoadTexture("./Resources/Images/1_red.png");
+	REDNUM[2] = Novice::LoadTexture("./Resources/Images/2_red.png");
+	REDNUM[3] = Novice::LoadTexture("./Resources/Images/3_red.png");
+	REDNUM[4] = Novice::LoadTexture("./Resources/Images/4_red.png");
+	REDNUM[5] = Novice::LoadTexture("./Resources/Images/5_red.png");
+	REDNUM[6] = Novice::LoadTexture("./Resources/Images/6_red.png");
+	REDNUM[7] = Novice::LoadTexture("./Resources/Images/7_red.png");
+	REDNUM[8] = Novice::LoadTexture("./Resources/Images/8_red.png");
+	REDNUM[9] = Novice::LoadTexture("./Resources/Images/9_red.png");
+
+	//ドット
+	int DOT = Novice::LoadTexture("./Resources/Images/dot.png");
+
+#pragma endregion
+
+	int SPEED = Novice::LoadTexture("./Resources/Images/speed.png");
+
+	//画像を動かすタイマー
+	int drawTimer = 0;
 
 	float posX = 200.0f;
 	float posY = 200.0f;
 	float velocityX = 0.0f;
 
 	Player player({ posX, posY }, { velocityX, 0.0f }, { 100.0f + 250.0f, 200.0f },
-		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0,BGTITLE);
+		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0, TARZAN, 0);
 
 	//壁の生成
 
@@ -270,6 +323,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (Key::IsTrigger(DIK_SPACE)) {
 					sceneChange = true;
+
+					//クリア済みだった場合フラグを元に戻す
+					if (isGoal == true) {
+						isGoal = false;
+					}
+
+					isLoading = 0;
 					nextScene = GAMEPLAY;
 				}
 
@@ -324,6 +384,40 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				//フェードイン
 				if (nextScene == GAMEPLAY) {
+
+					if (isLoading == 0) {
+
+						scroll = { 0.0f,0.0f };
+
+						//プレイヤーの初期化
+						player.resetPosition();
+
+						player.setSpeed0X();
+
+						player.RecoveryTarzanGage();
+
+						player.setSpeedY();
+
+						//ステージの初期化
+						for (int a = 0; a < STAGE_NUMBER; a++) {
+
+							for (int b = 0; b < WALL_NUMBER; b++) {
+
+								wall[a][b] = RESET_WALL[a][b];
+
+							}
+
+							for (int b = 0; b < FLOOR_NUMBER; b++) {
+
+								floor[a][b] = RESET_FLOOR[a][b];
+
+							}
+
+						}
+
+						isLoading = 1;
+
+					}
 
 					if (sceneCount > 0) {
 						sceneCount -= 1;
@@ -396,6 +490,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					nextScene = STAGESELECT;
 				}
 
+#pragma region DrawTimer
+
+				drawTimer += 1;
+
+				if (drawTimer % 12 == 0) {
+
+					player.MoveDrawX();
+
+					if (drawTimer >= 60) {
+						player.resetDrawX();
+					}
+				}
+
+				if (drawTimer >= 60) {
+					drawTimer = 0;
+				}
+
+#pragma endregion
+
 				player.Update(&scroll);
 
 				for (int i = 0; i < FLOOR_NUMBER; i++) {
@@ -407,9 +520,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					wall[stageSelect][i].Update(scroll);
 				}
 
+
 			}
 
-			if (player.getPosX() > GOAL_LINE[0]) {
+			drawSpeed = player.getSpeedX() * 1000;
+
+			if (player.getPosX() > GOAL_LINE[stageSelect]) {
 				isGoal = true;
 			}
 			
@@ -449,6 +565,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//ここからUIの表示
 			Novice::DrawSprite(0, 0, UI, 1, 1, 0.0f, 0xFFFFFFFF);
 
+			//ターザンゲージ
 			Novice::DrawQuad(640 - 256 - 4, 84 - 4, (640 - 256) + 512 + 4, 84 - 4,
 				640 - 256 - 4,116 + 4, (640 - 256) + 512 + 4, 116 + 4,
 				0, 0, 512, 64, BACKGAGE, 0xFFFFFFFF);
@@ -456,6 +573,46 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Novice::DrawQuad(640 - 256, 84, (640 - 256) + (player.getTarzanGage() * 512) / TARZAN_GAGE, 84,
 				640 - 256, 116, (640 - 256) + (player.getTarzanGage() * 512) / TARZAN_GAGE, 116,
 				0, 0, (player.getTarzanGage() * 512) / TARZAN_GAGE, 64, GAGE, 0xFFFFFFFF);
+
+			//ドット
+			Novice::DrawQuad(195, 64, 243, 64, 195, 112, 243, 112, 0, 0, 64, 64, DOT, 0xFFFFFFFF);
+
+			//スピード
+			Novice::DrawQuad(30, 48, 158, 48, 30, 80, 158, 80, 0, 0, 256, 64, SPEED, 0xFFFFFFFF);
+
+			//スピードの表示
+			for (int a = 0; a < 5; a++) {
+
+				divideNumber = 1;
+
+				for (int b = 0; b < 4; b++) {
+					divideNumber *= 10;
+				}
+
+				for (int c = 0; c < a; c++) {
+					divideNumber /= 10;
+				}
+
+				drawNumber = AbsoluteValue(drawSpeed) / divideNumber;
+
+				for (int d = 0; d < 10; d++) {
+
+					if (d == drawNumber) {
+
+						if (a < 2) {
+							Novice::DrawQuad(132 + a * 32, 32, 196 + a * 32, 32, 132 + a * 32, 96, 196 + a * 32, 96, 0, 0, 64, 64, NUM[d], 0xFFFFFFFF);
+						}
+						else {
+							Novice::DrawQuad(148 + a * 32, 32, 212 + a * 32, 32, 148 + a * 32, 96, 212 + a * 32, 96, 0, 0, 64, 64, NUM[d], 0xFFFFFFFF);
+						}
+						
+					}
+
+				}
+
+				drawSpeed = AbsoluteValue(drawSpeed) % divideNumber;
+
+			}
 
 			///
 			/// ↑描画処理ここまで
