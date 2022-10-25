@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vec2 scroll = { 0,0 };
 
 	//ステージ選択の変数
-	int stageSelect = 1;
+	int stageSelect = 2;
 
 	//X軸の画像表示の繰り返し回数
 	const int REPETITION_X = 32;
@@ -159,8 +159,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 
-
-
 	//画像を動かすタイマー
 	int drawTimer = 0;
 
@@ -205,9 +203,42 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	wall[1][6] = Wall({ 17000.0f,424.0f }, 512, 256, 35.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
 	wall[1][7] = Wall({ 20000.0f,-344.0f }, 256, 824, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[1][8] = Wall({ 23000.0f,-344.0f }, 256, 1024, 30.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
-	wall[1][9] = Wall({ -100.0f,-300.0f }, 256, 1024, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[1][9] = Wall({ -100.0f,-344.0f }, 256, 1124, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[1][10] = Wall({ 500.0f,600.0f }, 256, 300, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[1][11] = Wall({ 2000.0f,550.0f }, 256, 300, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	//
+
+	//ステージ2
+	wall[2][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
+	wall[2][1] = Wall({ -100.0f,-1000.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[2][2] = Wall({ 10000.0f,390.0f }, 500, 90, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[2][3] = Wall({ 13000.0f,510.0f }, 1000, 300, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[2][4] = Wall({ 15000.0f,510.0f }, 1000, 300, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[2][5] = Wall({ 600.0f,590.0f }, 300, 300, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[2][6] = Wall({ 11000.0f,-90.0f }, 4000, 80, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[2][7] = Wall({ 6000.0f,0.0f }, 2500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[2][8] = Wall({ 2250.0f,590.0f }, 500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[2][9] = Wall({ 7000.0f,200.0f }, 300, 480, 25.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[2][10] = Wall({ 7000.0f,-1000.0f }, 300, 990, 30.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[2][11] = Wall({ 11000.0f,0.0f }, 300, 680, 30.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[2][12] = Wall({ 14000.0f,-1000.0f }, 300, 900, 15.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[2][13] = Wall({ 19000.0f,-1000.0f }, 300, 1680, 35.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+
+	//
+
+	//ステージ3
+	wall[3][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
+	wall[3][1] = Wall({ -100.0f,-400.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	//
+
+	//ステージ4
+	wall[4][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
+	wall[4][1] = Wall({ -100.0f,-400.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	//
+
+	//ステージ5
+	wall[5][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
+	wall[5][1] = Wall({ -100.0f,-400.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	//
 
 	//初期化用
@@ -246,6 +277,52 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	floor[1][10] = Floor(0, -1440, 28000, 1096, CEILING, 28000, 1096, 64, 64, STAGECEILING, player);
 	floor[1][11] = Floor(500, 590, 256, 10, NORMAL, 256, 10, 64, 64, NORMALFLOOR, player);
 	floor[1][12] = Floor(2000, 540, 256, 10, NORMAL, 256, 10, 64, 64, NORMALFLOOR, player);
+	//
+
+	//ステージ2
+	floor[2][0] = Floor(100, 680, 50000, 10, NORMAL, 50000, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][1] = Floor(0, -2000, 50000, 1000, CEILING, 50000, 1000, 64, 64, STAGECEILING, player);
+	floor[2][2] = Floor(600, 580, 300, 10, NORMAL, 300, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][3] = Floor(1200, 450, 300, 10, NORMAL, 300, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][4] = Floor(2250, 580, 500, 10, NORMAL, 500, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][5] = Floor(4000, 550, 600, 10, NORMAL, 600, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][6] = Floor(5100, 550, 2900, 10, NORMAL, 2900, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][7] = Floor(1200, 460, 300, 10, CEILING, 300, 10, 64, 64, CEILINGFLOOR, player);
+	floor[2][8] = Floor(2000, 360, 1000, 10, PLAYERACCEL, 1000, 10, 64, 64, ACCELFLOOR, player);
+	floor[2][9] = Floor(2000, 370, 1000, 10, CEILING, 1000, 10, 64, 64, CEILINGFLOOR, player);
+	floor[2][10] = Floor(6000, -10, 2500, 10, PLAYERACCEL, 2500, 10, 64, 64, ACCELFLOOR, player);
+	floor[2][11] = Floor(6000, 190, 2500, 10, CEILING, 2500, 10, 64, 64, CEILINGFLOOR, player);
+	floor[2][12] = Floor(3500, 130, 1000, 10, PLAYERACCEL, 1000, 10, 64, 64, ACCELFLOOR, player);
+	floor[2][13] = Floor(5000, 50, 500, 10, PLAYERACCEL, 500, 10, 64, 64, ACCELFLOOR, player);
+	floor[2][14] = Floor(5500, 190, 500, 10, NORMAL, 500, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][15] = Floor(10000, 380, 500, 10, NORMAL, 500, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][16] = Floor(10500, 480, 1500, 10, NORMAL, 1500, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][17] = Floor(13000, 500, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][18] = Floor(15000, 500, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][19] = Floor(4000, 680, 600, 10, PLAYERDECEL, 600, 10, 64, 64, DECELFLOOR, player);
+	floor[2][20] = Floor(14000, 680, 1000, 10, PLAYERDECEL, 1000, 10, 64, 64, DECELFLOOR, player);
+	floor[2][21] = Floor(17000, 400, 1000, 10, PLAYERACCEL, 1000, 10, 64, 64, ACCELFLOOR, player);
+	floor[2][22] = Floor(18000, 450, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][23] = Floor(18000, 680, 1000, 10, PLAYERDECEL, 1000, 10, 64, 64, DECELFLOOR, player);
+	floor[2][24] = Floor(10000, 480, 500, 10, CEILING, 500, 10, 64, 64, CEILINGFLOOR, player);
+	floor[2][25] = Floor(11000, -100, 4000, 10, PLAYERACCEL, 4000, 10, 64, 64, ACCELFLOOR, player);
+	floor[2][26] = Floor(11000, -10, 4000, 10, CEILING, 4000, 10, 64, 64, CEILINGFLOOR, player);
+	floor[2][24] = Floor(9000, -50, 1500, 10, PLAYERACCEL, 1500, 10, 64, 64, ACCELFLOOR, player);
+	//
+
+	//ステージ3
+	floor[3][0] = Floor(100, 680, 50000, 10, NORMAL, 50000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][1] = Floor(0, -2000, 50000, 1000, CEILING, 50000, 1000, 64, 64, STAGECEILING, player);
+	//
+
+	//ステージ4
+	floor[4][0] = Floor(100, 680, 50000, 10, NORMAL, 50000, 10, 64, 64, NORMALFLOOR, player);
+	floor[4][1] = Floor(0, -2000, 50000, 1000, CEILING, 50000, 1000, 64, 64, STAGECEILING, player);
+	//
+
+	//ステージ5
+	floor[5][0] = Floor(100, 680, 50000, 10, NORMAL, 50000, 10, 64, 64, NORMALFLOOR, player);
+	floor[5][1] = Floor(0, -2000, 50000, 1000, CEILING, 50000, 1000, 64, 64, STAGECEILING, player);
 	//
 
 	//初期化用
@@ -370,6 +447,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (sceneCount == 0) {
 						sceneChange = false;
+						isGoal = false;
 					}
 
 				}
@@ -409,12 +487,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (Key::IsTrigger(DIK_SPACE)) {
 					sceneChange = true;
-
-					//クリア済みだった場合フラグを元に戻す
-					if (isGoal == true) {
-						isGoal = false;
-					}
-
 					isLoading = 0;
 					nextScene = GAMEPLAY;
 				}
@@ -483,6 +555,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						player.RecoveryTarzanGage();
 
 						player.setSpeedY();
+
+						player.resetCenter();
 
 						maxSpeed = 0.0f;
 
@@ -556,7 +630,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (sceneCount < SCENE_TIMER) {
 						sceneCount += 1;
-						clearly = 0x0000000F + sceneCount * 2;
+						clearly = 0x0000000F + sceneCount * 4;
 					}
 
 					//キー入力でシーンチェンジを有効にする

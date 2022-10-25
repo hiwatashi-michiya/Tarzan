@@ -49,10 +49,6 @@ void Player::Update(Vec2& scroll) {
 
 void Player::Draw(Vec2 scroll) {
 
-	for (int i = 1; i < 32; i++) {
-		Novice::DrawLine(1280 * i - scroll.x, 0 - scroll.y, 1280 * i - scroll.x, 720 - scroll.y, WHITE);
-	}
-
 	// ’†S
 	Novice::DrawEllipse(center.x - scroll.x, (center.y) - scroll.y, 10, 10, 0.0f, GREEN, kFillModeWireFrame);
 	// ’Í‚ñ‚Å‚¢‚é‚Æ‚«‚Ìƒcƒ^

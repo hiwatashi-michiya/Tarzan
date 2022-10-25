@@ -132,6 +132,8 @@ public:
 	//ポジションリセット
 	inline Vec2 resetPosition() { position = { 200.0f,500.0f }; return position; }
 
+	//センターリセット
+	inline Vec2 resetCenter() { center = { center.x = position.x + VINE_LENGTH ,center.y = position.y - 500 }; return center; }
 
 private:
 
