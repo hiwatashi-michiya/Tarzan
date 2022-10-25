@@ -7,7 +7,7 @@ enum Scene {
 };
 
 //現在のシーン
-Scene scene = TITLE;
+Scene scene = GAMEPLAY;
 
 //次のシーン
 Scene nextScene = GAMEPLAY;

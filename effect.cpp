@@ -930,66 +930,305 @@ void objFadeOut(unsigned int color, int fadeSpeed) {
 }
 
 //シェイク
-ShakeList shake(ShakeList list) {
+ShakeList shake(ShakeList list, float velX) {
 
 	if (list.time > 0) {
 
 		list.time--;
 
-		if (list.time > 30) {
-			return ShakeList{
-				rand() % 80 - 40.0f,
-				rand() % 80 - 40.0f,
-				list.time -1,
-			};
-		}
+		if (-70 >= velX || velX >= 70) {
 
-		if (list.time > 25) {
-			return ShakeList{
-				rand() % 60 - 40.0f,
-				rand() % 60 - 40.0f,
+			if (list.time > 30) {
+				return ShakeList{
+					rand() % 50 - 20.0f,
+					rand() % 50 - 20.0f,
+					list.time - 1,
+				};
+			}
+
+			if (list.time > 25) {
+				return ShakeList{
+					rand() % 30 - 15.0f,
+					rand() % 30 - 15.0f,
+					list.time - 1,
+				};
+			}
+
+			if (list.time > 20) {
+				return ShakeList{
+					rand() % 24 - 6.0f,
+					rand() % 24 - 6.0f,
+					list.time - 1,
+				};
+			}
+
+			else if (list.time > 15) {
+				return ShakeList{
+				rand() % 16 - 6.0f,
+				rand() % 16 - 6.0f,
 				list.time - 1,
-			};
-		}
+				};
+			}
 
-		if (list.time > 20) {
-			return ShakeList{
-				rand() % 50 - 20.0f,
-				rand() % 50 - 20.0f,
+			if (list.time > 10) {
+				return ShakeList{
+					rand() % 12 - 6.0f,
+					rand() % 12 - 6.0f,
+					list.time - 1,
+				};
+			}
+
+			else if (list.time > 5) {
+				return ShakeList{
+				rand() % 8 - 2.0f,
+				rand() % 8 - 2.0f,
 				list.time - 1,
-			};
-		}
+				};
+			}
 
-		else if (list.time > 15) {
-			return ShakeList{
-			rand() % 40 - 10.0f,
-			rand() % 40 - 10.0f,
-			list.time - 1,
-			};
-		}
-
-		if (list.time > 10) {
-			return ShakeList{
-				rand() % 20 - 10.0f,
-				rand() % 20 - 10.0f,
+			else if (list.time > 0) {
+				return ShakeList{
+				rand() % 4 - 0.0f,
+				rand() % 4 - 0.0f,
 				list.time - 1,
-			};
+				};
+			}
 		}
 
-		else if (list.time > 5) {
-			return ShakeList{
-			rand() % 10 - 4.0f,
-			rand() % 10 - 4.0f,
-			list.time -1,
-			};
+		else if (-60 >= velX || velX >= 60) {
+
+			if (list.time > 30) {
+				return ShakeList{
+					rand() % 30 - 20.0f,
+					rand() % 30 - 20.0f,
+					list.time - 1,
+				};
+			}
+
+			if (list.time > 25) {
+				return ShakeList{
+					rand() % 25 - 15.0f,
+					rand() % 25 - 15.0f,
+					list.time - 1,
+				};
+			}
+
+			if (list.time > 20) {
+				return ShakeList{
+					rand() % 18 - 6.0f,
+					rand() % 18 - 6.0f,
+					list.time - 1,
+				};
+			}
+
+			else if (list.time > 15) {
+				return ShakeList{
+				rand() % 12 - 6.0f,
+				rand() % 12 - 6.0f,
+				list.time - 1,
+				};
+			}
+
+			if (list.time > 10) {
+				return ShakeList{
+					rand() % 10 - 6.0f,
+					rand() % 10 - 6.0f,
+					list.time - 1,
+				};
+			}
+
+			else if (list.time > 5) {
+				return ShakeList{
+				rand() % 4 - 2.0f,
+				rand() % 4 - 2.0f,
+				list.time - 1,
+				};
+			}
+
+			else if (list.time > 0) {
+				return ShakeList{
+				rand() % 2 - 0.0f,
+				rand() % 2 - 0.0f,
+				list.time - 1,
+				};
+			}
 		}
 
-		else if (list.time > 0) {
-			return ShakeList{
-			rand() % 5 - 2.0f,
-			rand() % 5 - 2.0f,
-			list.time - 1,
-			};
+		else if (-50 >= velX || velX >= 50) {
+
+			if (list.time > 30) {
+				return ShakeList{
+					rand() % 28 - 18.0f,
+					rand() % 28 - 18.0f,
+					list.time - 1,
+				};
+			}
+
+			if (list.time > 25) {
+				return ShakeList{
+					rand() % 24 - 14.0f,
+					rand() % 24 - 14.0f,
+					list.time - 1,
+				};
+			}
+
+			if (list.time > 20) {
+				return ShakeList{
+					rand() % 16 - 6.0f,
+					rand() % 16 - 6.0f,
+					list.time - 1,
+				};
+			}
+
+			else if (list.time > 15) {
+				return ShakeList{
+				rand() % 10 - 5.0f,
+				rand() % 10 - 5.0f,
+				list.time - 1,
+				};
+			}
+
+			if (list.time > 10) {
+				return ShakeList{
+					rand() % 6 - 3.0f,
+					rand() % 6 - 3.0f,
+					list.time - 1,
+				};
+			}
+
+			else if (list.time > 5) {
+				return ShakeList{
+				rand() % 4 - 2.0f,
+				rand() % 4 - 2.0f,
+				list.time - 1,
+				};
+			}
+
+			else if (list.time > 0) {
+				return ShakeList{
+				rand() % 2 - 0.0f,
+				rand() % 2 - 0.0f,
+				list.time - 1,
+				};
+			}
+		}
+
+		else if (-40 >= velX || velX >= 40) {
+
+			if (list.time > 30) {
+				return ShakeList{
+					rand() % 24 - 11.0f,
+					rand() % 24 - 11.0f,
+					list.time - 1,
+				};
+			}
+
+			if (list.time > 25) {
+				return ShakeList{
+					rand() % 20 - 11.0f,
+					rand() % 20 - 11.0f,
+					list.time - 1,
+				};
+			}
+
+			if (list.time > 20) {
+				return ShakeList{
+					rand() % 14 - 4.0f,
+					rand() % 14 - 4.0f,
+					list.time - 1,
+				};
+			}
+
+			else if (list.time > 15) {
+				return ShakeList{
+				rand() % 10 - 3.0f,
+				rand() % 10 - 3.0f,
+				list.time - 1,
+				};
+			}
+
+			if (list.time > 10) {
+				return ShakeList{
+					rand() % 6 - 2.0f,
+					rand() % 6 - 2.0f,
+					list.time - 1,
+				};
+			}
+
+			else if (list.time > 5) {
+				return ShakeList{
+				rand() % 4 - 1.0f,
+				rand() % 4 - 1.0f,
+				list.time - 1,
+				};
+			}
+
+			else if (list.time > 0) {
+				return ShakeList{
+				rand() % 2 - 2.0f,
+				rand() % 2 - 2.0f,
+				list.time - 1,
+				};
+			}
+		}
+
+		else if (-30 >= velX || velX >= 30) {
+
+			if (list.time > 30) {
+				return ShakeList{
+					rand() % 22 - 10.0f,
+					rand() % 22 - 10.0f,
+					list.time - 1,
+				};
+			}
+
+			if (list.time > 25) {
+				return ShakeList{
+					rand() % 18 - 12.0f,
+					rand() % 18 - 12.0f,
+					list.time - 1,
+				};
+			}
+
+			if (list.time > 20) {
+				return ShakeList{
+					rand() % 16 - 6.0f,
+					rand() % 16 - 6.0f,
+					list.time - 1,
+				};
+			}
+
+			else if (list.time > 15) {
+				return ShakeList{
+				rand() % 8 - 2.0f,
+				rand() % 8 - 2.0f,
+				list.time - 1,
+				};
+			}
+
+			if (list.time > 10) {
+				return ShakeList{
+					rand() % 4 - 2.0f,
+					rand() % 4 - 2.0f,
+					list.time - 1,
+				};
+			}
+
+			else if (list.time > 5) {
+				return ShakeList{
+				rand() % 2 - 1.0f,
+				rand() % 2 - 1.0f,
+				list.time - 1,
+				};
+			}
+
+			else if (list.time > 0) {
+				return ShakeList{
+				rand() % 1 - 0.0f,
+				rand() % 1 - 0.0f,
+				list.time - 1,
+				};
+			}
 		}
 
 		if (list.time == 0) {

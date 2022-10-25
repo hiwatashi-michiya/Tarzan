@@ -103,8 +103,8 @@ public:
 	inline bool getIsGround() { return isGround; }
 
 	//地面判定にする
-	inline bool setIsGround() { isGround = true; state = RUN; return isGround; }
-
+	inline bool setIsGround() { isGround = true; unGrip = 0; return isGround; }
+	
 	//ターザンゲージの取得
 	inline int getTarzanGage() { return TarzanGage; }
 
@@ -134,6 +134,22 @@ public:
 
 	//センターリセット
 	inline Vec2 resetCenter() { center = { center.x = position.x + VINE_LENGTH ,center.y = position.y - 500 }; return center; }
+
+	//プレイヤーの初期化
+	inline void resetPlayer() {
+		position = { 200.0f,500.0f };
+		GripGage = 0;
+		TarzanGage = TARZAN_GAGE;
+		drawX = 0;
+		isGrip = false;
+		isGround = false;
+		length = 0;
+		state = IDLE;
+		unGrip = 0;
+		center.y = position.y - 500;
+		center.x = position.x + VINE_LENGTH;
+		velocity = { 0.0f,0.0f };
+	}
 
 	// すべての音を止める
 	void stopAudio();

@@ -3,9 +3,10 @@
 #include <Novice.h>
 #include <math.h>
 #include<time.h>
+#include "Vec2.h"
 
 //**ベクトルの構造体**//
-typedef struct Vector2{
+typedef struct Vector2 {
 	float x;
 	float y;
 };
@@ -16,7 +17,7 @@ typedef struct Vector2x2 {
 };
 
 typedef struct ShakeList {
-	Vector2 pos;
+	Vec2 pos;
 	int time;
 };
 
@@ -30,7 +31,7 @@ const int emitterMax = 120;
 // <X座標,Y座標>
 //を設定する
 //何か追加要素があれば追加してもよい
-typedef struct EffectPoint{
+typedef struct EffectPoint {
 	int isActive;
 	Vector2 pos;
 	Vector2 vel;
@@ -116,7 +117,7 @@ void speedParticle(float posX, float posY, float vel, Effect effect[], int* disp
 // <パーティクルを表示し続けるフレーム数> 
 //を入力すること
 //出現・消滅・移動処理をすべて行う
-void speedLineParticle(float posX, float posY,float vel, Effect effect[], int* displayTime);
+void speedLineParticle(float posX, float posY, float vel, Effect effect[], int* displayTime);
 
 
 //残像
@@ -219,15 +220,15 @@ void screenFadeDraw();
 // <オブジェクトの色>
 // <オブジェクトの消滅速度(1(遅い)~5(速い)段階で設定)>
 //を入力すること
-void objFadeOut(unsigned int color,int fadeSpeed);
+void objFadeOut(unsigned int color, int fadeSpeed);
 
 //シェイク
-// <シェイク用の座標>
-// <シェイクさせたいフレーム数>
+// <シェイク用の構造体>
+// <プレイヤーの速度>
 //を入力すること
 //シェイクさせたいときはシェイクする時間を入力すること
 //時間及びフラグはmain.cppでオフまたは更新すること
-ShakeList shake(ShakeList list);
+ShakeList shake(ShakeList list, float velX);
 
 #pragma endregion
 

@@ -24,7 +24,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vec2 scroll = { 0,0 };
 
 	//ステージ選択の変数
-	int stageSelect = 2;
+	int stageSelect = 3;
 
 	//X軸の画像表示の繰り返し回数
 	const int REPETITION_X = 32;
@@ -71,6 +71,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ステージ決定音
 	int DECISIONSOUND = Novice::LoadAudio("./Resources/SE/decision.wav");
 	int DECISIONSOUNDCHECK = -1;
+
+	// ターザンミュージック
+	int TARZANMUSIC = Novice::LoadAudio("./Resources/BGM/TarzanBGM.wav");
+	int TARZANMUSICCHECK = -1;
 
 #pragma endregion
 
@@ -329,7 +333,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region stage3
 	//ステージ3
 	wall[3][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
-	wall[3][1] = Wall({ -100.0f,-400.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][1] = Wall({ -100.0f,-1000.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[3][2] = Wall({ 6250.0f,310.0f }, 500, 1000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[3][3] = Wall({ 14250.0f,110.0f }, 500, 1000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[3][4] = Wall({ 156.0f,610.0f }, 944, 200, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
@@ -447,11 +451,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	floor[3][11] = Floor(18000, 400, 2000, 10, PLAYERDECEL, 2000, 10, 64, 64, DECELFLOOR, player);
 	floor[3][12] = Floor(1700, 190, 1500, 10, CEILING, 1500, 10, 64, 64, CEILINGFLOOR, player);
 	floor[3][13] = Floor(1700, -10, 1500, 10, PLAYERACCEL, 1500, 10, 64, 64, ACCELFLOOR, player);
-	floor[3][14] = Floor(1700, -300, 2500, 10, NORMAL, 2500, 10, 64, 64, NORMALFLOOR, player);
-	floor[3][15] = Floor(4200, -300, 500, 10, CEILING, 500, 10, 64, 64, CEILINGFLOOR, player);
-	floor[3][16] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
-	floor[3][17] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
-	floor[3][18] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][14] = Floor(1700, -300, 2550, 10, NORMAL, 2500, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][15] = Floor(4200, -300, 1500, 10, CEILING, 1500, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][16] = Floor(3700, -10, 2000, 10, PLAYERACCEL, 2000, 10, 64, 64, ACCELFLOOR, player);
+	floor[3][17] = Floor(10000, 400, 4000, 10, CEILING, 4000, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][18] = Floor(5000, 500, 1000, 10, CEILING, 1000, 10, 64, 64, CEILINGFLOOR, player);
 	floor[3][19] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
 	floor[3][20] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
 	floor[3][21] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
@@ -489,6 +493,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::BeginFrame();
 
 		Key::Update();
+
+		if (!Novice::IsPlayingAudio(TARZANMUSICCHECK) || TARZANMUSICCHECK == -1) {
+			TARZANMUSICCHECK = Novice::PlayAudio(TARZANMUSIC, 1, 0.1f);
+		}
 
 		switch (scene) {
 
@@ -600,6 +608,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (sceneCount == 0) {
 						sceneChange = false;
 						isGoal = false;
+						player.stopAudio();
 					}
 
 				}
@@ -665,6 +674,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (Key::IsTrigger(DIK_ESCAPE)) {
 					sceneChange = true;
+					if (!Novice::IsPlayingAudio(SCENECHANGESOUNDCHECK) || SCENECHANGESOUNDCHECK == -1) {
+						SCENECHANGESOUNDCHECK = Novice::PlayAudio(SCENECHANGESOUND, 0, 0.5f);
+					}
 					nextScene = TITLE;
 				}
 
@@ -719,16 +731,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 						scroll = { 0.0f,0.0f };
 
-						//プレイヤーの初期化
-						player.resetPosition();
-
-						player.setSpeed0X();
-
-						player.RecoveryTarzanGage();
-
-						player.setSpeedY();
-
-						player.resetCenter();
+						player.resetPlayer();
 
 						maxSpeed = 0.0f;
 
@@ -814,6 +817,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								SCENECHANGESOUNDCHECK = Novice::PlayAudio(SCENECHANGESOUND, 0, 0.5f);
 							}
 							nextScene = STAGESELECT;
+							player.stopAudio();
 						}
 
 					}
@@ -846,7 +850,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (Key::IsTrigger(DIK_ESCAPE)) {
 					sceneChange = true;
+					if (!Novice::IsPlayingAudio(SCENECHANGESOUNDCHECK) || SCENECHANGESOUNDCHECK == -1) {
+						SCENECHANGESOUNDCHECK = Novice::PlayAudio(SCENECHANGESOUND, 0, 0.5f);
+					}
 					nextScene = STAGESELECT;
+					player.stopAudio();
 				}
 
 #pragma region DrawTimer
@@ -911,18 +919,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//地面についたらフラグをオンにする
 				if (player.getIsGround() == true) {
 
+					//シェイクさせる
 					isShake = true;
 				}
 
 				//飛んだらいろいろ初期化
 				if (player.getIsGround() == false) {
 
+					//地面についたら着地エフェクトを発生
 					isPlayerLanding = true;
 
+					//着地エフェクトを消す
 					for (int i = 0; i < 4; i++) {
 						landingBox[i].isActive = false;
 					}
 
+					//シェイクする時間を再設定
 					if (isShake == false) {
 						if (shakes.time <= 0) {
 							shakes.time = 60;
@@ -930,9 +942,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 
-				//地面についたらフラグをオンにする
+				//壁に当たったらシェイクのフラグをtrueにする
+				for (int i = 0; i < WALL_NUMBER; i++) {
+
+					if (wall[stageSelect][i].getIsHit() == true) {
+
+						isShake = true;
+					}
+				}
+
+				//落下エフェクト
+				//地面についたら着地エフェクトを発生
 				if (player.getIsGround() == true) {
 					if (isPlayerLanding == true) {
+
 
 						landingParticle(player.getPosX(), player.getPosY(), landingBox);
 
@@ -947,9 +970,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 
+
+				//シェイク
 				if (isShake == true) {
 
-					shakes = shake(shakes);
+					shakes = shake(shakes, player.getSpeedX());
 
 					if (shakes.time == 0) {
 
@@ -957,9 +982,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					}
 				}
-			
+
 
 #pragma endregion
+
 
 				if (player.getPosX() > GOAL_LINE[stageSelect]) {
 					isGoal = true;
@@ -1227,7 +1253,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				0, 0, (player.getTarzanGage() * 512) / TARZAN_GAGE, 64, GAGE, 0xFFFFFFFF);
 
 			//ドット
-			Novice::DrawQuad(195, 64, 243, 64, 195, 112, 243, 112, 0, 0, 64, 64, DOT, 0xFFFFFFFF);
+			Novice::DrawQuad(195 + 32, 64, 243 + 32, 64, 195 + 32, 112, 243 + 32, 112, 0, 0, 64, 64, DOT, 0xFFFFFFFF);
 
 			//スピード
 			Novice::DrawQuad(30, 48, 158, 48, 30, 80, 158, 80, 0, 0, 256, 64, SPEED, 0xFFFFFFFF);
@@ -1237,7 +1263,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				divideNumber = 1;
 
-				for (int b = 0; b < 4; b++) {
+				for (int b = 0; b < 5; b++) {
 					divideNumber *= 10;
 				}
 
@@ -1251,7 +1277,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (d == drawNumber) {
 
-						if (a < 2) {
+						if (a < 3) {
 							Novice::DrawQuad(132 + a * 32, 32, 196 + a * 32, 32, 132 + a * 32, 96, 196 + a * 32, 96, 0, 0, 64, 64, NUM[d], 0xFFFFFFFF);
 						}
 						else {
@@ -1269,7 +1295,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//----------------最大速度の表示------------------
 
 			//ドット
-			Novice::DrawQuad(1095, 64, 1143, 64, 1095, 112, 1143, 112, 0, 0, 64, 64, REDDOT, 0xFFFFFFFF);
+			Novice::DrawQuad(1095 + 32, 64, 1143 + 32, 64, 1095 + 32, 112, 1143 + 32, 112, 0, 0, 64, 64, REDDOT, 0xFFFFFFFF);
 
 			//スピード
 			Novice::DrawQuad(888, 48, 1048, 48, 888, 80, 1048, 80, 0, 0, 320, 64, MAXSPEED, 0xFFFFFFFF);
@@ -1279,7 +1305,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				divideNumber = 1;
 
-				for (int b = 0; b < 4; b++) {
+				for (int b = 0; b < 5; b++) {
 					divideNumber *= 10;
 				}
 
@@ -1293,7 +1319,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (d == drawNumber) {
 
-						if (a < 2) {
+						if (a < 3) {
 							Novice::DrawQuad(1032 + a * 32, 32, 1096 + a * 32, 32, 1032 + a * 32, 96, 1096 + a * 32, 96, 0, 0, 64, 64, REDNUM[d], 0xFFFFFFFF);
 						}
 						else {

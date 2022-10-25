@@ -57,7 +57,7 @@ void Player::Update(Vec2& scroll) {
 
 void Player::Draw(Vec2 scroll) {
 
-	switch (state)
+	/*switch (state)
 	{
 	case IDLE:
 		Novice::ScreenPrintf(10, 10, "IDLE");
@@ -79,7 +79,7 @@ void Player::Draw(Vec2 scroll) {
 		break;
 	default:
 		break;
-	}
+	}*/
 
 	// 中心
 	//Novice::DrawEllipse(center.x - scroll.x, (center.y) - scroll.y, 10, 10, 0.0f, GREEN, kFillModeWireFrame);
@@ -176,18 +176,23 @@ void Player::Move() {
 
 
 	// ワンボタン
+	// もしスペースが押されたら
 	if (Novice::CheckHitKey(DIK_SPACE)) {
 		//Novice::ScreenPrintf(10, 10, "Pushing SPACE");
 		//DrawEllipse(position.X + VINE_LENGTH, 600, 20, 20, WHITE, kFillModeSolid);
 		//Novice::DrawLine(position.X, S(position.y), position.X + VINE_LENGTH, S(600), GREEN);
 
-		// あえて捕まらない
+		// あえて掴まない
+		// 掴まない条件としては
+		// ジャンプした直後
+		// のみ
 		unGrip--;
 		if (unGrip <= 0) {
 			unGrip = 0;
 
 			// ターザンゲージを減らす
 			TarzanGage--;
+			// ターザンゲージが 0 では無く、かつ、地面ではない
 			if (0 < TarzanGage && !isGround) {
 				GripGage++;
 				if (300 <= GripGage) {
@@ -196,13 +201,6 @@ void Player::Move() {
 				isGrip = true;
 				state = TARZAN;
 
-				// ツタにつかまってる音を鳴らす
-				if (!Novice::IsPlayingAudio(soundChecks[2]) || soundChecks[2] == -1) {
-					soundChecks[2] = Novice::PlayAudio(soundHandles[2], 1, 0.5f);
-				}
-				else {
-					Novice::ResumeAudio(soundChecks[2]);
-				}
 
 
 
@@ -304,40 +302,6 @@ void Player::Move() {
 		state = SKY;
 	}
 
-	switch (state)
-	{
-	case IDLE:
-		Novice::StopAudio(soundChecks[0]);
-		Novice::PauseAudio(soundChecks[2]);
-		break;
-	case RUN:
-		Novice::StopAudio(soundChecks[2]);
-		// 音ならない
-		if (!Novice::IsPlayingAudio(soundChecks[0]) || soundChecks[0] == -1) {
-			soundChecks[0] = Novice::PlayAudio(soundHandles[0], 1, 1.0f);
-		}
-		break;
-	case TARZAN:
-		Novice::StopAudio(soundChecks[0]);
-		break;
-	case JUMP:
-		Novice::StopAudio(soundChecks[0]);
-		Novice::PauseAudio(soundChecks[2]);
-		break;
-	case SKY:
-		Novice::StopAudio(soundChecks[0]);
-		Novice::PauseAudio(soundChecks[2]);
-		break;
-	case LANDING:
-		Novice::StopAudio(soundChecks[0]);
-		Novice::PauseAudio(soundChecks[2]);
-		if (!Novice::IsPlayingAudio(soundChecks[1]) || soundChecks[1] == -1) {
-			soundChecks[1] = Novice::PlayAudio(soundHandles[1], 0, 0.5f);
-		}
-		break;
-	default:
-		break;
-	}
 
 	// 重力加算
 	velocity.y += GRAVITY;
@@ -352,21 +316,24 @@ void Player::Collision(Vec2& scroll) {
 
 	// 範囲内にする
 	// 下側
-	if (WINDOW_HEIGHT - RADIUS <= position.y) {
-		position.y = WINDOW_HEIGHT - RADIUS;
-		TarzanGage = TARZAN_GAGE;
-		velocity.y = 0;
-		isGround = true;
-		length = 0;
-		isGrip = false;
+	if (isGround && 0 < velocity.y) {
+		if (-0.2f < velocity.x && velocity.x < 0.2f) {
+			state = IDLE;
+		}
+		else {
+			state = RUN;
+		}
 	}
-	else {
+	else if (isGround && velocity.y < 0) {
 		isGround = false;
 	}
-	// 左側
-	if (position.x - RADIUS <= 0) {
-		position.x = RADIUS;
-		velocity.x *= -1;
+	else if (!isGround) {
+		if (isGrip) {
+			state = TARZAN;
+		}
+		else {
+			state = SKY;
+		}
 	}
 	// x 値のスクロール
 	scroll.x = position.x - 640;
@@ -386,6 +353,49 @@ void Player::Collision(Vec2& scroll) {
 	}
 	if (velocity.x == 0) {
 		state = IDLE;
+	}
+
+	// 状態に応じて音を管理
+	switch (state)
+	{
+	case IDLE:
+		Novice::StopAudio(soundChecks[0]);
+		Novice::PauseAudio(soundChecks[2]);
+		break;
+	case RUN:
+		Novice::StopAudio(soundChecks[2]);
+		// 音なった
+		if (!Novice::IsPlayingAudio(soundChecks[0]) || soundChecks[0] == -1) {
+			soundChecks[0] = Novice::PlayAudio(soundHandles[0], 1, 0.07f);
+		}
+		break;
+	case TARZAN:
+		Novice::StopAudio(soundChecks[0]);
+		// ツタにつかまってる音を鳴らす
+		if (!Novice::IsPlayingAudio(soundChecks[2]) || soundChecks[2] == -1) {
+			soundChecks[2] = Novice::PlayAudio(soundHandles[2], 1, 0.05f);
+		}
+		else {
+			Novice::ResumeAudio(soundChecks[2]);
+		}
+		break;
+	case JUMP:
+		Novice::StopAudio(soundChecks[0]);
+		Novice::PauseAudio(soundChecks[2]);
+		break;
+	case SKY:
+		Novice::StopAudio(soundChecks[0]);
+		Novice::PauseAudio(soundChecks[2]);
+		break;
+	case LANDING:
+		Novice::StopAudio(soundChecks[0]);
+		Novice::PauseAudio(soundChecks[2]);
+		if (!Novice::IsPlayingAudio(soundChecks[1]) || soundChecks[1] == -1) {
+			soundChecks[1] = Novice::PlayAudio(soundHandles[1], 0, 0.5f);
+		}
+		break;
+	default:
+		break;
 	}
 }
 
