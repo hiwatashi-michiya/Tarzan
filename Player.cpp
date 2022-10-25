@@ -5,7 +5,7 @@
 
 Player::Player()
 	: position({ 100.0f,100.0f }), velocity({ 5.0f,5.0f }), center({ 0.0f,0.0f }),
-	isGrip(false), TarzanGage(TARZAN_GAGE), GripGage(0), unGrip(0), isGround(false), length(0), textureHandle(0)
+	isGrip(false), TarzanGage(TARZAN_GAGE), GripGage(0), unGrip(0), isGround(false), length(0), drawX(0), state(IDLE)
 {
 
 }
@@ -14,7 +14,7 @@ Player::Player(Vec2 position, Vec2 velocity, Vec2 center,
 	bool isGrip, int TarzanGage, int GripGage, int unGrip, bool isGround, float length, int textureHandle, int drawX)
 	: position({ position.x,position.y }), velocity({ velocity.x,velocity.y }),
 	center({ center.x,center.y }), isGrip(false), TarzanGage(TARZAN_GAGE),
-	GripGage(0), unGrip(unGrip), isGround(isGround), length(length), textureHandle(textureHandle), drawX(drawX)
+	GripGage(0), unGrip(unGrip), isGround(isGround), length(length), drawX(drawX)
 {
 
 }
@@ -35,6 +35,14 @@ Player::Player(Vec2 pos, int texturehandle[])
 	length = 0;
 	state = IDLE;
 	unGrip = 0;
+	loghandle = Novice::LoadTexture("./Resources/Images/Player/log.png");
+
+	soundHandles[0] = Novice::LoadAudio("./Resources/SE/run.wav");
+	soundHandles[1] = Novice::LoadAudio("./Resources/SE/landing.wav");
+	soundHandles[2] = Novice::LoadAudio("./Resources/SE/creak.wav");
+	for (int i = 0; i < 3; i++) {
+		soundChecks[i] = -1;
+	}
 }
 
 //-----------------------------------
@@ -49,14 +57,39 @@ void Player::Update(Vec2& scroll) {
 
 void Player::Draw(Vec2 scroll) {
 
+	switch (state)
+	{
+	case IDLE:
+		Novice::ScreenPrintf(10, 10, "IDLE");
+		break;
+	case RUN:
+		Novice::ScreenPrintf(10, 10, "RUN");
+		break;
+	case TARZAN:
+		Novice::ScreenPrintf(10, 10, "TARZAN");
+		break;
+	case JUMP:
+		Novice::ScreenPrintf(10, 10, "JUMP");
+		break;
+	case SKY:
+		Novice::ScreenPrintf(10, 10, "SKY");
+		break;
+	case LANDING:
+		Novice::ScreenPrintf(10, 10, "LANDING");
+		break;
+	default:
+		break;
+	}
+
 	// 中心
-	Novice::DrawEllipse(center.x - scroll.x, (center.y) - scroll.y, 10, 10, 0.0f, GREEN, kFillModeWireFrame);
+	//Novice::DrawEllipse(center.x - scroll.x, (center.y) - scroll.y, 10, 10, 0.0f, GREEN, kFillModeWireFrame);
+	Novice::DrawSprite(center.x - 16 - scroll.x, center.y - 16 - scroll.y, loghandle, 1, 1, 0.0f, WHITE);
 	// 掴んでいるときのツタ
 	if (isGrip) {
 		Novice::DrawLine(position.x - scroll.x, (position.y) - scroll.y, center.x - scroll.x, (center.y) - scroll.y, GREEN);
 	}
 	// 残りのターザンゲージを表す色
-	int color = RED + ((int)(TarzanGage * TARZAN_COLOR) << 16) + ((int)(TarzanGage * TARZAN_COLOR) << 8);
+	int color = 0xFF0000FF + ((int)(TarzanGage * TARZAN_COLOR) << 16) + ((int)(TarzanGage * TARZAN_COLOR) << 8) - (int)(TarzanGage * TARZAN_COLOR);
 	//Novice::DrawEllipse(position.x - scrollX, (position.y), RADIUS, RADIUS, 0.0f, color, kFillModeSolid);
 
 	if (isGrip) {}
@@ -87,16 +120,17 @@ void Player::Draw(Vec2 scroll) {
 	}
 
 	// ターザンを画像で表示
+	Novice::DrawEllipse(position.x - scroll.x, position.y - scroll.y, 16, 16, 0.0f, color, kFillModeSolid);
 
 	if (velocity.x >= 0) {
 		Novice::DrawQuad(lotatedLeftTop.x - scroll.x, lotatedLeftTop.y - scroll.y, lotatedRightTop.x - scroll.x, lotatedRightTop.y - scroll.y,
 			lotatedLeftBottom.x - scroll.x, lotatedLeftBottom.y - scroll.y, lotatedRightBottom.x - scroll.x, lotatedRightBottom.y - scroll.y,
-			drawX, 0, 32, 32, textures[(int)state], color);
+			drawX, 0, 32, 32, textures[(int)state], WHITE);
 	}
 	else {
 		Novice::DrawQuad(lotatedRightTop.x - scroll.x, lotatedRightTop.y - scroll.y, lotatedLeftTop.x - scroll.x, lotatedLeftTop.y - scroll.y,
 			lotatedRightBottom.x - scroll.x, lotatedRightBottom.y - scroll.y, lotatedLeftBottom.x - scroll.x, lotatedLeftBottom.y - scroll.y,
-			drawX, 0, 32, 32, textures[(int)state], color);
+			drawX, 0, 32, 32, textures[(int)state], WHITE);
 	}
 
 
@@ -118,6 +152,13 @@ float Player::KeepMaxSpeed(float maxSpeed) {
 
 	return maxSpeed;
 
+}
+
+void Player::stopAudio() {
+	for (int i = 0; i < 3; i++)
+	{
+		Novice::StopAudio(soundChecks[i]);
+	}
 }
 
 //-------------------------------------
@@ -154,6 +195,16 @@ void Player::Move() {
 				}
 				isGrip = true;
 				state = TARZAN;
+
+				// ツタにつかまってる音を鳴らす
+				if (!Novice::IsPlayingAudio(soundChecks[2]) || soundChecks[2] == -1) {
+					soundChecks[2] = Novice::PlayAudio(soundHandles[2], 1, 0.5f);
+				}
+				else {
+					Novice::ResumeAudio(soundChecks[2]);
+				}
+
+
 
 				// 中心までのベクトルを出す
 				Vec2 ptc;
@@ -194,8 +245,8 @@ void Player::Move() {
 				}
 
 				// 案2
-					// 広がった分を中心に向かうベクトルと合成して補正する
-					// その分のベクトルを算出
+				// 広がった分を中心に向かうベクトルと合成して補正する
+				// その分のベクトルを算出
 				Vec2 collection = { 0,0 };
 
 				ptc.x = center.x - (position.x + fixX);
@@ -248,6 +299,45 @@ void Player::Move() {
 		GripGage = 0;
 	}
 	//DrawEllipse(position.X + VINE_LENGTH, 600, 20, 20, WHITE, kFillModeWireFrame);
+
+	if (!isGrip) {
+		state = SKY;
+	}
+
+	switch (state)
+	{
+	case IDLE:
+		Novice::StopAudio(soundChecks[0]);
+		Novice::PauseAudio(soundChecks[2]);
+		break;
+	case RUN:
+		Novice::StopAudio(soundChecks[2]);
+		// 音ならない
+		if (!Novice::IsPlayingAudio(soundChecks[0]) || soundChecks[0] == -1) {
+			soundChecks[0] = Novice::PlayAudio(soundHandles[0], 1, 1.0f);
+		}
+		break;
+	case TARZAN:
+		Novice::StopAudio(soundChecks[0]);
+		break;
+	case JUMP:
+		Novice::StopAudio(soundChecks[0]);
+		Novice::PauseAudio(soundChecks[2]);
+		break;
+	case SKY:
+		Novice::StopAudio(soundChecks[0]);
+		Novice::PauseAudio(soundChecks[2]);
+		break;
+	case LANDING:
+		Novice::StopAudio(soundChecks[0]);
+		Novice::PauseAudio(soundChecks[2]);
+		if (!Novice::IsPlayingAudio(soundChecks[1]) || soundChecks[1] == -1) {
+			soundChecks[1] = Novice::PlayAudio(soundHandles[1], 0, 0.5f);
+		}
+		break;
+	default:
+		break;
+	}
 
 	// 重力加算
 	velocity.y += GRAVITY;

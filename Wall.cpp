@@ -54,6 +54,8 @@ void Wall::Collision(Vec2 scroll) {
 		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() - scroll.y >= position.y - scroll.y &&
 		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() - scroll.y <= position.y + height - scroll.y) {
 
+		isHit = true;
+
 		if (((pPlayer->Player::getSpeedX()) >= hitSpeed || (pPlayer->Player::getReverseSpeedX()) >= hitSpeed) && type == BREAK) {
 			isAlive = false;
 		}
@@ -79,6 +81,9 @@ void Wall::Collision(Vec2 scroll) {
 			}
 		}
 
+	}
+	else {
+		isHit = false;
 	}
 
 }

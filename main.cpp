@@ -6,6 +6,7 @@
 #include "Floor.h"
 #include "Stage.h"
 #include "Calc.h"
+#include "effect.h"
 
 const char kWindowTitle[] = "Wild Tarzan";
 
@@ -54,6 +55,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//シーンチェンジ画像
 	int SCENECHANGE = Novice::LoadTexture("./Resources/Images/BG/scenechange.png");
+	
+	// シーンチェンジ音
+	int SCENECHANGESOUND = Novice::LoadAudio("./Resources/SE/sceneChange.wav");
+	int SCENECHANGESOUNDCHECK = -1;
+
+	// カーソル移動音
+	int SELECTSOUND = Novice::LoadAudio("./Resources/SE/select.wav");
+	int SELECTSOUNDCHECK[8];
+	for (int i = 0; i < 8; i++)
+	{
+		SELECTSOUNDCHECK[i] = -1;
+	}
+
+	// ステージ決定音
+	int DECISIONSOUND = Novice::LoadAudio("./Resources/SE/decision.wav");
+	int DECISIONSOUNDCHECK = -1;
 
 #pragma endregion
 
@@ -75,6 +92,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int PLAYERIDLE = Novice::LoadTexture("./Resources/Images/Player/playerIdle.png");
 	int PLAYERRUN = Novice::LoadTexture("./Resources/Images/Player/playerRun.png");
 	int PLAYERTARZAN = Novice::LoadTexture("./Resources/Images/Player/playerTarzan.png");
+	int PLAYERSKY = Novice::LoadTexture("./Resources/Images/Player/playerSky.png");
 
 #pragma endregion
 
@@ -173,11 +191,89 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int drawMaxSpeed = 0;
 
+#pragma region パーティクルの変数の宣言・定義
+
+	//拡散
+	//for文を用いてパーティクル一つ一つの変数を初期化
+	Effect diffusionBox[emitterMax]{};
+	for (int i = 0; i < emitterMax; i++) {
+
+		diffusionBox[i] = inisharaizuDiffusion();
+
+	};
+
+	//速度
+	//for文を用いてパーティクル一つ一つの変数を初期化
+	Effect SpeedBox[emitterMax]{};
+	for (int i = 0; i < emitterMax; i++) {
+
+		SpeedBox[i] = inisharaizuSpeed();
+
+	};
+
+	//加速線
+	//for文を用いてパーティクル一つ一つの変数を初期化
+	Effect SpeedLineBox[emitterMax]{};
+	for (int i = 0; i < emitterMax; i++) {
+
+		SpeedLineBox[i] = inisharaizuSpeedLine();
+
+	};
+
+	//残像
+	//for文を用いてパーティクル一つ一つの変数を初期化
+	Effect afterImageBox[emitterMax]{};
+	for (int i = 0; i < emitterMax; i++) {
+
+		afterImageBox[i] = inisharaizuAfterImage();
+
+	};
+
+	//落下
+	//for文を用いてパーティクル一つ一つの変数を初期化
+	Effect landingBox[emitterMax]{};
+	for (int i = 0; i < emitterMax; i++) {
+
+		landingBox[i] = inisharaizuLanding();
+
+	};
+
+	//左衝突
+	//for文を用いてパーティクル一つ一つの変数を初期化
+	Effect	leftClashBox[emitterMax]{};
+	for (int i = 0; i < emitterMax; i++) {
+
+		leftClashBox[i] = inisharaizuLeftClash();
+
+	};
+
+	//右衝突
+	//for文を用いてパーティクル一つ一つの変数を初期化
+	Effect rightClashBox[emitterMax]{};
+	for (int i = 0; i < emitterMax; i++) {
+
+		rightClashBox[i] = inisharaizuRightClash();
+
+	};
+
+	ShakeList shakes{};
+
+	int displayTimeAfter[emitterMax]{};
+	int displayTimeDiffusion[emitterMax]{};
+	int displayTimeLine[emitterMax]{};
+
+
+	bool isPlayerLanding = false;
+	bool isShake = false;
+
+
+#pragma endregion
+
 	/*Player player({ posX, posY }, { velocityX, 0.0f }, { 100.0f + 250.0f, 200.0f },
 		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0, TARZAN, 0);*/
 
 	int PLAYERIMAGES[PLAYER_STATE_NUM] = {
-		PLAYERIDLE,PLAYERRUN,PLAYERTARZAN
+		PLAYERIDLE,PLAYERRUN,PLAYERTARZAN,0,PLAYERSKY
 	};
 
 	Vec2 pos = { 200.0f,500.0f };
@@ -193,6 +289,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 	}
+
+#pragma region stage1
 	//ステージ1
 	wall[1][0] = Wall({ 100.0f,690.0f }, 51200, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
 	wall[1][1] = Wall({ 4000.0f,590.0f }, 256, 256, 20.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
@@ -207,7 +305,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	wall[1][10] = Wall({ 500.0f,600.0f }, 256, 300, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[1][11] = Wall({ 2000.0f,550.0f }, 256, 300, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	//
-
+#pragma endregion
+#pragma region stage2
 	//ステージ2
 	wall[2][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
 	wall[2][1] = Wall({ -100.0f,-1000.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
@@ -221,25 +320,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	wall[2][9] = Wall({ 7000.0f,200.0f }, 300, 480, 25.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
 	wall[2][10] = Wall({ 7000.0f,-1000.0f }, 300, 990, 30.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
 	wall[2][11] = Wall({ 11000.0f,0.0f }, 300, 680, 30.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
-	wall[2][12] = Wall({ 14000.0f,-1000.0f }, 300, 900, 15.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[2][12] = Wall({ 14000.0f,-1000.0f }, 300, 900, 40.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
 	wall[2][13] = Wall({ 19000.0f,-1000.0f }, 300, 1680, 35.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
-
 	//
-
+#pragma endregion
+#pragma region stage3
 	//ステージ3
 	wall[3][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
 	wall[3][1] = Wall({ -100.0f,-400.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][2] = Wall({ 6250.0f,310.0f }, 500, 1000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][3] = Wall({ 14250.0f,110.0f }, 500, 1000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][4] = Wall({ 156.0f,610.0f }, 944, 200, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][5] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][6] = Wall({ 4200.0f,-2000.0f }, 1500, 1700, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][7] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][8] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][9] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][10] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][11] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	//
-
+#pragma endregion
+#pragma region stage4
 	//ステージ4
 	wall[4][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
 	wall[4][1] = Wall({ -100.0f,-400.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	//
-
+#pragma endregion
+#pragma region stage5
 	//ステージ5
 	wall[5][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
 	wall[5][1] = Wall({ -100.0f,-400.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	//
+#pragma endregion
 
 	//初期化用
 	Wall RESET_WALL[STAGE_NUMBER][WALL_NUMBER];
@@ -263,6 +375,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 	}
 
+#pragma region stage1
+
 	//ステージ1
 	floor[1][0] = Floor(100, 680, 28000, 10, NORMAL, 28000, 10, 64, 64, NORMALFLOOR, player);
 	floor[1][1] = Floor(4000, 580, 256, 10, NORMAL, 256, 10, 64, 64, NORMALFLOOR, player);
@@ -278,6 +392,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	floor[1][11] = Floor(500, 590, 256, 10, NORMAL, 256, 10, 64, 64, NORMALFLOOR, player);
 	floor[1][12] = Floor(2000, 540, 256, 10, NORMAL, 256, 10, 64, 64, NORMALFLOOR, player);
 	//
+
+#pragma endregion
+#pragma region stage2
 
 	//ステージ2
 	floor[2][0] = Floor(100, 680, 50000, 10, NORMAL, 50000, 10, 64, 64, NORMALFLOOR, player);
@@ -307,23 +424,53 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	floor[2][24] = Floor(10000, 480, 500, 10, CEILING, 500, 10, 64, 64, CEILINGFLOOR, player);
 	floor[2][25] = Floor(11000, -100, 4000, 10, PLAYERACCEL, 4000, 10, 64, 64, ACCELFLOOR, player);
 	floor[2][26] = Floor(11000, -10, 4000, 10, CEILING, 4000, 10, 64, 64, CEILINGFLOOR, player);
-	floor[2][24] = Floor(9000, -50, 1500, 10, PLAYERACCEL, 1500, 10, 64, 64, ACCELFLOOR, player);
+	floor[2][27] = Floor(9000, -50, 1500, 10, PLAYERACCEL, 1500, 10, 64, 64, ACCELFLOOR, player);
 	//
+
+#pragma endregion
+#pragma region stage3
 
 	//ステージ3
 	floor[3][0] = Floor(100, 680, 50000, 10, NORMAL, 50000, 10, 64, 64, NORMALFLOOR, player);
-	floor[3][1] = Floor(0, -2000, 50000, 1000, CEILING, 50000, 1000, 64, 64, STAGECEILING, player);
+	floor[3][1] = Floor(0, -3000, 50000, 1000, CEILING, 50000, 1000, 64, 64, STAGECEILING, player);
+	floor[3][2] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][3] = Floor(100, 200, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][4] = Floor(100, -300, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][5] = Floor(1700, 500, 1500, 10, NORMAL, 1500, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][6] = Floor(6000, 300, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][7] = Floor(7000, 500, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][8] = Floor(8000, 300, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][9] = Floor(14000, 100, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][10] = Floor(17000, 200, 500, 10, NORMAL, 500, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][11] = Floor(18000, 400, 2000, 10, PLAYERDECEL, 2000, 10, 64, 64, DECELFLOOR, player);
+	floor[3][12] = Floor(1700, 190, 1500, 10, CEILING, 1500, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][13] = Floor(1700, -10, 1500, 10, PLAYERACCEL, 1500, 10, 64, 64, ACCELFLOOR, player);
+	floor[3][14] = Floor(1700, -300, 2500, 10, NORMAL, 2500, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][15] = Floor(4200, -300, 500, 10, CEILING, 500, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][16] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][17] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][18] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][19] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][20] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][21] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][22] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
 	//
 
+#pragma endregion
+#pragma region stage4
 	//ステージ4
 	floor[4][0] = Floor(100, 680, 50000, 10, NORMAL, 50000, 10, 64, 64, NORMALFLOOR, player);
 	floor[4][1] = Floor(0, -2000, 50000, 1000, CEILING, 50000, 1000, 64, 64, STAGECEILING, player);
+	floor[4][2] = Floor(600, 580, 300, 10, NORMAL, 300, 10, 64, 64, NORMALFLOOR, player);
 	//
-
+#pragma endregion
+#pragma region stage5
 	//ステージ5
 	floor[5][0] = Floor(100, 680, 50000, 10, NORMAL, 50000, 10, 64, 64, NORMALFLOOR, player);
 	floor[5][1] = Floor(0, -2000, 50000, 1000, CEILING, 50000, 1000, 64, 64, STAGECEILING, player);
+	floor[5][2] = Floor(600, 580, 300, 10, NORMAL, 300, 10, 64, 64, NORMALFLOOR, player);
 	//
+#pragma endregion
 
 	//初期化用
 	Floor RESET_FLOOR[STAGE_NUMBER][FLOOR_NUMBER];
@@ -479,15 +626,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (Key::IsTrigger(DIK_UP) && stageSelect > 1) {
 					stageSelect -= 1;
+					for (int i = 0; i < 8; i++) {
+						if (!Novice::IsPlayingAudio(SELECTSOUNDCHECK[i]) || SELECTSOUNDCHECK[i] == -1) {
+							SELECTSOUNDCHECK[i] = Novice::PlayAudio(SELECTSOUND, 0, 0.5f);
+							break;
+						}
+
+					}
 				}
 
-				if (Key::IsTrigger(DIK_DOWN) && stageSelect < 5) {
+				if (Key::IsTrigger(DIK_DOWN) && stageSelect < STAGE_NUMBER - 1) {
 					stageSelect += 1;
+					for (int i = 0; i < 8; i++) {
+						if (!Novice::IsPlayingAudio(SELECTSOUNDCHECK[i]) || SELECTSOUNDCHECK[i] == -1) {
+							SELECTSOUNDCHECK[i] = Novice::PlayAudio(SELECTSOUND, 0, 0.5f);
+							break;
+						}
+
+					}
 				}
 
 				if (Key::IsTrigger(DIK_SPACE)) {
 					sceneChange = true;
 					isLoading = 0;
+					if (!Novice::IsPlayingAudio(DECISIONSOUNDCHECK) || DECISIONSOUNDCHECK == -1) {
+						DECISIONSOUNDCHECK = Novice::PlayAudio(DECISIONSOUND, 0, 0.5f);
+					}
+					if (!Novice::IsPlayingAudio(SCENECHANGESOUNDCHECK) || SCENECHANGESOUNDCHECK == -1) {
+						SCENECHANGESOUNDCHECK = Novice::PlayAudio(SCENECHANGESOUND, 0, 0.5f);
+					}
 					nextScene = GAMEPLAY;
 				}
 
@@ -636,7 +803,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					//キー入力でシーンチェンジを有効にする
 					if (sceneCount == SCENE_TIMER) {
 
-						if (Key::IsTrigger(DIK_RETURN)) {
+						if (Key::IsTrigger(DIK_SPACE)) {
 							sceneChange = true;
 							nextScene = STAGESELECT;
 						}
@@ -704,6 +871,92 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					wall[stageSelect][i].Update(scroll);
 				}
 
+#pragma region エフェクト
+
+				//拡散
+				diffusionParticle(player.getPosX(), player.getPosY(), diffusionBox, displayTimeDiffusion);
+				diffusionParticleMove(diffusionBox, displayTimeDiffusion);
+
+				//残像
+				/*for (int i = 0; i < emitterMax; i++) {
+
+					if (afterImageBox[i].isActive == false) {
+
+						afterImageBox[i].left.Top.x = player.getPosX() - 16;
+						afterImageBox[i].left.Top.y = player.getPosY() - 16;
+						afterImageBox[i].left.Bottom.x = player.getPosX() - 16;
+						afterImageBox[i].left.Bottom.y = player.getPosY() + 16;
+						afterImageBox[i].right.Top.x = player.getPosX() + 16;
+						afterImageBox[i].right.Top.y = player.getPosY() - 16;
+						afterImageBox[i].right.Bottom.x = player.getPosX() + 16;
+						afterImageBox[i].right.Bottom.y = player.getPosY() + 16;
+
+						afterImageBox[i].imagesPos = player.getDrawX();
+
+						break;
+					}
+				}*/
+
+				afterImage(player.getPosX(), player.getPosY(), afterImageBox, displayTimeAfter);
+				afterImageMove(player.getPosX(), player.getPosY(), afterImageBox, displayTimeAfter);
+
+				//地面についたらフラグをオンにする
+				if (player.getIsGround() == true) {
+
+					isShake = true;
+				}
+
+				//飛んだらいろいろ初期化
+				if (player.getIsGround() == false) {
+
+					isPlayerLanding = true;
+
+					for (int i = 0; i < 4; i++) {
+						landingBox[i].isActive = false;
+					}
+
+					if (isShake == false) {
+						if (shakes.time <= 0) {
+							shakes.time = 60;
+						}
+					}
+				}
+
+				//地面についたらフラグをオンにする
+				if (player.getIsGround() == true) {
+					if (isPlayerLanding == true) {
+
+						landingParticle(player.getPosX(), player.getPosY(), landingBox);
+
+						if (landingBox[0].isActive == false) {
+
+							landingBox[1].isActive = false;
+							landingBox[2].isActive = false;
+							landingBox[3].isActive = false;
+
+							isPlayerLanding = false;
+						}
+					}
+				}
+
+				if (isShake == true) {
+
+					shakes = shake(shakes);
+
+					if (shakes.time == 0) {
+
+						isShake = false;
+
+					}
+				}
+			
+
+#pragma endregion
+
+				if (player.getPosX() > GOAL_LINE[stageSelect]) {
+					isGoal = true;
+					player.stopAudio();
+				}
 
 			}
 
@@ -712,14 +965,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				maxSpeed = player.getSpeedX();
 			}
 
+			//速度を表示できるようにintに変換
 			drawMaxSpeed = maxSpeed * 1000;
 
 			drawSpeed = player.getSpeedX() * 1000;
-
-			if (player.getPosX() > GOAL_LINE[stageSelect]) {
-				isGoal = true;
-			}
-
 
 			///
 			/// ↑更新処理ここまで
@@ -734,10 +983,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int y = 0; y < REPETITION_Y; y++) {
 
 				for (int x = 0; x < REPETITION_X; x++) {
-					Novice::DrawQuad(WINDOW_WIDTH * x - scroll.x, -WINDOW_HEIGHT * y - scroll.y,
-						WINDOW_WIDTH * x + WINDOW_WIDTH - scroll.x, -WINDOW_HEIGHT * y - scroll.y,
-						WINDOW_WIDTH * x - scroll.x, -WINDOW_HEIGHT * y + WINDOW_HEIGHT - scroll.y,
-						WINDOW_WIDTH * x + WINDOW_WIDTH - scroll.x, -WINDOW_HEIGHT * y + WINDOW_HEIGHT - scroll.y,
+					Novice::DrawQuad(WINDOW_WIDTH * x - scroll.x + shakes.pos.x, -WINDOW_HEIGHT * y - scroll.y + shakes.pos.y,
+						WINDOW_WIDTH * x + WINDOW_WIDTH - scroll.x + shakes.pos.x, -WINDOW_HEIGHT * y - scroll.y + shakes.pos.y,
+						WINDOW_WIDTH * x - scroll.x + shakes.pos.x, -WINDOW_HEIGHT * y + WINDOW_HEIGHT - scroll.y + shakes.pos.y,
+						WINDOW_WIDTH * x + WINDOW_WIDTH - scroll.x + shakes.pos.x, -WINDOW_HEIGHT * y + WINDOW_HEIGHT - scroll.y + shakes.pos.y,
 						0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, INGAMEBG, 0x888888FF);
 				}
 
@@ -759,6 +1008,190 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					7000 - scroll.x, 240 - scroll.y, 7256 - scroll.x, 240 - scroll.y, 0, 0, 256, 256, FASTINFO, 0xFFFFFFFF);
 
 			}
+
+#pragma region パーティクルの描画処理
+
+			//拡散する方
+			for (int i = 0; i < emitterMax; i++) {
+
+				if (diffusionBox[i].isActive == true) {
+
+					Novice::DrawBox(
+						diffusionBox[i].pos.x - diffusionBox[i].size.x / 2 - scroll.x,
+						diffusionBox[i].pos.y - diffusionBox[i].size.y / 2 - scroll.y,
+						diffusionBox[i].size.x,
+						diffusionBox[i].size.y,
+						0.0f,
+						diffusionBox[i].color,
+						kFillModeSolid
+					);
+
+				}
+
+			}
+
+			//速度
+			for (int i = 0; i < emitterMax; i++) {
+
+				if (SpeedBox[i].isActive == true) {
+
+					Novice::DrawBox(
+						SpeedBox[i].pos.x - SpeedBox[i].size.x / 2 - afterImageBox[i].size.x / 2 - scroll.x,
+						SpeedBox[i].pos.y - SpeedBox[i].size.y / 2 - afterImageBox[i].size.x / 2 - scroll.y,
+						SpeedBox[i].size.x,
+						SpeedBox[i].size.y,
+						0.0f,
+						SpeedBox[i].color,
+						kFillModeSolid
+					);
+
+				}
+
+			}
+
+
+			//残像
+			for (int i = 0; i < emitterMax; i++) {
+
+				if (player.getIsGround() == true) {
+
+					if (afterImageBox[i].isActive == true) {
+
+						Novice::DrawQuad(
+							afterImageBox[i].pos.x - afterImageBox[i].size.x / 2 - scroll.x,
+							afterImageBox[i].pos.y - afterImageBox[i].size.y / 2 - scroll.y,
+							afterImageBox[i].pos.x + afterImageBox[i].size.x / 2 - scroll.x,
+							afterImageBox[i].pos.y - afterImageBox[i].size.y / 2 - scroll.y,
+							afterImageBox[i].pos.x - afterImageBox[i].size.x / 2 - scroll.x,
+							afterImageBox[i].pos.y + afterImageBox[i].size.y / 2 - scroll.y,
+							afterImageBox[i].pos.x + afterImageBox[i].size.x / 2 - scroll.x,
+							afterImageBox[i].pos.y + afterImageBox[i].size.y / 2 - scroll.y,
+							afterImageBox[i].imagesPos,
+							0,
+							32,
+							32,
+							PLAYERRUN,
+							afterImageBox[i].color
+						);
+
+
+					}
+				}
+
+				if (player.getIsGround() == false) {
+
+					if (afterImageBox[i].isActive == true) {
+
+						Novice::DrawQuad(
+							afterImageBox[i].pos.x - afterImageBox[i].size.x / 2 - scroll.x,
+							afterImageBox[i].pos.y - afterImageBox[i].size.y / 2 - scroll.y,
+							afterImageBox[i].pos.x + afterImageBox[i].size.x / 2 - scroll.x,
+							afterImageBox[i].pos.y - afterImageBox[i].size.y / 2 - scroll.y,
+							afterImageBox[i].pos.x - afterImageBox[i].size.x / 2 - scroll.x,
+							afterImageBox[i].pos.y + afterImageBox[i].size.y / 2 - scroll.y,
+							afterImageBox[i].pos.x + afterImageBox[i].size.x / 2 - scroll.x,
+							afterImageBox[i].pos.y + afterImageBox[i].size.y / 2 - scroll.y,
+							afterImageBox[i].imagesPos,
+							0,
+							32,
+							32,
+							PLAYERTARZAN,
+							afterImageBox[i].color
+						);
+
+
+					}
+				}
+
+
+
+			}
+
+			//落下
+			for (int i = 0; i < emitterMax; i++) {
+
+				if (landingBox[i].isActive == true) {
+
+					Novice::DrawBox(
+						landingBox[i].pos.x - landingBox[i].size.x / 2 - scroll.x,
+						landingBox[i].pos.y - landingBox[i].size.y / 2 - scroll.y,
+						landingBox[i].size.x,
+						landingBox[i].size.y,
+						landingBox[i].angle,
+						landingBox[i].color,
+						kFillModeSolid
+					);
+
+				}
+
+			}
+
+			//左衝突
+			for (int i = 0; i < emitterMax; i++) {
+
+				if (leftClashBox[i].isActive == true) {
+
+					Novice::DrawBox(
+						leftClashBox[i].pos.x - leftClashBox[i].size.x / 2,
+						leftClashBox[i].pos.y - leftClashBox[i].size.y / 2,
+						leftClashBox[i].size.x,
+						leftClashBox[i].size.y,
+						leftClashBox[i].angle,
+						leftClashBox[i].color,
+						kFillModeSolid
+					);
+
+				}
+
+			}
+
+			//右衝突
+			for (int i = 0; i < emitterMax; i++) {
+
+				if (rightClashBox[i].isActive == true) {
+
+					Novice::DrawBox(
+						rightClashBox[i].pos.x - rightClashBox[i].size.x / 2,
+						rightClashBox[i].pos.y - rightClashBox[i].size.y / 2,
+						rightClashBox[i].size.x,
+						rightClashBox[i].size.y,
+						rightClashBox[i].angle,
+						rightClashBox[i].color,
+						kFillModeSolid
+					);
+
+				}
+
+			}
+
+
+			//加速線 
+			for (int i = 0; i < emitterMax; i++) {
+
+				if (SpeedLineBox[i].isActive == true) {
+
+					Novice::DrawQuad(
+						SpeedLineBox[i].pos.x - SpeedLineBox[i].size.x / 2 - scroll.x,
+						SpeedLineBox[i].pos.y - SpeedLineBox[i].size.y / 2 - scroll.y,
+						SpeedLineBox[i].pos.x + SpeedLineBox[i].size.x / 2 - scroll.x,
+						SpeedLineBox[i].pos.y - SpeedLineBox[i].size.y / 2 - scroll.y,
+						SpeedLineBox[i].pos.x - SpeedLineBox[i].size.x / 2 - scroll.x,
+						SpeedLineBox[i].pos.y + SpeedLineBox[i].size.y / 2 - scroll.y,
+						SpeedLineBox[i].pos.x + SpeedLineBox[i].size.x / 2 - scroll.x,
+						SpeedLineBox[i].pos.y + SpeedLineBox[i].size.y / 2 - scroll.y,
+						0,
+						0,
+						64,
+						64,
+						0,
+						SpeedLineBox[i].color
+					);
+
+				}
+
+			}
+
+#pragma endregion
 
 			player.Draw(scroll);
 

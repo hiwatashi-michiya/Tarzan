@@ -36,6 +36,8 @@ public:
 
 	inline float getHitSpeedX() { return hitSpeed; }
 
+	inline bool getIsHit() { return isHit; }
+
 private:
 
 	void Collision(Vec2 scroll);
@@ -65,6 +67,9 @@ private:
 
 	//‰æ‘œ
 	int textureHandle;
+
+	//“–‚½‚Á‚½‚©‚Ç‚¤‚©
+	bool isHit;
 
 };
 

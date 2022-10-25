@@ -135,6 +135,9 @@ public:
 	//センターリセット
 	inline Vec2 resetCenter() { center = { center.x = position.x + VINE_LENGTH ,center.y = position.y - 500 }; return center; }
 
+	// すべての音を止める
+	void stopAudio();
+
 private:
 
 	void Move();
@@ -182,7 +185,17 @@ private:
 	// どの画像を出すか(どの処理をするか)
 	PLAYERSTATE state;
 
+	// 丸太の画像
+	int loghandle;
 
+
+
+	// 音を鳴らすための変数
+	// 0: 走る
+	// 1: 着地
+	// 2: ツタつかまり
+	int soundHandles[3];
+	int soundChecks[3];
 
 
 
