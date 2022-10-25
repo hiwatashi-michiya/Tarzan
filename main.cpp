@@ -155,6 +155,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int DOT = Novice::LoadTexture("./Resources/Images/UI/dot.png");
 	int REDDOT = Novice::LoadTexture("./Resources/Images/UI/dot_red.png");
 
+	//ゴール
+	int GOAL = Novice::LoadTexture("./Resources/Images/UI/goal.png");
 
 #pragma endregion
 
@@ -546,6 +548,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (Key::IsTrigger(DIK_SPACE)) {
 					sceneChange = true;
+					if (!Novice::IsPlayingAudio(SCENECHANGESOUNDCHECK) || SCENECHANGESOUNDCHECK == -1) {
+						SCENECHANGESOUNDCHECK = Novice::PlayAudio(SCENECHANGESOUND, 0, 0.5f);
+					}
 					nextScene = STAGESELECT;
 				}
 
@@ -805,6 +810,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 						if (Key::IsTrigger(DIK_SPACE)) {
 							sceneChange = true;
+							if (!Novice::IsPlayingAudio(SCENECHANGESOUNDCHECK) || SCENECHANGESOUNDCHECK == -1) {
+								SCENECHANGESOUNDCHECK = Novice::PlayAudio(SCENECHANGESOUND, 0, 0.5f);
+							}
 							nextScene = STAGESELECT;
 						}
 
@@ -991,6 +999,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 			}
+
+			Novice::DrawQuad(GOAL_LINE[stageSelect] - scroll.x - 16, -1000 - scroll.y, GOAL_LINE[stageSelect] - scroll.x + 16, -1000 - scroll.y,
+				GOAL_LINE[stageSelect] - scroll.x - 16, 1048 - scroll.y, GOAL_LINE[stageSelect] - scroll.x + 16, 1048 - scroll.y, 0, 0, 32, 2048, GOAL, 0xFFFFFFFF);
 
 			if (stageSelect == 1) {
 				
