@@ -993,6 +993,15 @@ ShakeList shake(ShakeList list, float velX) {
 				list.time - 1,
 				};
 			}
+
+			if (list.time == 0) {
+				return ShakeList{
+				0.0f,
+				0.0f,
+				0,
+				};
+			}
+
 		}
 
 		else if (-60 >= velX || velX >= 60) {
@@ -1052,6 +1061,15 @@ ShakeList shake(ShakeList list, float velX) {
 				list.time - 1,
 				};
 			}
+
+			if (list.time == 0) {
+				return ShakeList{
+				0.0f,
+				0.0f,
+				0,
+				};
+			}
+
 		}
 
 		else if (-50 >= velX || velX >= 50) {
@@ -1111,6 +1129,15 @@ ShakeList shake(ShakeList list, float velX) {
 				list.time - 1,
 				};
 			}
+
+			if (list.time == 0) {
+				return ShakeList{
+				0.0f,
+				0.0f,
+				0,
+				};
+			}
+
 		}
 
 		else if (-40 >= velX || velX >= 40) {
@@ -1170,6 +1197,15 @@ ShakeList shake(ShakeList list, float velX) {
 				list.time - 1,
 				};
 			}
+
+			if (list.time == 0) {
+				return ShakeList{
+				0.0f,
+				0.0f,
+				0,
+				};
+			}
+
 		}
 
 		else if (-30 >= velX || velX >= 30) {
@@ -1239,6 +1275,13 @@ ShakeList shake(ShakeList list, float velX) {
 			};
 		}
 	}
+
+	return ShakeList{
+		0.0f,
+		0.0f,
+		0,
+	};
+
 }
 
 
