@@ -87,6 +87,7 @@ void Floor::Collision(Vec2 scroll) {
 		pPlayer->Player::setPosY(posY);
 		pPlayer->Player::setLength();
 		pPlayer->Player::setIsGrip();
+		pPlayer->Player::setUnJump();
 
 		if (type == PLAYERACCEL) {
 

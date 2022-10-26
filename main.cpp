@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vec2 scroll = { 0,0 };
 
 	//ステージ選択の変数
-	int stageSelect = 1;
+	int stageSelect = 2;
 
 	//X軸の画像表示の繰り返し回数
 	const int REPETITION_X = 32;
@@ -197,6 +197,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//タイトルUI
 	int TITLETEXT = Novice::LoadTexture("./Resources/Images/UI/title.png");
+
+	//ESC UI
+
+	int ESCBACK = Novice::LoadTexture("./Resources/Images/UI/back.png");
 
 #pragma endregion
 
@@ -461,9 +465,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	floor[2][11] = Floor(6000, 190, 2500, 10, CEILING, 2500, 10, 64, 64, CEILINGFLOOR, player);
 	floor[2][12] = Floor(3500, 130, 1000, 10, PLAYERACCEL, 1000, 10, 64, 64, ACCELFLOOR, player);
 	floor[2][13] = Floor(5000, 50, 500, 10, PLAYERACCEL, 500, 10, 64, 64, ACCELFLOOR, player);
-	floor[2][14] = Floor(5500, 190, 500, 10, NORMAL, 500, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][14] = Floor(5500, 190, 300, 10, NORMAL, 300, 10, 64, 64, NORMALFLOOR, player);
 	floor[2][15] = Floor(10000, 380, 500, 10, NORMAL, 500, 10, 64, 64, NORMALFLOOR, player);
-	floor[2][16] = Floor(10500, 480, 1500, 10, NORMAL, 1500, 10, 64, 64, NORMALFLOOR, player);
+	floor[2][16] = Floor(10500, 430, 1500, 10, NORMAL, 1500, 10, 64, 64, NORMALFLOOR, player);
 	floor[2][17] = Floor(13000, 500, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
 	floor[2][18] = Floor(15000, 500, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
 	floor[2][19] = Floor(4000, 680, 600, 10, PLAYERDECEL, 600, 10, 64, 64, DECELFLOOR, player);
@@ -1449,6 +1453,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				drawMaxSpeed = AbsoluteValue(drawMaxSpeed) % divideNumber;
 
+			}
+
+			//ESCBACK
+			if (isGoal == false) {
+				Novice::DrawSprite(10, 680, ESCBACK, 0.5f, 0.5f, 0, 0xFFFFFFFF);
 			}
 
 			//ゴールしたら

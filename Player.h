@@ -138,6 +138,9 @@ public:
 	//‚Â‚©‚Ü‚È‚¢ŠÔ‚Ì‰Šú‰»
 	inline bool setUnGrip() { unGrip = 10; return unGrip; }
 
+	// ƒWƒƒƒ“ƒv‚È‚¢ŠÔ‚Ì‰Šú‰»
+	inline bool setUnJump() { if (unJump <= -2) unJump = 10; return unGrip; }
+
 	//‹——£‚ğ0‚É‚·‚é
 	inline bool setLength() { length = 0; return length; }
 

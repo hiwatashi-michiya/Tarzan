@@ -149,7 +149,7 @@ void Player::Move() {
 	}
 	if (isGround) {
 		unJump--;
-		if (unJump <= 0) {
+		if (unJump == -1) {
 			unJump = 0;
 		}
 	}
@@ -258,6 +258,7 @@ void Player::Move() {
 			else if (isGround && unJump == 0) {
 				velocity.y -= 20;
 				unGrip = 17;
+				unJump = -2;
 			}
 
 		}
@@ -281,6 +282,12 @@ void Player::Move() {
 
 	// 重力加算
 	velocity.y += GRAVITY;
+
+	//速度制限を設ける
+	if (velocity.y > 40.0f) {
+		velocity.y = 40.0f;
+	}
+
 	// 速度を座標に加算
 	position.x += velocity.x;
 	position.y += velocity.y;
