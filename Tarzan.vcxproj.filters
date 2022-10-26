@@ -44,9 +44,6 @@
     <ClCompile Include="Key.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
     <ClCompile Include="Select.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
@@ -144,7 +141,6 @@
     <ClInclude Include="Wall.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Key.h" />
-    <ClInclude Include="Text.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Calc.h" />
