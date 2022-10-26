@@ -49,7 +49,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int BGTITLE = Novice::LoadTexture("./Resources/Images/BG/TarzanBG.png");
 
 	//セレクト画像
-	int BGSELECT = Novice::LoadTexture("./Resources/Images/BG/TarzanBG_SELECT.png");
+	int BGSELECT = Novice::LoadTexture("./Resources/Images/BG/ingameBG.png");
 
 	//ゲームプレイ背景
 	int INGAMEBG = Novice::LoadTexture("./Resources/Images/BG/ingameBG1.png");
@@ -190,6 +190,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//スペースUI
 	int SPACESTART = Novice::LoadTexture("./Resources/Images/UI/spacestart.png");
+	int SPACESELECT = Novice::LoadTexture("./Resources/Images/UI/spaceselect.png");
 
 	//タイトルUI
 	int TITLETEXT = Novice::LoadTexture("./Resources/Images/UI/title.png");
@@ -218,6 +219,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//タイトル画像のタイマー
 	int drawTitleTimer = 0;
 
+	//ゴール時のタイマー
+	int drawGoalTimer = 0;
+
 	//ゴール画像の座標
 	int goalX = 0;
 	int goalY = 0;
@@ -225,12 +229,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int goalH = 0;
 
 	//座標
-	float titlePosX = 0.0f;
+	float titlePosX = -800.0f;
 	float titlePosY = 100.0f;
 	//始点
-	float startPosX = -400.0f;
+	float startPosX = -800.0f;
 	//終点
-	float goalPosX = 420.0f;
+	float endPosX = 384.0f;
 
 	//イージング
 	float t = 0.0f;
@@ -318,8 +322,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 
-	/*Player player({ posX, posY }, { velocityX, 0.0f }, { 100.0f + 250.0f, 200.0f },
-		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0, TARZAN, 0);*/
 
 	int PLAYERIMAGES[PLAYER_STATE_NUM] = {
 		PLAYERIDLE,PLAYERRUN,PLAYERTARZAN,PLAYERSKY,PLAYERLANDING
@@ -347,7 +349,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	wall[1][3] = Wall({ 9000.0f,-344.0f }, 256, 1024, 20.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
 	wall[1][4] = Wall({ 12000.0f,-344.0f }, 256, 1024, 25.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
 	wall[1][5] = Wall({ 14000.0f,-344.0f }, 256, 704, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
-	wall[1][6] = Wall({ 17000.0f,424.0f }, 512, 256, 35.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[1][6] = Wall({ 17000.0f,434.0f }, 512, 246, 35.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
 	wall[1][7] = Wall({ 20000.0f,-344.0f }, 256, 824, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[1][8] = Wall({ 23000.0f,-344.0f }, 256, 1024, 30.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
 	wall[1][9] = Wall({ -100.0f,-344.0f }, 256, 1124, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
@@ -429,7 +431,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	floor[1][3] = Floor(7000, 230, 2000, 10, PLAYERACCEL, 2000, 10, 64, 64, ACCELFLOOR, player);
 	floor[1][4] = Floor(14000, 360, 256, 10, CEILING, 256, 10, 64, 64, CEILINGFLOOR, player);
 	floor[1][5] = Floor(20500, 380, 4700, 10, PLAYERACCEL, 4700, 10, 64, 64, ACCELFLOOR, player);
-	floor[1][6] = Floor(17000, 404, 512, 20, NORMAL, 512, 20, 64, 64, NORMALFLOOR, player);
+	floor[1][6] = Floor(17000, 404, 512, 30, NORMAL, 512, 30, 64, 64, NORMALFLOOR, player);
 	floor[1][7] = Floor(6000, 680, 3000, 10, PLAYERDECEL, 3000, 10, 64, 64, DECELFLOOR, player);
 	floor[1][8] = Floor(15000, 300, 1400, 10, NORMAL, 1400, 10, 64, 64, NORMALFLOOR, player);
 	floor[1][9] = Floor(20000, 480, 256, 10, CEILING, 256, 10, 64, 64, CEILINGFLOOR, player);
@@ -606,7 +608,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					number += easingSpeed;
 
-					titlePosX = (1 - t) * startPosX + t * goalPosX;
+					titlePosX = (1 - t) * startPosX + t * endPosX;
 
 					if (number >= 1.0f) {
 						isTitleMove = false;
@@ -694,6 +696,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (sceneCount == SCENE_TIMER) {
 
+						titlePosX = -800.0f;
+						titlePosY = 100.0f;
+						//始点
+						startPosX = -800.0f;
+						//終点
+						endPosX = 384.0f;
+
+						//イージング
+						t = 0.0f;
+						easingSpeed = 0.01f;
+						number = 0.0f;
+
+						isTitleMove = true;
+
 						scene = nextScene;
 
 					}
@@ -775,7 +791,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			/// ↓描画処理ここから
 			///
 
-			Novice::DrawSprite(0, 0, BGSELECT, 1, 1, 0, 0xFFFFFFFF);
+			Novice::DrawSprite(0, 0, BGSELECT, 1, 1, 0, 0x888888FF);
 
 			Novice::DrawQuad(0, 0, 640, 0, 0, 64, 640, 64, 384, 0, 640, 64, SELECTWOOD, 0xFFFFFFFF);
 
@@ -922,6 +938,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					//キー入力でシーンチェンジを有効にする
 					if (sceneCount == SCENE_TIMER * 2) {
 
+						drawGoalTimer += 1;
+
+						if (drawGoalTimer == 60) {
+							drawGoalTimer = 0;
+						}
+
 						if (Key::IsTrigger(DIK_SPACE)) {
 							sceneChange = true;
 							if (!Novice::IsPlayingAudio(SCENECHANGESOUNDCHECK) || SCENECHANGESOUNDCHECK == -1) {
@@ -950,6 +972,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (sceneCount == SCENE_TIMER * 4) {
 						sceneCount = SCENE_TIMER;
+						drawGoalTimer = 0;
 						scene = nextScene;
 					}
 
@@ -1003,26 +1026,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//拡散
 				diffusionParticle(player.getPosX(), player.getPosY(), diffusionBox, displayTimeDiffusion);
 				diffusionParticleMove(diffusionBox, displayTimeDiffusion);
-
-				//残像
-				/*for (int i = 0; i < emitterMax; i++) {
-
-					if (afterImageBox[i].isActive == false) {
-
-						afterImageBox[i].left.Top.x = player.getPosX() - 16;
-						afterImageBox[i].left.Top.y = player.getPosY() - 16;
-						afterImageBox[i].left.Bottom.x = player.getPosX() - 16;
-						afterImageBox[i].left.Bottom.y = player.getPosY() + 16;
-						afterImageBox[i].right.Top.x = player.getPosX() + 16;
-						afterImageBox[i].right.Top.y = player.getPosY() - 16;
-						afterImageBox[i].right.Bottom.x = player.getPosX() + 16;
-						afterImageBox[i].right.Bottom.y = player.getPosY() + 16;
-
-						afterImageBox[i].imagesPos = player.getDrawX();
-
-						break;
-					}
-				}*/
 
 				afterImage(player.getPosX(), player.getPosY(), afterImageBox, displayTimeAfter);
 				afterImageMove(player.getPosX(), player.getPosY(), afterImageBox, displayTimeAfter);
@@ -1449,6 +1452,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (isGoal == true) {
 
 				Novice::DrawQuad(640 - 256, 200, 640 + 256, 200, 640 - 256, 200 + 128, 640 + 256, 200 + 128, 0, 0, goalW, 128, GOALTEXT, 0xFFFFFFFF);
+
+				if (drawGoalTimer < 40) {
+					Novice::DrawSprite(640 - 256, 600, SPACESELECT, 1, 1, 0, 0xFFFFFFFF);
+				}
 
 			}
 

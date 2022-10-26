@@ -427,7 +427,7 @@ void afterImage(float posX, float posY, Effect effect[], int* displayTime) {
 				effect[i].pos.y = posY;
 
 				//残像の透明度を変更
-				effect[i].color = 0x555555FF;
+				effect[i].color = 0x333333FF;
 
 				//パーティクルを表示し続ける時間を設定
 				displayTime[i] = 30;
@@ -440,7 +440,7 @@ void afterImage(float posX, float posY, Effect effect[], int* displayTime) {
 			}
 
 			//待機時間を設定
-			coolTime = 2;
+			coolTime = 1;
 
 		}
 	}
@@ -821,7 +821,7 @@ void afterImageMove(float posX, float posY, Effect effect[], int* displayTime) {
 			effect[i].color -= 0x11;
 
 			//パーティクルの出現後、透明になったら消滅させる
-			if (effect[i].color <= 0x55555500) {
+			if (effect[i].color <= 0x33333300) {
 
 				//パーティクルを非表示にする
 				effect[i].isActive = false;

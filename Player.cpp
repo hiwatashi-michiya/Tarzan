@@ -175,6 +175,10 @@ void Player::Move() {
 	}
 
 
+	unGrip--;
+	if (unGrip <= 0) {
+		unGrip = 0;
+	}
 	// ワンボタン
 	// もしスペースが押されたら
 	if (Novice::CheckHitKey(DIK_SPACE)) {
@@ -186,9 +190,7 @@ void Player::Move() {
 		// 掴まない条件としては
 		// ジャンプした直後
 		// のみ
-		unGrip--;
-		if (unGrip <= 0) {
-			unGrip = 0;
+		if (unGrip == 0) {
 
 			// ターザンゲージを減らす
 			TarzanGage--;
