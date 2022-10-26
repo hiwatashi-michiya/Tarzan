@@ -76,6 +76,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int TARZANMUSIC = Novice::LoadAudio("./Resources/BGM/TarzanBGM.wav");
 	int TARZANMUSICCHECK = -1;
 
+	// 着地音
+	int LANDINGSOUND = Novice::LoadAudio("./Resources/SE/landing.wav");
+	int LANDINGSOUNDCHECK = -1;
+
 #pragma endregion
 
 #pragma region Object
@@ -96,6 +100,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int PLAYERIDLE = Novice::LoadTexture("./Resources/Images/Player/playerIdle.png");
 	int PLAYERRUN = Novice::LoadTexture("./Resources/Images/Player/playerRun.png");
 	int PLAYERTARZAN = Novice::LoadTexture("./Resources/Images/Player/playerTarzan.png");
+	int PLAYERLANDING = Novice::LoadTexture("./Resources/Images/Player/playerLanding.png");
 	int PLAYERSKY = Novice::LoadTexture("./Resources/Images/Player/playerSky.png");
 
 #pragma endregion
@@ -179,6 +184,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//選択肢のUI
 	int SELECT = Novice::LoadTexture("./Resources/Images/UI/select.png");
 
+	//タイトルUI
+	int SPACESTART = Novice::LoadTexture("./Resources/Images/UI/spacestart.png");
+
 #pragma endregion
 
 	//画像を動かすタイマー
@@ -194,6 +202,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float maxSpeed = 0.0f;
 
 	int drawMaxSpeed = 0;
+
+	//選択ボタン画像の切り替え
+	int drawSelectTimer = 0;
+
+	int drawSelectX = 0;
+
+	//タイトル画像のタイマー
+	int drawTitleTimer = 0;
 
 #pragma region パーティクルの変数の宣言・定義
 
@@ -277,7 +293,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		0xFFFFFFFF, false, TARZAN_GAGE, 0, 0, false, 0, TARZAN, 0);*/
 
 	int PLAYERIMAGES[PLAYER_STATE_NUM] = {
-		PLAYERIDLE,PLAYERRUN,PLAYERTARZAN,0,PLAYERSKY
+		PLAYERIDLE,PLAYERRUN,PLAYERTARZAN,PLAYERSKY,PLAYERLANDING
 	};
 
 	Vec2 pos = { 200.0f,500.0f };
@@ -518,6 +534,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 
 					if (sceneCount == 0) {
+						//セレクト画面の描画タイマーリセット
+						drawSelectTimer = 0;
 						sceneChange = false;
 					}
 
@@ -548,6 +566,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (sceneChange == false) {
 
+				drawTitleTimer += 1;
+
+				if (drawTitleTimer == 60) {
+					drawTitleTimer = 0;
+				}
+
 				if (Key::IsTrigger(DIK_SPACE)) {
 					sceneChange = true;
 					if (!Novice::IsPlayingAudio(SCENECHANGESOUNDCHECK) || SCENECHANGESOUNDCHECK == -1) {
@@ -570,6 +594,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			Novice::DrawSprite(0, 0, BGTITLE, 1, 1, 0, 0xFFFFFFFF);
 
+			if (drawTitleTimer < 50) {
+				Novice::DrawSprite(640 - 256, 600, SPACESTART, 1, 1, 0, 0xFFFFFFFF);
+			}
+			
 			///
 			/// ↑描画処理ここまで
 			///
@@ -632,6 +660,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (sceneChange == false) {
 
+				drawSelectTimer += 1;
+
+				if (drawSelectTimer == 60) {
+					drawSelectTimer = 0;
+				}
+
+				if (drawSelectTimer % 15 == 0) {
+					drawSelectX += 64;
+				}
+
+				if (drawSelectX > 64) {
+					drawSelectX = 0;
+				}
+
 				if (Key::IsTrigger(DIK_UP) && stageSelect > 1) {
 					stageSelect -= 1;
 					for (int i = 0; i < 8; i++) {
@@ -668,6 +710,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (Key::IsTrigger(DIK_ESCAPE)) {
 					sceneChange = true;
+					//タイトル画面の描画タイマーリセット
+					drawTitleTimer = 0;
 					if (!Novice::IsPlayingAudio(SCENECHANGESOUNDCHECK) || SCENECHANGESOUNDCHECK == -1) {
 						SCENECHANGESOUNDCHECK = Novice::PlayAudio(SCENECHANGESOUND, 0, 0.5f);
 					}
@@ -696,6 +740,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (stageSelect == i) {
 					Novice::DrawQuad(0, 64 * i, 512, 64 * i, 0, 64 * i + 64, 512, 64 * i + 64, 0, 0, 512, 64, BRIGHTWOOD[i], 0xFFFFFFFF);
+					Novice::DrawQuad(544, 64 * i - 32, 608, 64 * i - 32, 544, 64 * i + 96, 608, 64 * i + 96, drawSelectX, 0, 64, 128, SELECT, 0xFFFFFFFF);
 				}
 				else {
 					Novice::DrawQuad(0, 64 * i, 512 - 128, 64 * i, 0, 64 * i + 64, 512 - 128, 64 * i + 64, 128, 0, 512 - 128, 64, WOOD[i], 0xFFFFFFFF);
@@ -763,6 +808,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 
 					if (sceneCount == 0) {
+						//セレクト画面の描画タイマーリセット
+						drawSelectTimer = 0;
 						sceneChange = false;
 					}
 

@@ -113,9 +113,15 @@ void Floor::Collision(Vec2 scroll) {
 
 		if (type == CEILING) {
 
-			pPlayer->Player::resetTarzanGage();
 			pPlayer->Player::setSpeedY();
 			pPlayer->Player::setUnderPosY(posY + height);
+
+			if (pPlayer->Player::getIsGrip() == true) {
+				pPlayer->Player::setIsGrip();
+				pPlayer->Player::setGripGage();
+				pPlayer->Player::setLength();
+				pPlayer->Player::setUnGrip();
+			}
 
 		}
 

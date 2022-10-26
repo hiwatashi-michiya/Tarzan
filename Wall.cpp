@@ -55,6 +55,10 @@ void Wall::Draw(Vec2 scroll) {
 			position.x - scroll.x, position.y + height - scroll.y, position.x + width - scroll.x, position.y + height - scroll.y,
 			scrX, 0, 64, 64, textureHandle, color);
 
+		if (type == BREAK) {
+
+		}
+
 	}
 
 }
@@ -74,8 +78,14 @@ void Wall::Collision(Vec2 scroll) {
 			isAlive = false;
 		}
 		else if (pPlayer->Player::getIsGround() == false) {
-			pPlayer->Player::resetTarzanGage();
 			pPlayer->Player::setSpeedX();
+
+			if (pPlayer->Player::getIsGrip() == true) {
+				pPlayer->Player::setIsGrip();
+				pPlayer->Player::setGripGage();
+				pPlayer->Player::setLength();
+				pPlayer->Player::setUnGrip();
+			}
 
 			if (type == BREAK) {
 				color = 0xFF0000FF;

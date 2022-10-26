@@ -7,13 +7,12 @@ enum PLAYERSTATE {
 	IDLE,
 	RUN,
 	TARZAN,
-	JUMP,
 	SKY,
 	LANDING
 };
 
 // プレイヤーの状態
-const int PLAYER_STATE_NUM = 6;
+const int PLAYER_STATE_NUM = 5;
 
 
 // 重力
@@ -80,7 +79,7 @@ public:
 				velocity.x *= 1.005f;
 			}
 		}
-		
+
 		return velocity.x;
 	}
 
@@ -114,7 +113,10 @@ public:
 
 	//地面判定にする
 	inline bool setIsGround() { isGround = true; unGrip = 0; return isGround; }
-	
+
+	//空中判定にする
+	inline bool setunGround() { isGround = false; return isGround; }
+
 	//ターザンゲージの取得
 	inline int getTarzanGage() { return TarzanGage; }
 
@@ -124,8 +126,17 @@ public:
 	//ターザンゲージを回復する
 	inline int RecoveryTarzanGage() { TarzanGage = TARZAN_GAGE; return TarzanGage; }
 
+	//グリップを取得
+	inline bool getIsGrip() { return isGrip; }
+
 	//グリップフラグを戻す
 	inline bool setIsGrip() { isGrip = false; return isGrip; }
+
+	//グリップゲージの初期化
+	inline bool setGripGage() { GripGage = 0; return GripGage; }
+
+	//つかまない時間の初期化
+	inline bool setUnGrip() { unGrip = 10; return unGrip; }
 
 	//距離を0にする
 	inline bool setLength() { length = 0; return length; }

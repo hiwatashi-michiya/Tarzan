@@ -295,12 +295,10 @@ void Player::Move() {
 		}
 		length = 0;
 		GripGage = 0;
+		state = SKY;
 	}
 	//DrawEllipse(position.X + VINE_LENGTH, 600, 20, 20, WHITE, kFillModeWireFrame);
 
-	if (!isGrip) {
-		state = SKY;
-	}
 
 
 	// 重力加算
@@ -313,15 +311,19 @@ void Player::Move() {
 }
 
 void Player::Collision(Vec2& scroll) {
-
 	// 範囲内にする
 	// 下側
 	if (isGround && 0 < velocity.y) {
-		if (-0.2f < velocity.x && velocity.x < 0.2f) {
-			state = IDLE;
+		if (state == SKY) {
+			state = LANDING;
 		}
 		else {
-			state = RUN;
+			if (-0.2f < velocity.x && velocity.x < 0.2f) {
+				state = IDLE;
+			}
+			else {
+				state = RUN;
+			}
 		}
 	}
 	else if (isGround && velocity.y < 0) {
@@ -335,6 +337,9 @@ void Player::Collision(Vec2& scroll) {
 			state = SKY;
 		}
 	}
+
+
+
 	// x 値のスクロール
 	scroll.x = position.x - 640;
 	if (scroll.x <= 0) {
@@ -379,10 +384,6 @@ void Player::Collision(Vec2& scroll) {
 			Novice::ResumeAudio(soundChecks[2]);
 		}
 		break;
-	case JUMP:
-		Novice::StopAudio(soundChecks[0]);
-		Novice::PauseAudio(soundChecks[2]);
-		break;
 	case SKY:
 		Novice::StopAudio(soundChecks[0]);
 		Novice::PauseAudio(soundChecks[2]);
@@ -391,7 +392,7 @@ void Player::Collision(Vec2& scroll) {
 		Novice::StopAudio(soundChecks[0]);
 		Novice::PauseAudio(soundChecks[2]);
 		if (!Novice::IsPlayingAudio(soundChecks[1]) || soundChecks[1] == -1) {
-			soundChecks[1] = Novice::PlayAudio(soundHandles[1], 0, 0.5f);
+			soundChecks[1] = Novice::PlayAudio(soundHandles[1], 0, 0.1f);
 		}
 		break;
 	default:
