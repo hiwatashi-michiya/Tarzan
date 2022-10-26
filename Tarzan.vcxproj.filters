@@ -44,9 +44,6 @@
     <ClCompile Include="Key.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Select.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
     <ClCompile Include="Floor.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
