@@ -656,7 +656,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			Novice::DrawSprite(0, 0, BGTITLE, 1, 1, 0, 0x888888FF);
 
-			Novice::DrawSprite(titlePosX, titlePosY, TITLETEXT, 1, 1, 0.0f, 0xFFFFFF);
+			Novice::DrawSprite(titlePosX, titlePosY, TITLETEXT, 1, 1, 0.0f, 0xFFFFFFFF);
 
 			if (drawTitleTimer < 50) {
 				Novice::DrawSprite(640 - 256, 600, SPACESTART, 1, 1, 0, 0xFFFFFFFF);
