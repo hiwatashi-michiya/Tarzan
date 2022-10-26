@@ -71,6 +71,10 @@ private:
 	//“–‚½‚Á‚½‚©‚Ç‚¤‚©
 	bool isHit;
 
+	//•`‰æ”ÍˆÍÀ•W‚ğ“®‚©‚·
+	int drawTime = 0;
+	int scrX = 0;
+	
 };
 
 

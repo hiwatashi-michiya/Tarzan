@@ -20,6 +20,20 @@ Wall::Wall(Vec2 position, float width, float height, float hitSpeed,
 
 void Wall::Update(Vec2 scroll) {
 
+	drawTime += 1;
+
+	if (drawTime == 60) {
+		drawTime = 0;
+	}
+
+	if (drawTime % 6 == 0) {
+		scrX += 64;
+	}
+
+	if (scrX > 192) {
+		scrX = 0;
+	}
+
 	if (isAlive == true) {
 
 		color = 0xFFFFFFFF;
@@ -39,7 +53,7 @@ void Wall::Draw(Vec2 scroll) {
 
 		Novice::DrawQuad(position.x - scroll.x, position.y - scroll.y, position.x + width - scroll.x, position.y - scroll.y,
 			position.x - scroll.x, position.y + height - scroll.y, position.x + width - scroll.x, position.y + height - scroll.y,
-			0, 0, 64, 64, textureHandle, color);
+			scrX, 0, 64, 64, textureHandle, color);
 
 	}
 

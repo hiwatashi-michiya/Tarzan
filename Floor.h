@@ -55,6 +55,10 @@ private:
 	//プレイヤーのポインタ
 	Player* pPlayer;
 
+	//描画範囲座標を動かす
+	int drawTime = 0;
+	int scrX = 0;
+
 };
 
 

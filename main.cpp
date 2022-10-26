@@ -114,8 +114,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WOOD[1] = Novice::LoadTexture("./Resources/Images/UI/stage1.png");
 	WOOD[2] = Novice::LoadTexture("./Resources/Images/UI/stage2.png");
 	WOOD[3] = Novice::LoadTexture("./Resources/Images/UI/stage3.png");
-	WOOD[4] = Novice::LoadTexture("./Resources/Images/UI/stage4.png");
-	WOOD[5] = Novice::LoadTexture("./Resources/Images/UI/stage5.png");
 	int BRIGHTWOOD[STAGE_NUMBER];
 	//特に使わない
 	BRIGHTWOOD[0] = 0;
@@ -123,9 +121,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	BRIGHTWOOD[1] = Novice::LoadTexture("./Resources/Images/UI/stage1select.png");
 	BRIGHTWOOD[2] = Novice::LoadTexture("./Resources/Images/UI/stage2select.png");
 	BRIGHTWOOD[3] = Novice::LoadTexture("./Resources/Images/UI/stage3select.png");
-	BRIGHTWOOD[4] = Novice::LoadTexture("./Resources/Images/UI/stage4select.png");
-	BRIGHTWOOD[5] = Novice::LoadTexture("./Resources/Images/UI/stage5select.png");
-
 #pragma endregion
 
 #pragma region NUM
@@ -180,6 +175,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int BREAKINFO = Novice::LoadTexture("./Resources/Images/UI/break.png");
 	int SLOWINFO = Novice::LoadTexture("./Resources/Images/UI/slow.png");
 	int FASTINFO = Novice::LoadTexture("./Resources/Images/UI/fast.png");
+
+	//選択肢のUI
+	int SELECT = Novice::LoadTexture("./Resources/Images/UI/select.png");
 
 #pragma endregion
 
@@ -339,23 +337,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	wall[3][4] = Wall({ 156.0f,610.0f }, 944, 200, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[3][5] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	wall[3][6] = Wall({ 4200.0f,-2000.0f }, 1500, 1700, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
-	wall[3][7] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
-	wall[3][8] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
-	wall[3][9] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
-	wall[3][10] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
-	wall[3][11] = Wall({ 1700.0f,0.0f }, 1500, 190, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
-	//
-#pragma endregion
-#pragma region stage4
-	//ステージ4
-	wall[4][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
-	wall[4][1] = Wall({ -100.0f,-400.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
-	//
-#pragma endregion
-#pragma region stage5
-	//ステージ5
-	wall[5][0] = Wall({ 100.0f,690.0f }, 50000, 64, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, GROUND);
-	wall[5][1] = Wall({ -100.0f,-400.0f }, 256, 2000, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][7] = Wall({ 15500.0f,-200.0f }, 1000, 690, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][8] = Wall({ 16000.0f,500.0f }, 100, 180, 20.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[3][9] = Wall({ 15700.0f,-2000.0f }, 300, 1790, 45.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[3][10] = Wall({ 28000.0f,-2000.0f }, 300, 2100, 35.0f, true, BREAK, 0xFFFFFFFF, player, BREAKWALL);
+	wall[3][11] = Wall({ 27500.0f,110.0f }, 4000, 800, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][12] = Wall({ 19000.0f,-2000.0f }, 1000, 1930, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][13] = Wall({ 21875.0f,-2000.0f }, 750, 1880, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][14] = Wall({ 24250.0f,-2000.0f }, 500, 1850, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][15] = Wall({ 26125.0f,-2000.0f }, 250, 1820, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][16] = Wall({ 18500.0f,240.0f }, 2000, 60, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][17] = Wall({ 21500.0f,190.0f }, 1500, 110, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][18] = Wall({ 24000.0f,160.0f }, 1000, 140, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
+	wall[3][19] = Wall({ 26000.0f,130.0f }, 500, 170, 15.0f, true, UNBREAK, 0xFFFFFFFF, player, UNBREAKWALL);
 	//
 #pragma endregion
 
@@ -447,35 +441,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	floor[3][7] = Floor(7000, 500, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
 	floor[3][8] = Floor(8000, 300, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
 	floor[3][9] = Floor(14000, 100, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
-	floor[3][10] = Floor(17000, 200, 500, 10, NORMAL, 500, 10, 64, 64, NORMALFLOOR, player);
-	floor[3][11] = Floor(18000, 400, 2000, 10, PLAYERDECEL, 2000, 10, 64, 64, DECELFLOOR, player);
+	floor[3][10] = Floor(17000, 200, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][11] = Floor(18000, 680, 10800, 10, PLAYERACCEL, 10800, 10, 64, 64, ACCELFLOOR, player);
 	floor[3][12] = Floor(1700, 190, 1500, 10, CEILING, 1500, 10, 64, 64, CEILINGFLOOR, player);
 	floor[3][13] = Floor(1700, -10, 1500, 10, PLAYERACCEL, 1500, 10, 64, 64, ACCELFLOOR, player);
 	floor[3][14] = Floor(1700, -300, 2550, 10, NORMAL, 2500, 10, 64, 64, NORMALFLOOR, player);
 	floor[3][15] = Floor(4200, -300, 1500, 10, CEILING, 1500, 10, 64, 64, CEILINGFLOOR, player);
 	floor[3][16] = Floor(3700, -10, 2000, 10, PLAYERACCEL, 2000, 10, 64, 64, ACCELFLOOR, player);
-	floor[3][17] = Floor(10000, 400, 4000, 10, CEILING, 4000, 10, 64, 64, CEILINGFLOOR, player);
-	floor[3][18] = Floor(5000, 500, 1000, 10, CEILING, 1000, 10, 64, 64, CEILINGFLOOR, player);
-	floor[3][19] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
-	floor[3][20] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
-	floor[3][21] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
-	floor[3][22] = Floor(100, 600, 1000, 10, NORMAL, 1000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][17] = Floor(10000, 680, 4250, 10, PLAYERDECEL, 4250, 10, 64, 64, DECELFLOOR, player);
+	floor[3][18] = Floor(4000, 680, 2250, 10, PLAYERDECEL, 2250, 10, 64, 64, DECELFLOOR, player);
+	floor[3][19] = Floor(8700, -100, 1300, 10, PLAYERACCEL, 1300, 10, 64, 64, ACCELFLOOR, player);
+	floor[3][20] = Floor(3700, 0, 2000, 10, CEILING, 2000, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][21] = Floor(8700, -90, 1300, 10, CEILING, 1300, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][22] = Floor(14000, -200, 1500, 10, CEILING, 1500, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][23] = Floor(14000, -210, 2500, 10, PLAYERACCEL, 2500, 10, 64, 64, ACCELFLOOR, player);
+	floor[3][24] = Floor(15500, 490, 1000, 10, CEILING, 1000, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][25] = Floor(15000, 390, 550, 10, NORMAL, 550, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][26] = Floor(16500, 340, 500, 10, NORMAL, 500, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][27] = Floor(18500, 230, 2000, 10, NORMAL, 2000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][28] = Floor(21500, 180, 1500, 10, NORMAL, 1500, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][29] = Floor(24000, 150, 1000, 10, PLAYERACCEL, 1000, 10, 64, 64, ACCELFLOOR, player);
+	floor[3][30] = Floor(26000, 120, 500, 10, PLAYERACCEL, 500, 10, 64, 64, ACCELFLOOR, player);
+	floor[3][31] = Floor(27500, 100, 4000, 10, NORMAL, 4000, 10, 64, 64, NORMALFLOOR, player);
+	floor[3][32] = Floor(18500, 300, 9000, 10, CEILING, 9000, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][33] = Floor(19000, -70, 1000, 10, CEILING, 1000, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][34] = Floor(21875, -120, 750, 10, CEILING, 750, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][35] = Floor(24250, -150, 500, 10, CEILING, 500, 10, 64, 64, CEILINGFLOOR, player);
+	floor[3][36] = Floor(26125, -180, 250, 10, CEILING, 250, 10, 64, 64, CEILINGFLOOR, player);
 	//
 
-#pragma endregion
-#pragma region stage4
-	//ステージ4
-	floor[4][0] = Floor(100, 680, 50000, 10, NORMAL, 50000, 10, 64, 64, NORMALFLOOR, player);
-	floor[4][1] = Floor(0, -2000, 50000, 1000, CEILING, 50000, 1000, 64, 64, STAGECEILING, player);
-	floor[4][2] = Floor(600, 580, 300, 10, NORMAL, 300, 10, 64, 64, NORMALFLOOR, player);
-	//
-#pragma endregion
-#pragma region stage5
-	//ステージ5
-	floor[5][0] = Floor(100, 680, 50000, 10, NORMAL, 50000, 10, 64, 64, NORMALFLOOR, player);
-	floor[5][1] = Floor(0, -2000, 50000, 1000, CEILING, 50000, 1000, 64, 64, STAGECEILING, player);
-	floor[5][2] = Floor(600, 580, 300, 10, NORMAL, 300, 10, 64, 64, NORMALFLOOR, player);
-	//
 #pragma endregion
 
 	//初期化用

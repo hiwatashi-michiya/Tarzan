@@ -1,6 +1,7 @@
 #pragma once
 #include "Vec2.h"
 
+
 // プレイヤーの状態を分ける
 enum PLAYERSTATE {
 	IDLE,
@@ -68,9 +69,18 @@ public:
 
 	//X速度を加速させる
 	inline float accelX() {
-		if (velocity.x < 50) {
-			velocity.x *= 1.005f;
+
+		if (velocity.x > 0) {
+			if (velocity.x < 50) {
+				velocity.x *= 1.005f;
+			}
 		}
+		else {
+			if (velocity.x > -50) {
+				velocity.x *= 1.005f;
+			}
+		}
+		
 		return velocity.x;
 	}
 

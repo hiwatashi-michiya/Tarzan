@@ -16,6 +16,49 @@ Floor::Floor(float posX, float posY, float length, float height,int type, float 
 
 void Floor::Update(Vec2 scroll) {
 
+	//描画タイマー
+	drawTime += 1;
+
+	if (drawTime == 60) {
+		drawTime = 0;
+	}
+
+	if (type == NORMAL) {
+
+		if (drawTime % 10 == 0) {
+			scrX += 64;
+		}
+
+	}
+
+	if (type == CEILING) {
+
+		if (drawTime % 10 == 0) {
+			scrX += 64;
+		}
+
+	}
+
+	if (type == PLAYERACCEL) {
+
+		if (drawTime % 5 == 0) {
+			scrX += 64;
+		}
+
+	}
+
+	if (type == PLAYERDECEL) {
+
+		if (drawTime % 15 == 0) {
+			scrX += 64;
+		}
+
+	}
+
+	if (scrX > 192) {
+		scrX = 0;
+	}
+
 	//当たり判定
 	Collision(scroll);
 
@@ -25,7 +68,7 @@ void Floor::Draw(Vec2 scroll) {
 
 	Novice::DrawQuad(posX - scroll.x, posY - scroll.y, posX + imgLength - scroll.x, posY - scroll.y,
 		posX - scroll.x, posY + imgHeight - scroll.y, posX + imgLength - scroll.x, posY + imgHeight - scroll.y,
-		0, 0, scrW, scrH, textureHandle, 0xFFFFFFFF);
+		scrX, 0, scrW, scrH, textureHandle, 0xFFFFFFFF);
 
 }
 
