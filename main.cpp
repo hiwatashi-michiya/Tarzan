@@ -805,6 +805,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 						}
 
+						//エフェクトの初期化
+						
+						isShake = false;
+						isPlayerLanding = false;
+						for (int i = 0; i < 4; i++) {
+							landingBox[i].isActive = false;
+						}
+						landingBox[0].isActive = false;
+						landingBox[1].isActive = false;
+						landingBox[2].isActive = false;
+						landingBox[3].isActive = false;
+
+						//
+
 						isLoading = 1;
 
 					}
