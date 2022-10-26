@@ -204,6 +204,9 @@ private:
 	//つかまらないフレーム
 	int unGrip;
 
+	// ジャンプしないフレーム
+	int unJump;
+
 	// 地面にいるか
 	bool isGround;
 

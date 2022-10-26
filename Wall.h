@@ -27,10 +27,10 @@ public:
 	/// /// <param name="type">壁の種類</param>
 	/// <param name="color">色</param>
 	/// <param name="pPlayer">受け渡すポインタ(Playerクラス限定)</param>
-	Wall(Vec2 position, float width, float height, float hitSpeed, bool isAlive, 
+	Wall(Vec2 position, float width, float height, float hitSpeed, bool isAlive,
 		int type, int color, Player& pPlayer, int textureHandle);
 
-	void Update(Vec2 scroll);
+	void Update(Vec2 scroll, int& sound);
 
 	void Draw(Vec2 scroll);
 
@@ -40,7 +40,7 @@ public:
 
 private:
 
-	void Collision(Vec2 scroll);
+	void Collision(Vec2 scroll, int& sound);
 
 	//壁の位置
 	Vec2 position;
@@ -74,7 +74,7 @@ private:
 	//描画範囲座標を動かす
 	int drawTime = 0;
 	int scrX = 0;
-	
+
 	//数字のリソース
 	int NUM[10];
 
@@ -84,6 +84,9 @@ private:
 	int divideNumber;
 
 	int drawHitSpeed;
+
+	// 壁にぶつかった音
+	int breakSoundCheck;
 
 };
 

@@ -23,11 +23,12 @@ Wall::Wall(Vec2 position, float width, float height, float hitSpeed,
 	NUM[7] = Novice::LoadTexture("./Resources/Images/UI/7_black.png");
 	NUM[8] = Novice::LoadTexture("./Resources/Images/UI/8_black.png");
 	NUM[9] = Novice::LoadTexture("./Resources/Images/UI/9_black.png");
+	breakSoundCheck = -1;
 }
 
 //-----------------------------------------
 
-void Wall::Update(Vec2 scroll) {
+void Wall::Update(Vec2 scroll, int& sound) {
 
 	drawTime += 1;
 
@@ -51,7 +52,7 @@ void Wall::Update(Vec2 scroll) {
 
 		if (pPlayer->getPosX() > position.x - width &&
 			pPlayer->getPosX() < position.x + width * 2) {
-			Collision(scroll);
+			Collision(scroll, sound);
 		}
 
 	}
@@ -79,7 +80,7 @@ void Wall::Draw(Vec2 scroll) {
 				for (int c = 0; c < a; c++) {
 					divideNumber /= 10;
 				}
-				
+
 				drawNumber = drawHitSpeed / divideNumber;
 
 				for (int d = 0; d < 10; d++) {
@@ -104,7 +105,7 @@ void Wall::Draw(Vec2 scroll) {
 
 //------------------------------------------
 
-void Wall::Collision(Vec2 scroll) {
+void Wall::Collision(Vec2 scroll, int& sound) {
 
 	if ((pPlayer->Player::getPosX() + pPlayer->Player::getRadius() - scroll.x > position.x - scroll.x) &&
 		(pPlayer->Player::getPosX() - pPlayer->Player::getRadius() - scroll.x < position.x + width - scroll.x) &&
@@ -112,6 +113,11 @@ void Wall::Collision(Vec2 scroll) {
 		pPlayer->Player::getPosY() + pPlayer->Player::getRadius() - scroll.y <= position.y + height - scroll.y) {
 
 		isHit = true;
+
+		if (!Novice::IsPlayingAudio(breakSoundCheck) || breakSoundCheck == -1) {
+			breakSoundCheck = Novice::PlayAudio(sound, 0, 0.1f);
+		}
+
 
 		if (((pPlayer->Player::getSpeedX()) >= hitSpeed || (pPlayer->Player::getReverseSpeedX()) >= hitSpeed) && type == BREAK) {
 			isAlive = false;
@@ -132,7 +138,7 @@ void Wall::Collision(Vec2 scroll) {
 			else {
 				color = 0x0000FFFF;
 			}
-			
+
 		}
 		else {
 			pPlayer->Player::setSpeedX();

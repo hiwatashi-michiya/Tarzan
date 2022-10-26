@@ -35,6 +35,7 @@ Player::Player(Vec2 pos, int texturehandle[])
 	length = 0;
 	state = IDLE;
 	unGrip = 0;
+	unJump = 0;
 	loghandle = Novice::LoadTexture("./Resources/Images/Player/log.png");
 
 	soundHandles[0] = Novice::LoadAudio("./Resources/SE/run.wav");
@@ -56,30 +57,6 @@ void Player::Update(Vec2& scroll) {
 }
 
 void Player::Draw(Vec2 scroll) {
-
-	/*switch (state)
-	{
-	case IDLE:
-		Novice::ScreenPrintf(10, 10, "IDLE");
-		break;
-	case RUN:
-		Novice::ScreenPrintf(10, 10, "RUN");
-		break;
-	case TARZAN:
-		Novice::ScreenPrintf(10, 10, "TARZAN");
-		break;
-	case JUMP:
-		Novice::ScreenPrintf(10, 10, "JUMP");
-		break;
-	case SKY:
-		Novice::ScreenPrintf(10, 10, "SKY");
-		break;
-	case LANDING:
-		Novice::ScreenPrintf(10, 10, "LANDING");
-		break;
-	default:
-		break;
-	}*/
 
 	// 中心
 	//Novice::DrawEllipse(center.x - scroll.x, (center.y) - scroll.y, 10, 10, 0.0f, GREEN, kFillModeWireFrame);
@@ -133,15 +110,6 @@ void Player::Draw(Vec2 scroll) {
 			drawX, 0, 32, 32, textures[(int)state], WHITE);
 	}
 
-
-	// 次に動く場所を表示
-	//Novice::DrawEllipse(position.x + velocity.x - scroll.x, (position.y + velocity.y) - scroll.y, RADIUS, RADIUS, 0.0f, 0xFF0000FF, kFillModeWireFrame);
-
-	//Novice::ScreenPrintf(0, 0, "%1.2f", position.x);
-	//Novice::ScreenPrintf(0, 20, "%1.2f", position.y);
-	//Novice::ScreenPrintf(0, 40, "%1.2f", velocity.x);
-	//Novice::ScreenPrintf(0, 60, "%1.2f", velocity.y);
-
 }
 
 float Player::KeepMaxSpeed(float maxSpeed) {
@@ -178,6 +146,12 @@ void Player::Move() {
 	unGrip--;
 	if (unGrip <= 0) {
 		unGrip = 0;
+	}
+	if (isGround) {
+		unJump--;
+		if (unJump <= 0) {
+			unJump = 0;
+		}
 	}
 	// ワンボタン
 	// もしスペースが押されたら
@@ -275,11 +249,13 @@ void Player::Move() {
 
 
 			}
+			// ゲージがなくなったら手を離す
 			else if (TarzanGage <= 0) {
 				TarzanGage = 0;
 				isGrip = false;
 			}
-			else if (isGround) {
+			// 地面かつジャンプできるとき
+			else if (isGround && unJump == 0) {
 				velocity.y -= 20;
 				unGrip = 17;
 			}
@@ -391,6 +367,7 @@ void Player::Collision(Vec2& scroll) {
 		Novice::PauseAudio(soundChecks[2]);
 		break;
 	case LANDING:
+		unJump = 10;
 		Novice::StopAudio(soundChecks[0]);
 		Novice::PauseAudio(soundChecks[2]);
 		if (!Novice::IsPlayingAudio(soundChecks[1]) || soundChecks[1] == -1) {

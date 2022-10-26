@@ -81,6 +81,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int LANDINGSOUND = Novice::LoadAudio("./Resources/SE/landing.wav");
 	int LANDINGSOUNDCHECK = -1;
 
+	// 壁にぶつかった音
+	int BREAKSOUND = Novice::LoadAudio("./Resources/SE/break.wav");
+
 #pragma endregion
 
 #pragma region Object
@@ -1018,7 +1021,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 				for (int i = 0; i < WALL_NUMBER; i++) {
-					wall[stageSelect][i].Update(scroll);
+					wall[stageSelect][i].Update(scroll, BREAKSOUND);
 				}
 
 #pragma region エフェクト
