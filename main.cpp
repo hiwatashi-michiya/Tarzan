@@ -159,9 +159,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int DOT = Novice::LoadTexture("./Resources/Images/UI/dot.png");
 	int REDDOT = Novice::LoadTexture("./Resources/Images/UI/dot_red.png");
 
-	//ゴール
-	int GOAL = Novice::LoadTexture("./Resources/Images/UI/goal.png");
-
 #pragma endregion
 
 	//ターザンゲージ
@@ -180,6 +177,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int BREAKINFO = Novice::LoadTexture("./Resources/Images/UI/break.png");
 	int SLOWINFO = Novice::LoadTexture("./Resources/Images/UI/slow.png");
 	int FASTINFO = Novice::LoadTexture("./Resources/Images/UI/fast.png");
+
+	//ゴール
+	int GOAL = Novice::LoadTexture("./Resources/Images/UI/goal.png");
+
+	//ゴールテキスト
+	int GOALTEXT = Novice::LoadTexture("./Resources/Images/UI/goaltext.png");
 
 	//選択肢のUI
 	int SELECT = Novice::LoadTexture("./Resources/Images/UI/select.png");
@@ -210,6 +213,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//タイトル画像のタイマー
 	int drawTitleTimer = 0;
+
+	//ゴール画像の座標
+	int goalX = 0;
+	int goalY = 0;
+	int goalW = 0;
+	int goalH = 0;
 
 #pragma region パーティクルの変数の宣言・定義
 
@@ -774,6 +783,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 						maxSpeed = 0.0f;
 
+						goalX = 0;
+						goalY = 0;
+						goalW = 0;
+						goalH = 0;
+
 						//ステージの初期化
 						for (int a = 0; a < STAGE_NUMBER; a++) {
 
@@ -844,13 +858,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//リザルト表示
 				if (sceneChange == false) {
 
-					if (sceneCount < SCENE_TIMER) {
+					if (goalW < 512) {
+						goalW += 16;
+					}
+
+					if (sceneCount < SCENE_TIMER * 2) {
 						sceneCount += 1;
-						clearly = 0x0000000F + sceneCount * 4;
+						clearly = 0x0000000F + sceneCount * 2;
 					}
 
 					//キー入力でシーンチェンジを有効にする
-					if (sceneCount == SCENE_TIMER) {
+					if (sceneCount == SCENE_TIMER * 2) {
 
 						if (Key::IsTrigger(DIK_SPACE)) {
 							sceneChange = true;
@@ -866,7 +884,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				else {
 
-					if (sceneCount < SCENE_TIMER * 2) {
+					if (sceneCount < SCENE_TIMER * 4) {
 						sceneCount += 1;
 					}
 
@@ -878,7 +896,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						sceneX = 5120;
 					}
 
-					if (sceneCount == SCENE_TIMER * 2) {
+					if (sceneCount == SCENE_TIMER * 4) {
 						sceneCount = SCENE_TIMER;
 						scene = nextScene;
 					}
@@ -1372,6 +1390,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 				drawMaxSpeed = AbsoluteValue(drawMaxSpeed) % divideNumber;
+
+			}
+
+			//ゴールしたら
+			if (isGoal == true) {
+
+				Novice::DrawQuad(640 - 256, 200, 640 + 256, 200, 640 - 256, 200 + 128, 640 + 256, 200 + 128, 0, 0, goalW, 128, GOALTEXT, 0xFFFFFFFF);
 
 			}
 
