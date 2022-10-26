@@ -24,7 +24,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vec2 scroll = { 0,0 };
 
 	//ステージ選択の変数
-	int stageSelect = 3;
+	int stageSelect = 1;
 
 	//X軸の画像表示の繰り返し回数
 	const int REPETITION_X = 32;

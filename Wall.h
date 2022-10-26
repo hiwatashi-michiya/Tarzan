@@ -75,6 +75,16 @@ private:
 	int drawTime = 0;
 	int scrX = 0;
 	
+	//数字のリソース
+	int NUM[10];
+
+	//数字表示の処理関数
+	int drawNumber;
+
+	int divideNumber;
+
+	int drawHitSpeed;
+
 };
 
 
