@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vec2 scroll = { 0,0 };
 
 	//ステージ選択の変数
-	int stageSelect = 2;
+	int stageSelect = 1;
 
 	//X軸の画像表示の繰り返し回数
 	const int REPETITION_X = 32;
@@ -46,7 +46,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region BG
 
 	//タイトル画像
-	int BGTITLE = Novice::LoadTexture("./Resources/Images/BG/TarzanBG.png");
+	int BGTITLE = Novice::LoadTexture("./Resources/Images/BG/titleBG.png");
 
 	//セレクト画像
 	int BGSELECT = Novice::LoadTexture("./Resources/Images/BG/ingameBG.png");
@@ -83,6 +83,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// 壁にぶつかった音
 	int BREAKSOUND = Novice::LoadAudio("./Resources/SE/break.wav");
+
+	//ゴール音
+	int GOALSOUND = Novice::LoadAudio("./Resources/SE/goal.wav");
 
 #pragma endregion
 
@@ -199,8 +202,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int TITLETEXT = Novice::LoadTexture("./Resources/Images/UI/title.png");
 
 	//ESC UI
-
 	int ESCBACK = Novice::LoadTexture("./Resources/Images/UI/back.png");
+
+	//ステージプレビュー
+	int PREVIEW[4];
+	PREVIEW[0] = Novice::LoadTexture("./Resources/Images/UI/preview.png");
+	PREVIEW[1] = Novice::LoadTexture("./Resources/Images/UI/stage1preview.png");
+	PREVIEW[2] = Novice::LoadTexture("./Resources/Images/UI/stage2preview.png");
+	PREVIEW[3] = Novice::LoadTexture("./Resources/Images/UI/stage3preview.png");
 
 #pragma endregion
 
@@ -250,6 +259,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//タイトルの文字が動いているか(フラグ)
 	bool isTitleMove = true;
+
+	//プレビュー表示の透明度
+	int previewColor = 0xFFFFFF00;
 
 #pragma region パーティクルの変数の宣言・定義
 
@@ -594,7 +606,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 
 					if (sceneCount == SCENE_TIMER) {
-
+						previewColor = 0xFFFFFF00;
 						scene = nextScene;
 
 					}
@@ -642,7 +654,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			/// ↓描画処理ここから
 			///
 
-			Novice::DrawSprite(0, 0, BGTITLE, 1, 1, 0, 0xFFFFFFFF);
+			Novice::DrawSprite(0, 0, BGTITLE, 1, 1, 0, 0x888888FF);
 
 			Novice::DrawSprite(titlePosX, titlePosY, TITLETEXT, 1, 1, 0.0f, 0xFFFFFF);
 
@@ -740,8 +752,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					drawSelectX = 0;
 				}
 
+				if (previewColor > 0xFFFFFF00) {
+					previewColor -= 0xF;
+				}
+
+				if (previewColor < 0xFFFFFF00) {
+					previewColor = 0xFFFFFF00;
+				}
+
 				if (Key::IsTrigger(DIK_UP) && stageSelect > 1) {
 					stageSelect -= 1;
+					previewColor = 0xFFFFFFFF;
 					for (int i = 0; i < 8; i++) {
 						if (!Novice::IsPlayingAudio(SELECTSOUNDCHECK[i]) || SELECTSOUNDCHECK[i] == -1) {
 							SELECTSOUNDCHECK[i] = Novice::PlayAudio(SELECTSOUND, 0, 0.5f);
@@ -753,6 +774,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (Key::IsTrigger(DIK_DOWN) && stageSelect < STAGE_NUMBER - 1) {
 					stageSelect += 1;
+					previewColor = 0xFFFFFFFF;
 					for (int i = 0; i < 8; i++) {
 						if (!Novice::IsPlayingAudio(SELECTSOUNDCHECK[i]) || SELECTSOUNDCHECK[i] == -1) {
 							SELECTSOUNDCHECK[i] = Novice::PlayAudio(SELECTSOUND, 0, 0.5f);
@@ -807,12 +829,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (stageSelect == i) {
 					Novice::DrawQuad(0, 64 * i, 512, 64 * i, 0, 64 * i + 64, 512, 64 * i + 64, 0, 0, 512, 64, BRIGHTWOOD[i], 0xFFFFFFFF);
 					Novice::DrawQuad(544, 64 * i - 32, 608, 64 * i - 32, 544, 64 * i + 96, 608, 64 * i + 96, drawSelectX, 0, 64, 128, SELECT, 0xFFFFFFFF);
+					Novice::DrawSprite(640 - 256, 300, PREVIEW[i], 0.5f, 0.5f, 0, 0xFFFFFFFF);
 				}
 				else {
 					Novice::DrawQuad(0, 64 * i, 512 - 128, 64 * i, 0, 64 * i + 64, 512 - 128, 64 * i + 64, 128, 0, 512 - 128, 64, WOOD[i], 0xFFFFFFFF);
 				}
 
 			}
+
+			Novice::DrawSprite(640 - 256, 300, PREVIEW[0], 0.5f, 0.5f, 0, previewColor);
 
 			if (drawSelectTimer < 50) {
 				Novice::DrawSprite(640 - 256, 600, SPACESTART, 1, 1, 0, 0xFFFFFFFF);
@@ -919,7 +944,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 
 					if (sceneCount == SCENE_TIMER) {
-
+						previewColor = 0xFFFFFF00;
 						scene = nextScene;
 
 					}
@@ -980,6 +1005,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (sceneCount == SCENE_TIMER * 4) {
 						sceneCount = SCENE_TIMER;
 						drawGoalTimer = 0;
+						previewColor = 0xFFFFFF00;
 						scene = nextScene;
 					}
 
@@ -1110,6 +1136,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (player.getPosX() > GOAL_LINE[stageSelect]) {
 					isGoal = true;
+					Novice::PlayAudio(GOALSOUND, 0, 0.5);
 					player.stopAudio();
 				}
 
