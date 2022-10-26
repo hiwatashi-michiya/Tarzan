@@ -56,6 +56,9 @@
     <ClCompile Include="effect.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Eaing.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -146,5 +149,6 @@
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Calc.h" />
     <ClInclude Include="effect.h" />
+    <ClInclude Include="Easing.h" />
   </ItemGroup>
 </Project>

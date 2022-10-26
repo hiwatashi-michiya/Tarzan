@@ -7,6 +7,7 @@
 #include "Stage.h"
 #include "Calc.h"
 #include "effect.h"
+#include "Easing.h"
 
 const char kWindowTitle[] = "Wild Tarzan";
 
@@ -187,8 +188,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//選択肢のUI
 	int SELECT = Novice::LoadTexture("./Resources/Images/UI/select.png");
 
-	//タイトルUI
+	//スペースUI
 	int SPACESTART = Novice::LoadTexture("./Resources/Images/UI/spacestart.png");
+
+	//タイトルUI
+	int TITLETEXT = Novice::LoadTexture("./Resources/Images/UI/title.png");
 
 #pragma endregion
 
@@ -219,6 +223,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int goalY = 0;
 	int goalW = 0;
 	int goalH = 0;
+
+	//座標
+	float titlePosX = 0.0f;
+	float titlePosY = 100.0f;
+	//始点
+	float startPosX = -400.0f;
+	//終点
+	float goalPosX = 420.0f;
+
+	//イージング
+	float t = 0.0f;
+	float easingSpeed = 0.01f;
+	float number = 0.0f;
+
+	//タイトルの文字が動いているか(フラグ)
+	bool isTitleMove = true;
 
 #pragma region パーティクルの変数の宣言・定義
 
@@ -581,6 +601,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					drawTitleTimer = 0;
 				}
 
+				if (isTitleMove == true) {
+					t = Easing::OutElastic(number);
+
+					number += easingSpeed;
+
+					titlePosX = (1 - t) * startPosX + t * goalPosX;
+
+					if (number >= 1.0f) {
+						isTitleMove = false;
+					}
+				}
+
 				if (Key::IsTrigger(DIK_SPACE)) {
 					sceneChange = true;
 					if (!Novice::IsPlayingAudio(SCENECHANGESOUNDCHECK) || SCENECHANGESOUNDCHECK == -1) {
@@ -602,6 +634,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			///
 
 			Novice::DrawSprite(0, 0, BGTITLE, 1, 1, 0, 0xFFFFFFFF);
+
+			Novice::DrawSprite(titlePosX, titlePosY, TITLETEXT, 1, 1, 0.0f, 0xFFFFFF);
 
 			if (drawTitleTimer < 50) {
 				Novice::DrawSprite(640 - 256, 600, SPACESTART, 1, 1, 0, 0xFFFFFFFF);
@@ -755,6 +789,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					Novice::DrawQuad(0, 64 * i, 512 - 128, 64 * i, 0, 64 * i + 64, 512 - 128, 64 * i + 64, 128, 0, 512 - 128, 64, WOOD[i], 0xFFFFFFFF);
 				}
 
+			}
+
+			if (drawSelectTimer < 50) {
+				Novice::DrawSprite(640 - 256, 600, SPACESTART, 1, 1, 0, 0xFFFFFFFF);
 			}
 
 			///

@@ -97,6 +97,7 @@
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\WinApp.cpp" />
     <ClCompile Include="C:\KamataEngine\DirectXGame\scene\GameScene.cpp" />
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
+    <ClCompile Include="Eaing.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="Key.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="Calc.h" />
+    <ClInclude Include="Easing.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Key.h" />
